@@ -1,0 +1,23 @@
+.section {
+    width: 100%;
+    min-height: 100vh;
+    padding: 80px 20px; /* Espaciado */
+    background-color: #1E1E1E; /* Color oscuro */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+  }
+  
+  .section h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .section p {
+    max-width: 800px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }

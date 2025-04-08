@@ -1,0 +1,71 @@
+.container {
+    background-color: #1E1E1E; /* Un gris oscuro elegante */
+    color: white;
+    width: 80%; /* Se adapta mejor a distintas pantallas */
+    max-width: 400px; /* Mayor presencia sin exagerar */
+    height: auto;
+    padding: 60px 40px;
+    border-radius: 16px; /* Esquinas más suaves */
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* Espacio entre elementos */
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    /* Sombras sutiles estilo Material Design */
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+
+    /* Efecto de brillo suave al pasar el mouse */
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.container:hover {
+    transform: translate(-50%, -50%) scale(1.05); /* Sutil efecto de zoom */
+    box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        max-width: 90%;
+        padding: 40px 20px;
+    }
+}
+
+.title-portfolio {
+    font-size: 42px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2;
+
+    /* Gradiente para el texto (efecto premium) */
+    background: linear-gradient(to right, #FF416C, #FF4B2B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Efecto de luz animado */
+@keyframes glow {
+    0% { text-shadow: 0 0 5px rgba(255, 65, 108, 0.4); }
+    50% { text-shadow: 0 0 20px rgba(255, 65, 108, 0.7); }
+    100% { text-shadow: 0 0 5px rgba(255, 65, 108, 0.4); }
+}
+
+.title-portfolio:hover {
+    animation: glow 1.5s infinite alternate ease-in-out;
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "title": "Dibujo",
+    "description": "El dibujo es una forma de expresión visual que utiliza líneas y sombreados para representar objetos, ideas o emociones.",
+    "categoria": [
+      { "name": "Carboncillo", "color": "#000000" },
+      { "name": "Lápiz", "color": "#0000FF" },
+      { "name": "Tinta", "color": "#FFFF00" },
+      { "name": "Acuarela", "color": "#FFC0CB" }
+    ]
+  },
+  {
+    "title": "Pintura",
+    "description": "La pintura es una técnica artística que emplea pigmentos para crear imágenes sobre una superficie, como lienzo o madera.",
+    "categoria": [
+      { "name": "Óleo", "color": "#8B4513" },
+      { "name": "Acrílico", "color": "#32CD32" },
+      { "name": "Acuarela", "color": "#1E90FF" },
+      { "name": "Fresco", "color": "#FFD700" }
+    ]
+  },
+  {
+    "title": "Fotografía",
+    "description": "La fotografía es el arte de capturar momentos y escenas a través de una cámara, utilizando luz y composición.",
+    "categoria": [
+      { "name": "Retrato", "color": "#800000" },
+      { "name": "Paisaje", "color": "#228B22" },
+      { "name": "Documental", "color": "#4682B4" },
+      { "name": "Macro", "color": "#9932CC" }
+    ]
+  },
+  {
+    "title": "Escritos",
+    "description": "Los escritos artísticos incluyen poesía, cuentos y ensayos creativos que transmiten ideas y emociones a través de la palabra escrita.",
+    "categoria": [
+      { "name": "Poesía", "color": "#FF69B4" },
+      { "name": "Cuento", "color": "#DC143C" },
+      { "name": "Ensayo", "color": "#556B2F" },
+      { "name": "Crónica", "color": "#8B0000" }
+    ]
+  }
+]
