@@ -1,63 +1,56 @@
-import React from 'react';
-import { Box, Typography, Button, Paper, keyframes } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Box, Button } from "@mui/material";
+import { Link } from "react-router-dom";
+import './Home.css';
+import { keyframes } from "@emotion/react";
+import HomePrincipal from "../../data/images/Home/HomePrincipal.jpeg";
 
-// Animación de "latido" (pulse) para la tarjeta
-const pulse = keyframes`
-  0% { transform: scale(1); box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3); }
-  50% { transform: scale(1.03); box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.4); }
-  100% { transform: scale(1); box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3); }
-`;
-
-// Animación de "brillo" en el botón
 const glow = keyframes`
-  0% { box-shadow: 0 0 10px rgba(255, 75, 43, 0.5); }
-  50% { box-shadow: 0 0 20px rgba(255, 75, 43, 0.9); }
-  100% { box-shadow: 0 0 10px rgba(255, 75, 43, 0.5); }
+  0% {
+    box-shadow: 0 0 5px #FF4B2B;
+  }
+  100% {
+    box-shadow: 0 0 20px #FF4B2B;
+  }
 `;
 
 const Home = () => {
   return (
     <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      minHeight="100vh"
-    >
-      {/* Tarjeta animada */}
-      <Paper
-        elevation={10}
-        sx={{
-          bgcolor: "#1E1E1E",
-          color: "white",
-          width: { xs: "90%", sm: "80%", md: "400px" },
-          padding: "60px 40px",
-          borderRadius: "16px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 3,
-          textAlign: "center",
-          animation: `${pulse} 2s infinite ease-in-out`,
-        }}
-      >
-        <Typography
-          variant="h3"
-          fontWeight="bold"
-          textTransform="uppercase"
-          letterSpacing={2}
-          sx={{
-            background: "linear-gradient(to right, #FF416C, #FF4B2B)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
-        >
-          PORT-FOLIO
-        </Typography>
+    sx={{
+      position: "fixed", // clave para evitar el scroll 
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      overflow: "hidden",
+    }}
+>
+      {/* Fondo */}
+      <Box
+  sx={{
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundImage: `url(${HomePrincipal})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    zIndex: -1,
+    animation: "zoomInOut 10s ease-in-out infinite",
+  }}
+/>
 
-        {/* Botón con efecto glow */}
+      {/* Contenido */}
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        height="100%"
+        sx={{ position: "relative", zIndex: 1 }}
+      >
         <Button
           component={Link}
           to="/portfolio"
@@ -73,13 +66,13 @@ const Home = () => {
             animation: `${glow} 1.5s infinite alternate ease-in-out`,
             "&:hover": {
               bgcolor: "#FF1E00",
-              animation: "none", // Detiene la animación al pasar el mouse para que el usuario sienta el control
+              animation: "none",
             },
           }}
         >
           Entrar
         </Button>
-      </Paper>
+      </Box>
     </Box>
   );
 };
