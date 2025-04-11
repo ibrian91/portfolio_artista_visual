@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Card, CardContent } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import techniquesData from "../../assets/techniques.json"; // Import directo
+import techniquesData from "../../assets/techniques.json";
 
 const Main = () => {
   const [techniques, setTechniques] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setTechniques(techniquesData); // Cargar los datos directamente
+    setTechniques(techniquesData);
   }, []);
 
   const handleTechniqueClick = (categories) => {
@@ -16,12 +16,18 @@ const Main = () => {
   };
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="center" minHeight="100vh" p={2}>
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      minHeight="100vh"
+      p={2}
+    >
       <Card
         sx={{
           width: { xs: "95%", sm: "85%", md: "90%" },
-          minHeight: { xs: "auto", md: "400px" },
-          padding: { xs: "30px", md: "50px" },
+          minHeight: { xs: "auto", md: "550px" },
+          padding: { xs: "40px", md: "60px" },
           bgcolor: "#1E1E1E",
           color: "white",
           borderRadius: "20px",
@@ -35,17 +41,10 @@ const Main = () => {
         <Box
           sx={{
             display: "flex",
-            flexDirection: "row",
-            overflowX: { xs: "auto", md: "visible" },
-            whiteSpace: "nowrap",
-            gap: 2,
             width: "100%",
-            justifyContent: { xs: "flex-start", md: "center" },
-            paddingBottom: { xs: 2, md: 0 },
-            scrollSnapType: "x mandatory",
-            WebkitOverflowScrolling: "touch",
-            paddingRight: { xs: "15%", md: "0" },
-            scrollPaddingLeft: { xs: "15%", md: "0" },
+            height: "100%",
+            gap: "20px",
+            overflow: "hidden",
           }}
         >
           {techniques.map((technique, index) => (
@@ -53,24 +52,28 @@ const Main = () => {
               key={index}
               onClick={() => handleTechniqueClick(technique)}
               sx={{
+                flex: 1,
                 bgcolor: "#2A2A2A",
-                color: "white",
                 borderRadius: "12px",
-                padding: "20px",
-                minWidth: "250px",
-                height: "450px",
-                boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.3)",
-                transition: "transform 0.3s ease-in-out",
-                scrollSnapAlign: "center",
+                padding: 0,
+                height: "100%",
+                overflow: "hidden",
                 cursor: "pointer",
-                "&:hover": { transform: "scale(1.05)" },
+                transition: "transform 0.3s ease-in-out",
+                "&:hover": { transform: "scale(1.03)" },
               }}
             >
-              <CardContent>
-                <Typography variant="h6" fontWeight="bold">
-                  {technique.title}
-                </Typography>
-                <Typography variant="body1">{technique.description}</Typography>
+              <CardContent sx={{ p: 0, height: "100%", width: "100%" }}>
+                <Box
+                  component="img"
+                  src={technique.image}
+                  alt={technique.title}
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
               </CardContent>
             </Card>
           ))}

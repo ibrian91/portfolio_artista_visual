@@ -2,6 +2,7 @@
   {
     "title": "Dibujo",
     "description": "El dibujo es una forma de expresión visual que utiliza líneas y sombreados para representar objetos, ideas o emociones.",
+    "image": "/assets/images/llamaradas/llamarada-gris.jpeg",
     "categoria": [
       { "name": "Carboncillo", "color": "#000000" },
       { "name": "Lápiz", "color": "#0000FF" },
@@ -12,6 +13,7 @@
   {
     "title": "Pintura",
     "description": "La pintura es una técnica artística que emplea pigmentos para crear imágenes sobre una superficie, como lienzo o madera.",
+    "image": "/assets/images/llamaradas/llamarada-naranja.jpeg",
     "categoria": [
       { "name": "Óleo", "color": "#8B4513" },
       { "name": "Acrílico", "color": "#32CD32" },
@@ -22,6 +24,7 @@
   {
     "title": "Fotografía",
     "description": "La fotografía es el arte de capturar momentos y escenas a través de una cámara, utilizando luz y composición.",
+    "image": "/assets/images/llamaradas/llamarada-roja.jpeg",
     "categoria": [
       { "name": "Retrato", "color": "#800000" },
       { "name": "Paisaje", "color": "#228B22" },
@@ -32,6 +35,7 @@
   {
     "title": "Escritos",
     "description": "Los escritos artísticos incluyen poesía, cuentos y ensayos creativos que transmiten ideas y emociones a través de la palabra escrita.",
+    "image": "/assets/images/llamaradas/llamarada-marron.jpeg",
     "categoria": [
       { "name": "Poesía", "color": "#FF69B4" },
       { "name": "Cuento", "color": "#DC143C" },
