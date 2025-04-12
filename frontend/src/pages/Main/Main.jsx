@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Box, Card, CardContent } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import techniquesData from "../../assets/techniques.json";
+import "@fontsource/playfair-display";
+import { motion } from "framer-motion";
 
 const Main = () => {
   const [techniques, setTechniques] = useState([]);
@@ -25,24 +27,24 @@ const Main = () => {
     >
       <Card
         sx={{
-          width: { xs: "95%", sm: "85%", md: "90%" },
-          minHeight: { xs: "auto", md: "550px" },
-          padding: { xs: "40px", md: "60px" },
-          bgcolor: "#1E1E1E",
+          width: "2000px",
+          minHeight: "550px",
+          padding: 0,
+          bgcolor: "transparent",
           color: "white",
           borderRadius: "20px",
           boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.4)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: 4,
+          justifyContent: "center",
         }}
       >
         <Box
           sx={{
             display: "flex",
-            width: "100%",
-            height: "100%",
+            width: "1700px",
+            height: "550px",
             gap: "20px",
             overflow: "hidden",
           }}
@@ -53,14 +55,20 @@ const Main = () => {
               onClick={() => handleTechniqueClick(technique)}
               sx={{
                 flex: 1,
-                bgcolor: "#2A2A2A",
+                bgcolor: "#3C2E2B",
                 borderRadius: "12px",
                 padding: 0,
                 height: "100%",
                 overflow: "hidden",
                 cursor: "pointer",
+                position: "relative",
                 transition: "transform 0.3s ease-in-out",
-                "&:hover": { transform: "scale(1.03)" },
+                "&:hover": {
+                  transform: "scale(1.03)",
+                },
+                "&:hover .titleBox": {
+                  opacity: 1,
+                },
               }}
             >
               <CardContent sx={{ p: 0, height: "100%", width: "100%" }}>
@@ -72,8 +80,54 @@ const Main = () => {
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
+                    transition: "filter 0.5s ease",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    zIndex: 0,
                   }}
                 />
+                <Box
+                  className="titleBox"
+                  sx={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    textAlign: "center",
+                    color: "white",
+                    opacity: 0,
+                    transition: "opacity 0.5s ease",
+                    zIndex: 1,
+                    display: "flex",
+                    gap: "0.2rem",
+                    pointerEvents: "none",
+                  }}
+                >
+                  {technique.title.split("").map((char, i) => (
+                    <motion.span
+                      key={i}
+                      initial={{ y: 30, opacity: 0, rotate: -10 }}
+                      animate={{ y: 0, opacity: 1, rotate: 0 }}
+                      transition={{
+                        delay: i * 0.05,
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 20,
+                      }}
+                      style={{
+                        fontSize: "2.5rem",
+                        fontFamily: "'Playfair Display', serif",
+                        textTransform: "uppercase",
+                        textShadow: "2px 2px 8px rgba(0, 0, 0, 0.8)",
+                        color: "white",
+                        display: "inline-block",
+                      }}
+                    >
+                      {char === " " ? "\u00A0" : char}
+                    </motion.span>
+                  ))}
+                </Box>
               </CardContent>
             </Card>
           ))}
