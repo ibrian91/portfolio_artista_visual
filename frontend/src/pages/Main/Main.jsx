@@ -5,6 +5,8 @@ import techniquesData from "../../assets/techniques.json";
 import "@fontsource/playfair-display";
 import { motion } from "framer-motion";
 
+const MotionCard = motion(Card);
+
 const Main = () => {
   const [techniques, setTechniques] = useState([]);
   const navigate = useNavigate();
@@ -50,9 +52,12 @@ const Main = () => {
           }}
         >
           {techniques.map((technique, index) => (
-            <Card
+            <MotionCard
               key={index}
               onClick={() => handleTechniqueClick(technique)}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.2, duration: 0.6, ease: "easeOut" }}
               sx={{
                 flex: 1,
                 bgcolor: "#3C2E2B",
@@ -65,6 +70,7 @@ const Main = () => {
                 transition: "transform 0.3s ease-in-out",
                 "&:hover": {
                   transform: "scale(1.03)",
+                  boxShadow: "0px 10px 20px rgba(0,0,0,0.4)",
                 },
                 "&:hover .titleBox": {
                   opacity: 1,
@@ -85,6 +91,23 @@ const Main = () => {
                     top: 0,
                     left: 0,
                     zIndex: 0,
+                  }}
+                />
+                <Box
+                  className="hoverOverlay"
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    background: "rgba(0, 0, 0, 0.4)",
+                    opacity: 0,
+                    transition: "opacity 0.4s ease",
+                    zIndex: 1,
+                    "&:hover": {
+                      opacity: 1,
+                    },
                   }}
                 />
                 <Box
@@ -129,7 +152,7 @@ const Main = () => {
                   ))}
                 </Box>
               </CardContent>
-            </Card>
+            </MotionCard>
           ))}
         </Box>
       </Card>

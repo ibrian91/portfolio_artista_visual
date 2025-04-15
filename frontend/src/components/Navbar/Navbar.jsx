@@ -3,10 +3,14 @@ import { Link } from "react-router-dom"; // Importamos Link
 import { Menu, X } from "lucide-react";
 import "./Navbar.css"; // Importamos el CSS
 import Logo from "../Other/Logo";
+import logoData from "../../assets/logos.json";
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const randomIndex = Math.floor(Math.random() * logoData.length);
+  const randomLogo = logoData[randomIndex];
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -19,9 +23,9 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="positionLogo">
-        <Logo />
-      </div>
+           <div className="logo-circle">
+      <img src={randomLogo.image} alt={randomLogo.title} className="logo-image" />
+    </div>
 
       {/* Menú en escritorio */}
       {!isMobile && (
