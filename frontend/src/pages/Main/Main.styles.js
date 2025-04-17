@@ -9,7 +9,8 @@ export const outerBoxStyle = {
 };
 
 export const mainCardStyle = {
-  width: "2000px",
+  width: "100%",
+  maxWidth: "2000px",
   minHeight: "550px",
   padding: 0,
   bgcolor: "transparent",
@@ -24,18 +25,30 @@ export const mainCardStyle = {
 
 export const innerBoxStyle = {
   display: "flex",
-  width: "1700px",
-  height: "550px",
+  flexWrap: "wrap",
   gap: "20px",
   overflow: "hidden",
+  justifyContent: "center",
+  width: "100%",
+  maxWidth: "1700px",
+  height: "auto", // permite crecer en mobile
+
+  // Media query usando el sistema de breakpoints de MUI
+  '@media (max-width: 900px)': {
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "16px",
+  },
 };
 
 export const motionCardStyle = {
-  flex: 1,
+  flex: "1 1 300px",
+  minWidth: "280px",
+  maxWidth: "90vw",
   bgcolor: "#3C2E2B",
   borderRadius: "12px",
   padding: 0,
-  height: "100%",
+  height: "550px", // 🔥 clave para ocupar todo el alto del padre en desktop
   overflow: "hidden",
   cursor: "pointer",
   position: "relative",
@@ -46,6 +59,11 @@ export const motionCardStyle = {
   },
   "&:hover .titleBox": {
     opacity: 1,
+  },
+
+  // Mobile override
+  '@media (max-width: 600px)': {
+    height: "300px", // sólo se aplica este en pantallas pequeñas
   },
 };
 
@@ -97,4 +115,8 @@ export const charStyle = {
   textShadow: "2px 2px 8px rgba(0, 0, 0, 0.8)",
   color: "white",
   display: "inline-block",
+
+  '@media (max-width: 600px)': {
+    fontSize: "1.5rem",
+  },
 };
