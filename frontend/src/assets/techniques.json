@@ -4,10 +4,12 @@
     "description": "El dibujo es una forma de expresión visual que utiliza líneas y sombreados para representar objetos, ideas o emociones.",
     "image": "/assets/images/llamaradas/llamarada-gris.jpeg",
     "categoria": [
-      { "name": "Carboncillo", "color": "#000000" },
-      { "name": "Lápiz", "color": "#0000FF" },
-      { "name": "Tinta", "color": "#FFFF00" },
-      { "name": "Acuarela", "color": "#FFC0CB" }
+      { "name": "Digital", "color": "#000000","image":"/assets/images/tecnicas_principales/dibujo/digital.jpeg"},
+      { "name": "Fibra", "color": "#FFFF00","image":"/assets/images/tecnicas_principales/dibujo/fibra.jpeg"},
+      { "name": "Lapiz", "color": "#FFFF00","image":"/assets/images/tecnicas_principales/dibujo/lapiz.jpeg"},
+      { "name": "Tecnica Mixta", "color": "#FFFF00","image":"/assets/images/tecnicas_principales/dibujo/tecnica_mixta.jpeg"},
+      { "name": "Tinta Birome", "color": "#FFFF00","image":"/assets/images/tecnicas_principales/dibujo/tinta_birome.jpeg" },
+      { "name": "Tinta China", "color": "#000000","image":"/assets/images/tecnicas_principales/dibujo/tinta_china.jpeg"}
     ]
   },
   {

@@ -32,24 +32,42 @@ const Techniques = () => {
         >
           {categories.categoria.map((category, index) => (
             <Card
-              key={index}
-              sx={{
-                backgroundColor: category.color, // Se usa el color del JSON
-                //color: "white",
-                borderRadius: "12px",
-                boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.3)",
-                width: "150px",
-                height: "150px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center"
-              }}
-            >
-              <CardContent>
-                <Typography variant="h6">{category.name}</Typography>
-              </CardContent>
-            </Card>
+            key={index}
+            sx={{
+              backgroundColor: "transparent",
+              boxShadow: "none",
+              width: "150px",
+              height: "150px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              position: "relative",
+              overflow: "hidden",
+              
+            }}
+          >
+            {category.image && (
+              <Box
+                component="img"
+                src={category.image}
+                alt={category.name}
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  zIndex: 0,
+                 
+                 
+                }}
+              />
+            )}
+          
+          
+          </Card>
           ))}
         </Box>
       ) : (
