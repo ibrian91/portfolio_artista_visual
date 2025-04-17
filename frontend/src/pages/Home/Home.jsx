@@ -21,10 +21,10 @@ const Home = () => {
 
       <ContentWrapper>
         <StyledCard>
-          <Title>MATIAS</Title>
-          <Title>BORSOLINO</Title>
+          <Title>PORT-</Title>
+          <Title>FOLIO</Title>
           <StyledButton as={Link} to="/portfolio">
-            INGRESAR
+            ENTRAR
           </StyledButton>
         </StyledCard>
       </ContentWrapper>
