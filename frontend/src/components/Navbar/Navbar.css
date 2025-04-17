@@ -56,6 +56,8 @@ nav {
   position: absolute;
   right: 20px;
   z-index: 1100;
+  padding-right: 50px;
+  color: #d2691e;	
 }
 
 /* Menú hamburguesa */

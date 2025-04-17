@@ -39,7 +39,7 @@ const Navbar = () => {
       {/* Icono del menú hamburguesa en móviles */}
       {isMobile && (
         <div className="menu-icon" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
+          {isOpen ? <X size={50} /> : <Menu size={50} />}
         </div>
       )}
 
