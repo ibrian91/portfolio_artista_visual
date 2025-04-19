@@ -4,12 +4,12 @@
     "description": "El dibujo es una forma de expresión visual que utiliza líneas y sombreados para representar objetos, ideas o emociones.",
     "image": "/assets/images/llamaradas/llamarada-gris.jpeg",
     "categoria": [
-      { "name": "Digital", "color": "#000000","image":"/assets/images/tecnicas_principales/dibujo/digital.jpeg"},
-      { "name": "Fibra", "color": "#FFFF00","image":"/assets/images/tecnicas_principales/dibujo/fibra.jpeg"},
-      { "name": "Lapiz", "color": "#FFFF00","image":"/assets/images/tecnicas_principales/dibujo/lapiz.jpeg"},
-      { "name": "Tecnica Mixta", "color": "#FFFF00","image":"/assets/images/tecnicas_principales/dibujo/tecnica_mixta.jpeg"},
-      { "name": "Tinta Birome", "color": "#FFFF00","image":"/assets/images/tecnicas_principales/dibujo/tinta_birome.jpeg" },
-      { "name": "Tinta China", "color": "#000000","image":"/assets/images/tecnicas_principales/dibujo/tinta_china.jpeg"}
+      { "name": "Digital",      "image":"/assets/images/tecnicas_principales/dibujo/digital.jpeg"},
+      { "name": "Fibra",        "image":"/assets/images/tecnicas_principales/dibujo/fibra.jpeg"},
+      { "name": "Lapiz",        "image":"/assets/images/tecnicas_principales/dibujo/lapiz.jpeg"},
+      { "name": "Tecnica Mixta","image":"/assets/images/tecnicas_principales/dibujo/tecnica_mixta.jpeg"},
+      { "name": "Tinta Birome", "image":"/assets/images/tecnicas_principales/dibujo/tinta_birome.jpeg" },
+      { "name": "Tinta China",  "image":"/assets/images/tecnicas_principales/dibujo/tinta_china.jpeg"}
     ]
   },
   {
@@ -17,10 +17,9 @@
     "description": "La pintura es una técnica artística que emplea pigmentos para crear imágenes sobre una superficie, como lienzo o madera.",
     "image": "/assets/images/llamaradas/llamarada-naranja.jpeg",
     "categoria": [
-      { "name": "Óleo", "color": "#8B4513" },
-      { "name": "Acrílico", "color": "#32CD32" },
-      { "name": "Acuarela", "color": "#1E90FF" },
-      { "name": "Fresco", "color": "#FFD700" }
+      { "name": "Acrilico",  "image":"/assets/images/tecnicas_principales/pintura/acrilico.jpeg"},
+      { "name": "Acuarela",  "image":"/assets/images/tecnicas_principales/pintura/acuarela.jpeg"},
+      { "name": "Pastel",    "image":"/assets/images/tecnicas_principales/pintura/pastel.jpeg"}
     ]
   },
   {
@@ -28,10 +27,13 @@
     "description": "La fotografía es el arte de capturar momentos y escenas a través de una cámara, utilizando luz y composición.",
     "image": "/assets/images/llamaradas/llamarada-roja.jpeg",
     "categoria": [
-      { "name": "Retrato", "color": "#800000" },
-      { "name": "Paisaje", "color": "#228B22" },
-      { "name": "Documental", "color": "#4682B4" },
-      { "name": "Macro", "color": "#9932CC" }
+      { "name": "Urbana",       "image":"/assets/images/tecnicas_principales/fotografia/urbana.jpeg"},
+      { "name": "Arquitectura", "image":"/assets/images/tecnicas_principales/fotografia/arquitectura.jpeg"},
+      { "name": "Paisaje",      "image":"/assets/images/tecnicas_principales/fotografia/paisaje.jpeg"},
+      { "name": "Documental",   "image":"/assets/images/tecnicas_principales/fotografia/documental.jpeg"},
+      { "name": "Moda",         "image":"/assets/images/tecnicas_principales/fotografia/moda.jpeg" },
+      { "name": "Retrato",      "image":"/assets/images/tecnicas_principales/fotografia/retrato.jpeg"},
+      { "name": "Abstraccion",  "image":"/assets/images/tecnicas_principales/fotografia/abstraccion.jpeg"}
     ]
   },
   {

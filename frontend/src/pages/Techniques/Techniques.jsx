@@ -37,7 +37,7 @@ const Techniques = () => {
               backgroundColor: "transparent",
               boxShadow: "none",
               width: "150px",
-              height: "150px",
+              height: "155px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
