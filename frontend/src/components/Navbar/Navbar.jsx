@@ -24,7 +24,8 @@ const Navbar = () => {
   return (
     <nav className="navbar">
            <div className="logo-circle">
-      <img src={randomLogo.image} alt={randomLogo.title} className="logo-image" />
+           <Link to="/portfolio"><img src={randomLogo.image} alt={randomLogo.title} className="logo-image" /> </Link>
+      
     </div>
 
       {/* Menú en escritorio */}
