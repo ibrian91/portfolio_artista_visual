@@ -19,7 +19,8 @@
     "categoria": [
       { "name": "Acrilico",  "image":"/assets/images/tecnicas_principales/pintura/acrilico.jpeg"},
       { "name": "Acuarela",  "image":"/assets/images/tecnicas_principales/pintura/acuarela.jpeg"},
-      { "name": "Pastel",    "image":"/assets/images/tecnicas_principales/pintura/pastel.jpeg"}
+      { "name": "Pastel",    "image":"/assets/images/tecnicas_principales/pintura/pastel.jpeg"},
+      { "name": "Serigrafia",    "image":"/assets/images/tecnicas_principales/pintura/serigrafia.jpeg"}
     ]
   },
   {
