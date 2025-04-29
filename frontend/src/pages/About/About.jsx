@@ -26,9 +26,10 @@ const About = () => {
   return (
     <section className="slideshow-section">
       <div className="slideshow-tittle">
-        <h1>Lorem Ipsum
-        </h1>
-      </div>
+  <h1>
+    <span className="first-name">Matias</span> <span className="last-name">Borsalino</span>
+  </h1>
+</div>
         <div className="slideshow-container">
           {images.map((img, index) => (
             <div
@@ -54,7 +55,12 @@ const About = () => {
         </div>
       <div className="slideshow-text">
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        Nace en 1979 en Ciudad de Buenos Aires, Argentina. Estudia varios años en el
+        Instituto Universitario Nacional de Arte (IUNA, actualmente UNA) la
+        Licenciatura en Artes Visuales con orientación en Pintura. Luego, además de
+        participar en talleres de literatura; cursa un año de Arquitectura en la
+        Universidad de Palermo. Finalmente ingresa en la carrera de Licenciatura en
+        Fotografía en la misma Universidad donde transita todo el grado académico.
         </p>
 
       </div>
