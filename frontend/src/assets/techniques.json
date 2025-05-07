@@ -115,9 +115,28 @@
             "name": "Musica",
             "items": [
               {
-                "name": "Guitarra",
+                "name": "Contrabajista",
+                "image": "/assets/images/images_details/dibujo/lapiz/musica/contrabajista/CCI03092024_00037 cold.png",
                 "variants": [
-                  { "name": "Guitarra roja", "image": "/assets/images/lapiz/musica/guitarra/roja.jpeg" }
+                  { "name": "Guitarra roja", "image":     "/assets/images/images_details/dibujo/lapiz/musica/contrabajista/CCI03092024_00037 fuc..png" },
+                  { "name": "Guitarra azul", "image":     "/assets/images/images_details/dibujo/lapiz/musica/contrabajista/CCI03092024_00037 golden.png" },
+                  { "name": "Guitarra verde", "image":    "/assets/images/images_details/dibujo/lapiz/musica/contrabajista/CCI03092024_00037 goldy old.png" },
+                  { "name": "Guitarra amarilla", "image": "/assets/images/images_details/dibujo/lapiz/musica/contrabajista/CCI03092024_00037 green fluo oxido.png" },
+                  { "name": "Guitarra rosa", "image":     "/assets/images/images_details/dibujo/lapiz/musica/contrabajista/CCI03092024_00037 inwell.png" },
+                  { "name": "Guitarra violeta", "image":  "/assets/images/images_details/dibujo/lapiz/musica/contrabajista/CCI03092024_00037 viol. pink.png" }
+                ]
+              },
+              {
+                "name": "Paganini",
+                "image": "/assets/images/images_details/dibujo/lapiz/musica/paganini/Niccolò Paganini (sepia) - copia ama. old.jpg",
+                "variants": [
+                  { "name": "Guitarra roja",    "image": "/assets/images/images_details/dibujo/lapiz/musica/paganini/Niccolò Paganini (sepia) - copia azul.jpg" },
+                  { "name": "Guitarra azul",    "image": "/assets/images/images_details/dibujo/lapiz/musica/paganini/Niccolò Paganini (sepia) - copia cian.jpg" },
+                  { "name": "Guitarra verde",   "image": "/assets/images/images_details/dibujo/lapiz/musica/paganini/Niccolò Paganini (sepia) - copia fuc..jpg" },
+                  { "name": "Guitarra amarilla","image": "/assets/images/images_details/dibujo/lapiz/musica/paganini/Niccolò Paganini (sepia) - copia green.jpg" },
+                  { "name": "Guitarra rosa",    "image": "/assets/images/images_details/dibujo/lapiz/musica/paganini/Niccolò Paganini (sepia) - copia inkwell.jpg" },
+                  { "name": "Guitarra violeta", "image": "/assets/images/images_details/dibujo/lapiz/musica/paganini/Niccolò Paganini (sepia) - copia viol..jpg" },
+                  { "name": "Guitarra naranja", "image": "/assets/images/images_details/dibujo/lapiz/musica/paganini/Niccolò Paganini (sepia) - copia.jpg" }
                 ]
               }
             ]
