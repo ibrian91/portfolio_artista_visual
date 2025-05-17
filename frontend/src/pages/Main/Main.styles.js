@@ -1,5 +1,3 @@
-
-
 export const outerBoxStyle = {
   display: "flex",
   alignItems: "center",
@@ -31,13 +29,19 @@ export const innerBoxStyle = {
   justifyContent: "center",
   width: "100%",
   maxWidth: "1700px",
-  height: "auto", // permite crecer en mobile
+  height: "auto",
 
-  // Media query usando el sistema de breakpoints de MUI
-  '@media (max-width: 900px)': {
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "16px",
+  // Breakpoints MUI
+  flexDirection: {
+    xs: "column", // hasta 600px
+    md: "row",    // desde 900px
+  },
+  alignItems: {
+    xs: "center",
+  },
+  gap: {
+    xs: "16px",
+    sm: "20px",
   },
 };
 
@@ -48,7 +52,10 @@ export const motionCardStyle = {
   bgcolor: "#3C2E2B",
   borderRadius: "12px",
   padding: 0,
-  height: "550px", // 🔥 clave para ocupar todo el alto del padre en desktop
+  height: {
+    xs: "300px",
+    sm: "550px",
+  },
   overflow: "hidden",
   cursor: "pointer",
   position: "relative",
@@ -59,11 +66,6 @@ export const motionCardStyle = {
   },
   "&:hover .titleBox": {
     opacity: 1,
-  },
-
-  // Mobile override
-  '@media (max-width: 600px)': {
-    height: "300px", // sólo se aplica este en pantallas pequeñas
   },
 };
 
@@ -109,14 +111,13 @@ export const titleBoxStyle = {
 };
 
 export const charStyle = {
-  fontSize: "2.5rem",
+  fontSize: {
+    xs: "1.5rem",
+    sm: "2.5rem",
+  },
   fontFamily: "'Playfair Display', serif",
   textTransform: "uppercase",
   textShadow: "2px 2px 8px rgba(0, 0, 0, 0.8)",
   color: "white",
   display: "inline-block",
-
-  '@media (max-width: 600px)': {
-    fontSize: "1.5rem",
-  },
 };

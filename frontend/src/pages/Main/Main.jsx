@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Card, CardContent } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import techniquesData from "../../assets/techniques.json";
@@ -15,7 +15,7 @@ import {
   charStyle,
 } from "./Main.styles";
 
-const MotionCard = motion(Card);
+const MotionCard = motion.create(Card);
 
 const Main = () => {
   const [techniques, setTechniques] = useState([]);
@@ -77,4 +77,4 @@ const Main = () => {
   );
 };
 
-export default Main;  
+export default Main;
