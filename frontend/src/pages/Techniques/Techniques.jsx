@@ -102,13 +102,22 @@ const Techniques = () => {
       minHeight="80vh"
       color="white"
     >
-      <Typography variant="h4" fontWeight="bold" mb={3} color="black">
-        {selectedItem
-          ? selectedItem.name
-          : selectedCategory
-          ? selectedCategory.name
-          : categories.title}
-      </Typography>
+<Typography
+  variant="h3"
+  fontWeight="bold"
+  mb={3}
+  sx={{
+    color: "#000",
+    textShadow: "0 2px 8px #fff, 2px 2px 4px rgba(0,0,0,0.4)",
+    letterSpacing: 4,
+  }}
+>
+  {selectedItem
+    ? selectedItem.name
+    : selectedCategory
+    ? selectedCategory.name
+    : categories.title}
+</Typography>
 
       {(selectedCategory || selectedItem) && (
         <button onClick={handleBack} style={{ marginBottom: 20 }}>

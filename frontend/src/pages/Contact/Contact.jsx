@@ -6,8 +6,8 @@ const Contact = () => {
     <section className="section">
       <h2>¿Querés conectar con el arte?</h2>
       <p>
-        Ya sea para adquirir una obra, colaborar en un proyecto, invitarme a una exposición o simplemente compartir una idea, estás en el lugar correcto. 
-        Estoy abierto a propuestas artísticas, charlas, encuentros culturales o cualquier intercambio que gire en torno al arte contemporáneo.
+        Ya sea para adquirir una obra, colaborar en un proyecto, invitarme a una exposición o simplemente compartir una idea, estás en el lugar correcto.
+        Estoy abierto a propuestas artísticas, charlas, encuentros culturales o cualquier intercambio que gire en torno al arte.
       </p>
 
       <div className="contact-info">
@@ -17,11 +17,6 @@ const Contact = () => {
       </div>
 
       <p>
-        Me interesa especialmente el cruce entre lo visual y lo sensorial, así que si tu proyecto o consulta tiene algo que decir en ese sentido, será un placer conversar. 
-        También participo en ferias, muestras colectivas y colaboraciones con otros artistas visuales, curadores y espacios independientes.
-      </p>
-
-      <p>
         Si sos parte de una institución, un centro cultural o simplemente te interesa el arte desde un lugar sensible, podés escribirme directamente o seguir mis publicaciones en redes sociales.
       </p>
 
@@ -29,8 +24,8 @@ const Contact = () => {
   <iframe
     title="Ubicación"
     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d105073.33124859956!2d-58.515705997949574!3d-34.61575126950637!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95bcca3d05457fbb%3A0xe160f4fce7f7c017!2sCdad.%20Aut%C3%B3noma%20de%20Buenos%20Aires!5e0!3m2!1ses-419!2sar!4v1745027880764!5m2!1ses-419!2sar"
-    width="600px"
-    height="450px"
+    width="500px"
+    height="350px"
     style={{ border: 0, borderRadius: "12px" }}
     allowFullScreen=""
     loading="lazy"

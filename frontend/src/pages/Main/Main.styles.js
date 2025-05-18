@@ -19,6 +19,7 @@ export const mainCardStyle = {
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
+  marginTop: "100px",
 };
 
 export const innerBoxStyle = {
@@ -111,13 +112,12 @@ export const titleBoxStyle = {
 };
 
 export const charStyle = {
-  fontSize: {
-    xs: "1.5rem",
-    sm: "2.5rem",
-  },
-  fontFamily: "'Playfair Display', serif",
-  textTransform: "uppercase",
-  textShadow: "2px 2px 8px rgba(0, 0, 0, 0.8)",
-  color: "white",
   display: "inline-block",
+  fontFamily: "'Cooper Black', serif",
+  fontSize: "3rem", // Aumenta el tamaño aquí
+  lineHeight: 1.1,
+  color: "#fff",
+  textShadow: "2px 2px 8px rgba(0,0,0,0.7)",
+  whiteSpace: "pre",
+  // Puedes agregar overflow si es necesario
 };
