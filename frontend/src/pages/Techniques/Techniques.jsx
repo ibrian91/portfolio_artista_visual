@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Box, Typography, Card } from "@mui/material";
+import { Box, Typography, Card, Button } from "@mui/material";
+
+const ITEMS_PER_PAGE = 8;
 
 const Techniques = () => {
   const location = useLocation();
@@ -9,10 +11,12 @@ const Techniques = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [variantIndex, setVariantIndex] = useState(0);
+  const [page, setPage] = useState(1);
 
   const handleCategoryClick = (category) => {
     if (category.name === "Lapiz" && category.collections) {
       setSelectedCategory(category);
+      setPage(1); // Reset page on category change
     }
   };
 
@@ -25,6 +29,7 @@ const Techniques = () => {
       setSelectedItem(null);
     } else if (selectedCategory) {
       setSelectedCategory(null);
+      setPage(1);
     }
   };
 
@@ -32,47 +37,15 @@ const Techniques = () => {
     if (element.image) {
       return (
         <Box
-        component="img"
-        src={encodeURI(element.image)}
-        alt={element.name}
-        sx={{
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-        }}
-      />
-      );
-    } else {
-      return (
-        <Typography
-          variant="subtitle1"
-          color="black"
+          component="img"
+          src={encodeURI(element.image)}
+          alt={element.name}
           sx={{
-            textAlign: "center",
-            padding: "10px",
-            fontWeight: "bold",
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
           }}
-        >
-          {element.name}
-        </Typography>
-      );
-    }
-  }
-
-  const renderCardContent = (element) => {
-    if (element.image) {
-      return (
-        <Box
-        component="img"
-        src={encodeURI(element.image)}
-        alt={element.name}
-        sx={{
-          width: "80vw",
-          height: "auto",
-          maxHeight: "90vh",
-          objectFit: "contain",
-        }}
-      />
+        />
       );
     } else {
       return (
@@ -90,6 +63,16 @@ const Techniques = () => {
       );
     }
   };
+
+  // --- PAGINACIÓN PARA ITEMS ---
+  let paginatedItems = [];
+  let totalPages = 1;
+  if (selectedCategory && !selectedItem) {
+    const allItems = selectedCategory.collections.flatMap((collection) => collection.items);
+    totalPages = Math.ceil(allItems.length / ITEMS_PER_PAGE);
+    const start = (page - 1) * ITEMS_PER_PAGE;
+    paginatedItems = allItems.slice(start, start + ITEMS_PER_PAGE);
+  }
 
   return (
     <Box
@@ -102,22 +85,22 @@ const Techniques = () => {
       minHeight="80vh"
       color="white"
     >
-<Typography
-  variant="h3"
-  fontWeight="bold"
-  mb={3}
-  sx={{
-    color: "#000",
-    textShadow: "0 2px 8px #fff, 2px 2px 4px rgba(0,0,0,0.4)",
-    letterSpacing: 4,
-  }}
->
-  {selectedItem
-    ? selectedItem.name
-    : selectedCategory
-    ? selectedCategory.name
-    : categories.title}
-</Typography>
+      <Typography
+        variant="h3"
+        fontWeight="bold"
+        mb={3}
+        sx={{
+          color: "#000",
+          textShadow: "0 2px 8px #fff, 2px 2px 4px rgba(0,0,0,0.4)",
+          letterSpacing: 4,
+        }}
+      >
+        {selectedItem
+          ? selectedItem.name
+          : selectedCategory
+          ? selectedCategory.name
+          : categories.title}
+      </Typography>
 
       {(selectedCategory || selectedItem) && (
         <button onClick={handleBack} style={{ marginBottom: 20 }}>
@@ -132,6 +115,7 @@ const Techniques = () => {
         justifyContent="center"
         width="100%"
         maxWidth="800px"
+        minHeight="320px" // para mantener altura con menos de 8 items
       >
         {/* Mostrar categorías si no hay selección */}
         {!selectedCategory && categories.categoria
@@ -157,142 +141,216 @@ const Techniques = () => {
             ))
           : null}
 
-        {/* Mostrar items si hay categoría seleccionada */}
+        {/* Mostrar items paginados si hay categoría seleccionada */}
         {selectedCategory && !selectedItem
-          ? selectedCategory.collections.flatMap((collection, i) =>
-              collection.items.map((item, j) => (
-                <Card
-                  key={`${i}-${j}`}
-                  onClick={() => handleItemClick(item)}
-                  sx={{
-                    backgroundColor: "transparent",
-                    boxShadow: "none",
-                    width: "150px",
-                    height: "155px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "relative",
-                    overflow: "hidden",
-                    cursor: "pointer",
-                  }}
-                >
-                  {renderLogoContent(item)}
-                </Card>
-              ))
-            )
+          ? paginatedItems.map((item, idx) => (
+              <Card
+                key={idx}
+                onClick={() => handleItemClick(item)}
+                sx={{
+                  backgroundColor: "transparent",
+                  boxShadow: "none",
+                  width: "150px",
+                  height: "155px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  position: "relative",
+                  overflow: "hidden",
+                  cursor: "pointer",
+                }}
+              >
+                {renderLogoContent(item)}
+              </Card>
+            ))
           : null}
-
-        {/* Mostrar variante en carrusel si hay item seleccionado */}
-        {selectedItem && selectedItem.variants.length > 0 && (
-  <Box
-    position="fixed"
-    top={0}
-    left={0}
-    width="100vw"
-    height="100vh"
-    bgcolor="black"
-    zIndex={9999}
-    display="flex"
-    flexDirection="column"
-    alignItems="center"
-    justifyContent="center"
-  >
-    {/* Botón Volver */}
-    <button
-      onClick={handleBack}
-      style={{
-        position: "absolute",
-        top: 20,
-        left: 20,
-        zIndex: 10000,
-        background: "white",
-        border: "none",
-        padding: "10px 20px",
-        borderRadius: "5px",
-        cursor: "pointer",
-      }}
-    >
-      Volver
-    </button>
-
-    {/* Contenedor de la imagen con flechas */}
-    <Box
-      position="relative"
-      width="80vw"
-      height="70vh"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-    >
-      {/* Flecha izquierda */}
-      <button
-        onClick={() =>
-          setVariantIndex((prev) =>
-            prev === 0 ? selectedItem.variants.length - 1 : prev - 1
-          )
-        }
-        style={{
-          position: "absolute",
-          left: 0,
-          zIndex: 10000,
-          background: "transparent",
-          border: "none",
-          color: "white",
-          fontSize: "3rem",
-          cursor: "pointer",
-        }}
-      >
-        ◀
-      </button>
-
-      {/* Imagen */}
-      <Box
-        component="img"
-        src={encodeURI(selectedItem.variants[variantIndex].image)}
-        alt={selectedItem.variants[variantIndex].name}
-        sx={{
-          maxWidth: "100%",
-          maxHeight: "100%",
-          objectFit: "contain",
-        }}
-      />
-
-      {/* Flecha derecha */}
-      <button
-        onClick={() =>
-          setVariantIndex((prev) =>
-            prev === selectedItem.variants.length - 1 ? 0 : prev + 1
-          )
-        }
-        style={{
-          position: "absolute",
-          right: 0,
-          zIndex: 10000,
-          background: "transparent",
-          border: "none",
-          color: "white",
-          fontSize: "3rem",
-          cursor: "pointer",
-        }}
-      >
-        ▶
-      </button>
-    </Box>
-
-    {/* Descripción */}
-    <Typography
-      variant="subtitle1"
-      color="white"
-      mt={2}
-      textAlign="center"
-      maxWidth="80vw"
-    >
-      {selectedItem.variants[variantIndex].name}
-    </Typography>
-  </Box>
-)}
       </Box>
+
+      {/* Paginación con estilos similares al título */}
+      {selectedCategory && !selectedItem && totalPages > 1 && (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          mt={2}
+          gap={1}
+          sx={{
+            color: "#000",
+            textShadow: "0 2px 8px #fff, 2px 2px 4px rgba(0,0,0,0.4)",
+            letterSpacing: 4,
+            fontWeight: "bold",
+            fontSize: "1.2rem",
+          }}
+        >
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+            disabled={page === 1}
+            sx={{
+              color: "#000",
+              borderColor: "#000",
+              backgroundColor: "#fff",
+              fontWeight: "bold",
+              textShadow: "0 2px 8px #fff, 2px 2px 4px rgba(0,0,0,0.4)",
+              letterSpacing: 2,
+              '&.Mui-disabled': {
+                opacity: 0.5,
+              },
+            }}
+          >
+            Anterior
+          </Button>
+          {[...Array(totalPages)].map((_, i) => (
+            <Button
+              key={i}
+              variant={page === i + 1 ? "contained" : "outlined"}
+              size="small"
+              onClick={() => setPage(i + 1)}
+              sx={{
+                minWidth: 32,
+                color: page === i + 1 ? "#fff" : "#000",
+                backgroundColor: page === i + 1 ? "#000" : "#fff",
+                borderColor: "#000",
+                fontWeight: "bold",
+                textShadow: "0 2px 8px #fff, 2px 2px 4px rgba(0,0,0,0.4)",
+                letterSpacing: 2,
+              }}
+            >
+              {i + 1}
+            </Button>
+          ))}
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages}
+            sx={{
+              color: "#000",
+              borderColor: "#000",
+              backgroundColor: "#fff",
+              fontWeight: "bold",
+              textShadow: "0 2px 8px #fff, 2px 2px 4px rgba(0,0,0,0.4)",
+              letterSpacing: 2,
+              '&.Mui-disabled': {
+                opacity: 0.5,
+              },
+            }}
+          >
+            Siguiente
+          </Button>
+        </Box>
+      )}
+
+      {/* Mostrar variante en carrusel si hay item seleccionado */}
+      {selectedItem && selectedItem.variants && selectedItem.variants.length > 0 && (
+        <Box
+          position="fixed"
+          top={0}
+          left={0}
+          width="100vw"
+          height="100vh"
+          bgcolor="black"
+          zIndex={9999}
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+        >
+          {/* Botón Volver */}
+          <button
+            onClick={handleBack}
+            style={{
+              position: "absolute",
+              top: 20,
+              left: 20,
+              zIndex: 10000,
+              background: "white",
+              border: "none",
+              padding: "10px 20px",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Volver
+          </button>
+
+          {/* Contenedor de la imagen con flechas */}
+          <Box
+            position="relative"
+            width="80vw"
+            height="70vh"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {/* Flecha izquierda */}
+            <button
+              onClick={() =>
+                setVariantIndex((prev) =>
+                  prev === 0 ? selectedItem.variants.length - 1 : prev - 1
+                )
+              }
+              style={{
+                position: "absolute",
+                left: 0,
+                zIndex: 10000,
+                background: "transparent",
+                border: "none",
+                color: "white",
+                fontSize: "3rem",
+                cursor: "pointer",
+              }}
+            >
+              ◀
+            </button>
+
+            {/* Imagen */}
+            <Box
+              component="img"
+              src={encodeURI(selectedItem.variants[variantIndex].image)}
+              alt={selectedItem.variants[variantIndex].name}
+              sx={{
+                maxWidth: "100%",
+                maxHeight: "100%",
+                objectFit: "contain",
+              }}
+            />
+
+            {/* Flecha derecha */}
+            <button
+              onClick={() =>
+                setVariantIndex((prev) =>
+                  prev === selectedItem.variants.length - 1 ? 0 : prev + 1
+                )
+              }
+              style={{
+                position: "absolute",
+                right: 0,
+                zIndex: 10000,
+                background: "transparent",
+                border: "none",
+                color: "white",
+                fontSize: "3rem",
+                cursor: "pointer",
+              }}
+            >
+              ▶
+            </button>
+          </Box>
+
+          {/* Descripción */}
+          <Typography
+            variant="subtitle1"
+            color="white"
+            mt={2}
+            textAlign="center"
+            maxWidth="80vw"
+          >
+            {selectedItem.variants[variantIndex].name}
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };

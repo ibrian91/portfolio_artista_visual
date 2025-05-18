@@ -108,6 +108,213 @@
                   { "name": "Revolver variante 8", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047ama. palido.png" },
                   { "name": "Revolver variante 9", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/Inwell c rosa china ama..png" }
                 ]
+              },
+              {
+                "name": "Anciano leyendo",
+                "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/anciano_leyendo/CCI21082024_00034.jpg",
+                "variants": [
+                  { "name": "Anciano leyendo rojo", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/anciano_leyendo/CCI21082024_00034 azul.jpg" },
+                  { "name": "Anciano leyendo azul", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/anciano_leyendo/CCI21082024_00034 inwell.png" },
+                  { "name": "Anciano leyendo verde", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/anciano_leyendo/CCI21082024_00034 old.png" },
+                  { "name": "Anciano leyendo amarillo", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/anciano_leyendo/CCI21082024_00034 old2.png" },
+                  { "name": "Anciano leyendo rosa", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/anciano_leyendo/CCI21082024_00034 rose s.s.soft.png" },
+                  { "name": "Anciano leyendo cian", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/anciano_leyendo/CCI21082024_00034-cianotipo.png" }
+                ]
+              },
+              {
+                "name": "Arbolito",
+                "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/arbolito/atardecer.png",
+                "variants": [
+                  { "name": "Arbolito rojo",      "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/arbolito/CCI21082024_00008_atardecer_rojizo.png" },
+                  { "name": "Arbolito amarillo",  "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/arbolito/CCI21082024_00008_atardecer.png" },
+                  { "name": "Arbolito azul",      "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/arbolito/CCI21082024_00008_cian.png" },
+                  { "name": "Arbolito rojo",      "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/arbolito/CCI21082024_00008_ver.pastel.png" },
+                  { "name": "Arbolito amarillo",  "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/arbolito/CCI21082024_00008_viol..png" },
+                  { "name": "Arbolito azul",      "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/arbolito/CCI21082024_00008_viol..png" }
+                ]
+              },
+              {
+                "name": "Dormi",
+                "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_ant..png",
+                "variants": [
+                  {
+                    "name": "Dormi ant.",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_ant..png"
+                  },
+                  {
+                    "name": "Dormi azul oscuro",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_azul_oscuro.png"
+                  },
+                  {
+                    "name": "Dormi azul",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_azul.png"
+                  },
+                  {
+                    "name": "Dormi byn",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_byn.png"
+                  },
+                  {
+                    "name": "Dormi cianotipo",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_cianotipo.png"
+                  },
+                  {
+                    "name": "Dormi inkwell",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_inkwell.png"
+                  },
+                  {
+                    "name": "Dormi rosa azul",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_rosa_azul.png"
+                  },
+                  {
+                    "name": "Dormi turquesa soft",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_turq. soft.png"
+                  },
+                  {
+                    "name": "Dormi verde",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_ver..png"
+                  },
+                  {
+                    "name": "Dormi azul oscuro 2",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/DSC_1844_dormi_(azul oscuro).png"
+                  }
+                ]
+              },
+              {
+                "name": "Jardin",
+                "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/jardin/CCI21082024_00007_ant..png",
+                "variants": [
+                  { "name": "Jardin variante 1", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/jardin/CCI21082024_00007_atardecer.png" },
+                  { "name": "Jardin variante 2", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/jardin/CCI21082024_00007_fuc..png" },
+                  { "name": "Jardin variante 3", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/jardin/CCI21082024_00007_inkwell.png" },
+                  { "name": "Jardin variante 4", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/jardin/CCI21082024_00007_turq..png" },
+                  { "name": "Jardin variante 5", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/jardin/CCI21082024_00007.png" }
+                ]
+              },
+              {
+                "name": "Revolver",
+                "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 -.png",
+                "variants": [
+                  { "name": "Revolver variante 1", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 -byn sobreexp..png" },
+                  { "name": "Revolver variante 2", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 -byn.png" },
+                  { "name": "Revolver variante 3", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 -inkwell.png" },
+                  { "name": "Revolver variante 4", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 ama..png" },
+                  { "name": "Revolver variante 5", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 azul.png" },
+                  { "name": "Revolver variante 6", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 fuc..png" },
+                  { "name": "Revolver variante 7", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047---blood.png" },
+                  { "name": "Revolver variante 8", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047ama. palido.png" },
+                  { "name": "Revolver variante 9", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/Inwell c rosa china ama..png" }
+                ]
+              },
+              {
+                "name": "Revolver",
+                "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 -.png",
+                "variants": [
+                  { "name": "Revolver variante 1", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 -byn sobreexp..png" },
+                  { "name": "Revolver variante 2", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 -byn.png" },
+                  { "name": "Revolver variante 3", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 -inkwell.png" },
+                  { "name": "Revolver variante 4", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 ama..png" },
+                  { "name": "Revolver variante 5", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 azul.png" },
+                  { "name": "Revolver variante 6", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 fuc..png" },
+                  { "name": "Revolver variante 7", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047---blood.png" },
+                  { "name": "Revolver variante 8", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047ama. palido.png" },
+                  { "name": "Revolver variante 9", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/Inwell c rosa china ama..png" }
+                ]
+              },
+              {
+                "name": "Anciano leyendo",
+                "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/anciano_leyendo/CCI21082024_00034.jpg",
+                "variants": [
+                  { "name": "Anciano leyendo rojo", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/anciano_leyendo/CCI21082024_00034 azul.jpg" },
+                  { "name": "Anciano leyendo azul", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/anciano_leyendo/CCI21082024_00034 inwell.png" },
+                  { "name": "Anciano leyendo verde", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/anciano_leyendo/CCI21082024_00034 old.png" },
+                  { "name": "Anciano leyendo amarillo", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/anciano_leyendo/CCI21082024_00034 old2.png" },
+                  { "name": "Anciano leyendo rosa", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/anciano_leyendo/CCI21082024_00034 rose s.s.soft.png" },
+                  { "name": "Anciano leyendo cian", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/anciano_leyendo/CCI21082024_00034-cianotipo.png" }
+                ]
+              },
+              {
+                "name": "Arbolito",
+                "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/arbolito/atardecer.png",
+                "variants": [
+                  { "name": "Arbolito rojo",      "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/arbolito/CCI21082024_00008_atardecer_rojizo.png" },
+                  { "name": "Arbolito amarillo",  "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/arbolito/CCI21082024_00008_atardecer.png" },
+                  { "name": "Arbolito azul",      "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/arbolito/CCI21082024_00008_cian.png" },
+                  { "name": "Arbolito rojo",      "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/arbolito/CCI21082024_00008_ver.pastel.png" },
+                  { "name": "Arbolito amarillo",  "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/arbolito/CCI21082024_00008_viol..png" },
+                  { "name": "Arbolito azul",      "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/arbolito/CCI21082024_00008_viol..png" }
+                ]
+              },
+              {
+                "name": "Dormi",
+                "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_ant..png",
+                "variants": [
+                  {
+                    "name": "Dormi ant.",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_ant..png"
+                  },
+                  {
+                    "name": "Dormi azul oscuro",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_azul_oscuro.png"
+                  },
+                  {
+                    "name": "Dormi azul",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_azul.png"
+                  },
+                  {
+                    "name": "Dormi byn",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_byn.png"
+                  },
+                  {
+                    "name": "Dormi cianotipo",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_cianotipo.png"
+                  },
+                  {
+                    "name": "Dormi inkwell",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_inkwell.png"
+                  },
+                  {
+                    "name": "Dormi rosa azul",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_rosa_azul.png"
+                  },
+                  {
+                    "name": "Dormi turquesa soft",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_turq. soft.png"
+                  },
+                  {
+                    "name": "Dormi verde",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/CCI03092024_00031_ver..png"
+                  },
+                  {
+                    "name": "Dormi azul oscuro 2",
+                    "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/dormi/DSC_1844_dormi_(azul oscuro).png"
+                  }
+                ]
+              },
+              {
+                "name": "Jardin",
+                "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/jardin/CCI21082024_00007_ant..png",
+                "variants": [
+                  { "name": "Jardin variante 1", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/jardin/CCI21082024_00007_atardecer.png" },
+                  { "name": "Jardin variante 2", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/jardin/CCI21082024_00007_fuc..png" },
+                  { "name": "Jardin variante 3", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/jardin/CCI21082024_00007_inkwell.png" },
+                  { "name": "Jardin variante 4", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/jardin/CCI21082024_00007_turq..png" },
+                  { "name": "Jardin variante 5", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/jardin/CCI21082024_00007.png" }
+                ]
+              },
+              {
+                "name": "Revolver",
+                "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 -.png",
+                "variants": [
+                  { "name": "Revolver variante 1", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 -byn sobreexp..png" },
+                  { "name": "Revolver variante 2", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 -byn.png" },
+                  { "name": "Revolver variante 3", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 -inkwell.png" },
+                  { "name": "Revolver variante 4", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 ama..png" },
+                  { "name": "Revolver variante 5", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 azul.png" },
+                  { "name": "Revolver variante 6", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047 fuc..png" },
+                  { "name": "Revolver variante 7", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047---blood.png" },
+                  { "name": "Revolver variante 8", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/CCI21082024_00047ama. palido.png" },
+                  { "name": "Revolver variante 9", "image": "/assets/images/images_details/dibujo/lapiz/miscelaneas/revolver/Inwell c rosa china ama..png" }
+                ]
               }
             ]
           },
