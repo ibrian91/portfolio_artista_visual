@@ -7,6 +7,7 @@ const images = [biografia1, biografia2];
 
 const About = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loadedIndexes, setLoadedIndexes] = useState([false, false]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -21,6 +22,14 @@ const About = () => {
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const handleImageLoad = (idx) => {
+    setLoadedIndexes((prev) => {
+      const updated = [...prev];
+      updated[idx] = true;
+      return updated;
+    });
   };
 
   return (
@@ -46,8 +55,14 @@ const About = () => {
             <img
               src={img}
               alt={`Slide ${index}`}
-              style={{ width: "100%", height: "auto" }}
+              style={{
+                width: "100%",
+                height: "auto",
+                filter: loadedIndexes[index] ? "none" : "blur(8px)",
+                transition: "filter 0.5s"
+              }}
               loading="eager"
+              onLoad={() => handleImageLoad(index)}
             />
           </div>
         ))}
