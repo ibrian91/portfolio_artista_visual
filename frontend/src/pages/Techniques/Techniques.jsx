@@ -2,54 +2,7 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Box, Typography, Card, Button } from "@mui/material";
 
-const ITEMS_PER_PAGE = 6; // Menos imágenes por página para mejorar la carga
-
-// Componente de imagen con blur hasta que carga
-const BlurImage = ({ src, alt, style, ...props }) => {
-  const [loaded, setLoaded] = useState(false);
-  return (
-    <Box
-      sx={{
-        position: "relative",
-        width: "100%",
-        height: "100%",
-        ...style,
-      }}
-    >
-      <Box
-        component="img"
-        src={src}
-        alt={alt}
-        loading="lazy"
-        onLoad={() => setLoaded(true)}
-        sx={{
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          filter: loaded ? "none" : "blur(12px) grayscale(60%)",
-          transition: "filter 0.5s",
-          display: "block",
-        }}
-        {...props}
-      />
-      {!loaded && (
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            bgcolor: "rgba(240,240,240,0.3)",
-            zIndex: 1,
-          }}
-        >
-          <Typography variant="caption" color="gray">Cargando...</Typography>
-        </Box>
-      )}
-    </Box>
-  );
-};
+const ITEMS_PER_PAGE = 8;
 
 const Techniques = () => {
   const location = useLocation();
@@ -80,17 +33,18 @@ const Techniques = () => {
     }
   };
 
-  // Usa BlurImage en vez de Box para imágenes
+  // Renderiza la imagen sin blur ni lazy loading
   const renderLogoContent = (element) => {
     if (element.image) {
       return (
-        <BlurImage
+        <img
           src={encodeURI(element.image)}
           alt={element.name}
           style={{
             width: "100%",
             height: "100%",
             objectFit: "cover",
+            display: "block",
           }}
         />
       );
@@ -289,7 +243,7 @@ const Techniques = () => {
         </Box>
       )}
 
-      {/* Carrusel de variantes con blur */}
+      {/* Carrusel de variantes sin blur ni lazy loading */}
       {selectedItem && selectedItem.variants && selectedItem.variants.length > 0 && (
         <Box
           position="fixed"
@@ -349,14 +303,14 @@ const Techniques = () => {
               ◀
             </button>
 
-            {/* Imagen con blur */}
-            <BlurImage
+            <img
               src={encodeURI(selectedItem.variants[variantIndex].image)}
               alt={selectedItem.variants[variantIndex].name}
               style={{
                 maxWidth: "100%",
                 maxHeight: "100%",
                 objectFit: "contain",
+                display: "block",
               }}
             />
 
