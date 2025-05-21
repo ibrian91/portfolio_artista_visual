@@ -3,6 +3,34 @@ import "./About.css";
 import biografia1 from "/assets/images/biografia/biografia1.jpeg";
 import biografia2 from "/assets/images/biografia/biografia2.jpeg";
 
+const ImageWithLoader = ({ src, alt }) => {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <div style={{ position: "relative", minHeight: "320px", minWidth: "100%" }}>
+      {!loaded && (
+        <div style={{
+          position: "absolute", inset: 0, background: "#eee",
+          display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1
+        }}>
+          <span style={{ color: "#888" }}>Cargando imagen...</span>
+        </div>
+      )}
+      <img
+        src={src}
+        alt={alt}
+        style={{
+          width: "100%",
+          height: "auto",
+          opacity: loaded ? 1 : 0,
+          transition: "opacity 0.5s"
+        }}
+        onLoad={() => setLoaded(true)}
+        loading="eager"
+      />
+    </div>
+  );
+};
+
 const images = [biografia1, biografia2];
 
 const About = () => {
@@ -31,14 +59,15 @@ const About = () => {
   </h1>
 </div>
         <div className="slideshow-container">
-          {images.map((img, index) => (
-            <div
-              key={index}
-              className={`slide ${index === currentIndex ? "active" : ""}`}
-            >
-              <img src={img} alt={`Slide ${index}`} />
-            </div>
-          ))}
+        {images.map((img, index) => (
+  <div
+    key={index}
+    className={`slide ${index === currentIndex ? "active" : ""}`}
+    style={{ minHeight: "320px", minWidth: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+  >
+    <ImageWithLoader src={img} alt={`Slide ${index}`} />
+  </div>
+))}
           <div className="slideshow-controls">
             <button onClick={prevSlide} className="control-btn">‹</button>
             <button onClick={nextSlide} className="control-btn">›</button>
