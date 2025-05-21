@@ -40,6 +40,7 @@ const Techniques = () => {
           component="img"
           src={encodeURI(element.image)}
           alt={element.name}
+           loading="lazy"
           sx={{
             width: "100%",
             height: "100%",
@@ -310,6 +311,7 @@ const Techniques = () => {
               component="img"
               src={encodeURI(selectedItem.variants[variantIndex].image)}
               alt={selectedItem.variants[variantIndex].name}
+              loading="lazy"
               sx={{
                 maxWidth: "100%",
                 maxHeight: "100%",
