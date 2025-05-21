@@ -2,7 +2,54 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Box, Typography, Card, Button } from "@mui/material";
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 6; // Menos imágenes por página para mejorar la carga
+
+// Componente de imagen con blur hasta que carga
+const BlurImage = ({ src, alt, style, ...props }) => {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <Box
+      sx={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        ...style,
+      }}
+    >
+      <Box
+        component="img"
+        src={src}
+        alt={alt}
+        loading="lazy"
+        onLoad={() => setLoaded(true)}
+        sx={{
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          filter: loaded ? "none" : "blur(12px) grayscale(60%)",
+          transition: "filter 0.5s",
+          display: "block",
+        }}
+        {...props}
+      />
+      {!loaded && (
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            bgcolor: "rgba(240,240,240,0.3)",
+            zIndex: 1,
+          }}
+        >
+          <Typography variant="caption" color="gray">Cargando...</Typography>
+        </Box>
+      )}
+    </Box>
+  );
+};
 
 const Techniques = () => {
   const location = useLocation();
@@ -16,7 +63,7 @@ const Techniques = () => {
   const handleCategoryClick = (category) => {
     if (category.name === "Lapiz" && category.collections) {
       setSelectedCategory(category);
-      setPage(1); // Reset page on category change
+      setPage(1);
     }
   };
 
@@ -33,15 +80,14 @@ const Techniques = () => {
     }
   };
 
+  // Usa BlurImage en vez de Box para imágenes
   const renderLogoContent = (element) => {
     if (element.image) {
       return (
-        <Box
-          component="img"
+        <BlurImage
           src={encodeURI(element.image)}
           alt={element.name}
-           loading="lazy"
-          sx={{
+          style={{
             width: "100%",
             height: "100%",
             objectFit: "cover",
@@ -116,7 +162,7 @@ const Techniques = () => {
         justifyContent="center"
         width="100%"
         maxWidth="800px"
-        minHeight="320px" // para mantener altura con menos de 8 items
+        minHeight="320px"
       >
         {/* Mostrar categorías si no hay selección */}
         {!selectedCategory && categories.categoria
@@ -167,7 +213,7 @@ const Techniques = () => {
           : null}
       </Box>
 
-      {/* Paginación con estilos similares al título */}
+      {/* Paginación */}
       {selectedCategory && !selectedItem && totalPages > 1 && (
         <Box
           display="flex"
@@ -243,7 +289,7 @@ const Techniques = () => {
         </Box>
       )}
 
-      {/* Mostrar variante en carrusel si hay item seleccionado */}
+      {/* Carrusel de variantes con blur */}
       {selectedItem && selectedItem.variants && selectedItem.variants.length > 0 && (
         <Box
           position="fixed"
@@ -258,7 +304,6 @@ const Techniques = () => {
           alignItems="center"
           justifyContent="center"
         >
-          {/* Botón Volver */}
           <button
             onClick={handleBack}
             style={{
@@ -276,7 +321,6 @@ const Techniques = () => {
             Volver
           </button>
 
-          {/* Contenedor de la imagen con flechas */}
           <Box
             position="relative"
             width="80vw"
@@ -285,7 +329,6 @@ const Techniques = () => {
             alignItems="center"
             justifyContent="center"
           >
-            {/* Flecha izquierda */}
             <button
               onClick={() =>
                 setVariantIndex((prev) =>
@@ -306,20 +349,17 @@ const Techniques = () => {
               ◀
             </button>
 
-            {/* Imagen */}
-            <Box
-              component="img"
+            {/* Imagen con blur */}
+            <BlurImage
               src={encodeURI(selectedItem.variants[variantIndex].image)}
               alt={selectedItem.variants[variantIndex].name}
-              loading="lazy"
-              sx={{
+              style={{
                 maxWidth: "100%",
                 maxHeight: "100%",
                 objectFit: "contain",
               }}
             />
 
-            {/* Flecha derecha */}
             <button
               onClick={() =>
                 setVariantIndex((prev) =>
@@ -341,7 +381,6 @@ const Techniques = () => {
             </button>
           </Box>
 
-          {/* Descripción */}
           <Typography
             variant="subtitle1"
             color="white"
