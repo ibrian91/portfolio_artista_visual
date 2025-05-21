@@ -1,6 +1,5 @@
-// Home.jsx
 import { Box } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import HomePrincipal from "../../data/images/Home/HomePrincipal.jpeg";
 import {
   FullScreenBox,
@@ -12,7 +11,25 @@ import {
   StyledButton,
 } from "./Home.styles";
 
+const preloadBiografiaImages = () => {
+  [
+    "/assets/images/biografia/biografia1.webp",
+    "/assets/images/biografia/biografia2.webp"
+  ].forEach(src => {
+    const img = new window.Image();
+    img.src = src;
+  });
+};
+
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleEntrar = (e) => {
+    preloadBiografiaImages();
+    // Navega después de precargar
+    navigate("/portfolio");
+  };
+
   return (
     <FullScreenBox>
       <BackgroundImage
@@ -23,7 +40,7 @@ const Home = () => {
         <StyledCard>
           <Title>PORT-</Title>
           <Title>FOLIO</Title>
-          <StyledButton as={Link} to="/portfolio">
+          <StyledButton onClick={handleEntrar}>
             ENTRAR
           </StyledButton>
         </StyledCard>
