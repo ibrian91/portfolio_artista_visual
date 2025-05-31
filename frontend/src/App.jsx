@@ -6,6 +6,7 @@ import Techniques from "./pages/Techniques/Techniques";
 import Header from "./components/Header/Header";
 import About from "./pages/About/About";
 import Contact from "./pages/Contact/Contact";
+import FormPage from "./pages/FormPage/FormPage";
 
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="biografia" element={<About />} />
         <Route path="techniques" element={<Techniques />} />
         <Route path="contacto" element={<Contact />} />
+        <Route path="/form_images/key/:key" element={<FormPage />} />
       </Routes>
     </div>
   );
