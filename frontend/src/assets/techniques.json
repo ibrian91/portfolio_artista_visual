@@ -371,13 +371,8 @@
     "description": "La fotografía es el arte de capturar momentos y escenas a través de una cámara, utilizando luz y composición.",
     "image": "/assets/images/llamaradas/llamarada-roja.jpeg",
     "categoria": [
-      { "name": "Urbana", "image": "/assets/images/tecnicas_principales/fotografia/urbana.jpeg" },
-      { "name": "Arquitectura", "image": "/assets/images/tecnicas_principales/fotografia/arquitectura.jpeg" },
-      { "name": "Paisaje", "image": "/assets/images/tecnicas_principales/fotografia/paisaje.jpeg" },
-      { "name": "Documental", "image": "/assets/images/tecnicas_principales/fotografia/documental.jpeg" },
-      { "name": "Moda", "image": "/assets/images/tecnicas_principales/fotografia/moda.jpeg" },
-      { "name": "Retrato", "image": "/assets/images/tecnicas_principales/fotografia/retrato.jpeg" },
-      { "name": "Abstraccion", "image": "/assets/images/tecnicas_principales/fotografia/abstraccion.jpeg" }
+      { "name": "Blanco y Negro", "image": "/assets/images/tecnicas_principales/fotografia/blanco_negro.jpeg" },
+      { "name": "Color", "image": "/assets/images/tecnicas_principales/fotografia/color.jpeg" }
     ]
   },
   {

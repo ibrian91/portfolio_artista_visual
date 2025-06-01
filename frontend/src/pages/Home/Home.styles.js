@@ -64,12 +64,20 @@ export const StyledCard = styled(Card)({
 });
 
 export const Title = styled(Typography)({
-  color: "#FF4B2B",
-  fontSize: "32px",
-  fontWeight: 900,
-  letterSpacing: "3px",
-  fontFamily: "'Roboto Mono', monospace",
-});
+    color: "#111",
+    fontSize: "32px", // mismo tamaño que antes
+    fontWeight: 900,
+    letterSpacing: "3px",
+    fontFamily: "'Orbitron', 'Montserrat', 'Poppins', 'Oswald', 'Roboto Mono', monospace",
+    textTransform: "uppercase",
+    textShadow: `
+      0 0 6px #00f6ff,
+      0 0 2px #00f6ff,
+      2px 2px 0 #222,
+      4px 4px 8px #000
+    `,
+    WebkitTextStroke: "1.5px #00f6ff",
+  });
 
 export const Subtitle = styled(Typography)({
   color: "#ffffff",
