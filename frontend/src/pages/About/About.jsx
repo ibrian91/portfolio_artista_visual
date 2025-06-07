@@ -91,8 +91,8 @@ const About = () => {
         </p>
 
         <div className="statement-scrollbox">
-          <strong>STATEMENT ARTÍSTICO.</strong>
-          <p>
+          <strong className="javanese-text">STATEMENT ARTÍSTICO.</strong>
+          <p className="javanese-text">
             "Mi obra contiene aspectos muy diversos en cuanto a temáticas y técnicas. El
             dibujo es el método más utilizado en mis trabajos; ya sea como previos bocetos
             de posteriores pinturas o como resultado final. Uno de los aspectos particulares
