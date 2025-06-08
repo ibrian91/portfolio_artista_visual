@@ -1,6 +1,8 @@
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import HomePrincipal from "../../data/images/Home/HomePrincipal.jpeg";
+//import TittlePortfolio from "/assets/images/tittle_portfolio/TittlePortfolio.png";
+
 import {
   FullScreenBox,
   BackgroundImage,
@@ -71,9 +73,14 @@ const Home = () => {
 
       <ContentWrapper>
         <StyledCard>
-          <Title>PORT-</Title>
-          <Title>FOLIO</Title>
-          <StyledButton onClick={handleEntrar}>
+         {/*  <Title>PORT-</Title>
+          <Title>FOLIO</Title> */}
+            <img
+              src="/assets/images/tittle_portfolio/PORT-FOLIO_.png"
+              alt="Título del Portafolio"
+              className="img-portfolio-title"
+            />
+           <StyledButton onClick={handleEntrar}>
             ENTRAR
           </StyledButton>
         </StyledCard>

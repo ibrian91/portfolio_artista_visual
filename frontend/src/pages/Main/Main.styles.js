@@ -113,7 +113,7 @@ export const titleBoxStyle = {
 
 export const charStyle = {
   display: "inline-block",
-  fontFamily: "'Cooper Black', serif",
+  fontFamily: "'Javanese Text Regular', serif",
   fontSize: "3rem", // Aumenta el tamaño aquí
   lineHeight: 1.1,
   color: "#fff",

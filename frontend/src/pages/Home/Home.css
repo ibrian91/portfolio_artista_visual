@@ -84,3 +84,19 @@
       transform: scale(1);
     }
   }
+
+.img-portfolio-title {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin-bottom: 16px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 600px) {
+  .img-portfolio-title {
+    max-width: 95vw;
+  }
+}

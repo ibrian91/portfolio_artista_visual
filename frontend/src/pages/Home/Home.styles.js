@@ -3,6 +3,7 @@ import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Box, Button, Card, Typography } from "@mui/material";
 import HomePrincipal from "../../data/images/Home/HomePrincipal.jpeg";
+import './Home.css';
 
 // Animación para el fondo
 export const zoomInOut = keyframes`
@@ -52,7 +53,7 @@ export const ContentWrapper = styled(Box)({
 
 export const StyledCard = styled(Card)({
   backgroundColor: "rgba(0, 0, 0, 0.6)",
-  padding: "48px 64px",
+  padding: "32px 16px",
   borderRadius: "20px",
   textAlign: "center",
   backdropFilter: "blur(10px)",
@@ -61,6 +62,9 @@ export const StyledCard = styled(Card)({
   flexDirection: "column",
   alignItems: "center",
   gap: "16px",
+  '@media (max-width: 600px)': {
+    padding: "16px 4px",
+  },
 });
 
 export const Title = styled(Typography)({
