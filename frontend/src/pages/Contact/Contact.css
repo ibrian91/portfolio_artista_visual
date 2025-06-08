@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'Javanese Text';
+    src: url('/assets/fonts/JavaneseText-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 .section {
   width: 100%;
   min-height: 100vh;
@@ -9,6 +16,7 @@
   align-items: center;
   text-align: center;
   flex-direction: column;
+  font-family: 'Javanese Text Regular', serif;
 }
 
 .section h2 {
