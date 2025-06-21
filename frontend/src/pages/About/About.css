@@ -5,6 +5,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'ACESansdemo';
+    src: url('/assets/fonts/AceSans-Demo.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body, html {
   margin: 0;
   padding: 0;
@@ -29,8 +36,6 @@ body, html {
   justify-content: center;
   border-radius: 20px;
   overflow: hidden;
-
-
   width: 50%;
   height: 80%;
 }
@@ -109,7 +114,7 @@ body, html {
 }
 
 .slideshow-tittle {
-  font-family: 'Javanese Text Regular', serif;
+  font-family: 'ACESansdemo', serif;
   padding-top: 50px;
   text-align: center;
   margin-bottom: 20px;

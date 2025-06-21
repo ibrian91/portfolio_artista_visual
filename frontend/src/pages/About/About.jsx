@@ -82,7 +82,7 @@ const About = () => {
       </div>
       <div className="slideshow-text">
         <p>
-          Matías Nicolás Borsalino Nace en 1979 en Ciudad de Buenos Aires, Argentina. Estudia varios años en el
+          Matías Nicolás Borsalino nace en 1979 en Ciudad de Buenos Aires, Argentina. Estudia varios años en el
           Instituto Universitario Nacional de Arte (IUNA, actualmente UNA) la
           Licenciatura en Artes Visuales con orientación en Pintura. Luego, además de
           participar en talleres de literatura; cursa un año de Arquitectura en la

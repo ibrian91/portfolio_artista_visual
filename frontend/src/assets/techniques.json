@@ -360,10 +360,11 @@
     "description": "La pintura es una técnica artística que emplea pigmentos para crear imágenes sobre una superficie, como lienzo o madera.",
     "image": "/assets/images/llamaradas/llamarada-naranja.jpeg",
     "categoria": [
-      { "name": "Acrilico", "image": "/assets/images/tecnicas_principales/pintura/acrilico.jpeg" },
-      { "name": "Acuarela", "image": "/assets/images/tecnicas_principales/pintura/acuarela.jpeg" },
-      { "name": "Pastel", "image": "/assets/images/tecnicas_principales/pintura/pastel.jpeg" },
-      { "name": "Serigrafia", "image": "/assets/images/tecnicas_principales/pintura/serigrafia.jpeg" }
+      { "name": "Tecnica Mixta",    "image": "/assets/images/tecnicas_principales/pintura/tecnica_mixta.jpeg" },
+      { "name": "Acrilico",         "image": "/assets/images/tecnicas_principales/pintura/acrilico.jpeg" },
+      { "name": "Acuarela",         "image": "/assets/images/tecnicas_principales/pintura/acuarela.jpeg" },
+      { "name": "Pastel",           "image": "/assets/images/tecnicas_principales/pintura/pastel.jpeg" },
+      { "name": "Serigrafia",       "image": "/assets/images/tecnicas_principales/pintura/serigrafia.jpeg" }
     ]
   },
   {
