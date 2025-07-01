@@ -7,8 +7,8 @@ const Contact = () => {
       <h2>CONTACTO</h2>
 
       <div className="contact-info">
-        <p>📧 <strong>Email:</strong> <a href="mailto:artista@email.com">artista@email.com</a></p>
-        <p>📷 <strong>Instagram:</strong> <a href="https://instagram.com/usuario" target="_blank" rel="noopener noreferrer">@usuario</a></p>
+        <p>📧 <strong>Email:</strong> <a href="mailto:matiasborsalino@hotmail.com">matiasborsalino@hotmail.com</a></p>
+        <p>📷 <strong>Instagram:</strong> <a href="https://instagram.com/aveseca" target="_blank" rel="noopener noreferrer">@aveseca</a></p>
         <p>📍 <strong>Ubicación:</strong> Ciudad Autónoma de Buenos Aires, Argentina</p>
       </div>
 
