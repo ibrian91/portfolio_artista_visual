@@ -1,14 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import techniques from "../../assets/techniques.json";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { VALIDATION_CONSTANTS, getCategoriesForTechnique } from "../../utils/validation/formValidation.js";
+import ApiService from "../../services/ApiService.js";
 
 const UploadSection = ({ uploadHook }) => {
   const [showUploadKey, setShowUploadKey] = useState(false);
 
+  // Usar los contadores del hook
+  const [nameImageCount, setNameImageCount] = useState(VALIDATION_CONSTANTS.MAX_NAME_LENGTH);
+  const [descriptionImageCount, setDescriptionImageCount] = useState(VALIDATION_CONSTANTS.MAX_DESCRIPTION_LENGTH);
+
+  // Sincronizar contadores con el hook
+  useEffect(() => {
+    if (uploadHook.resetCounters) {
+      uploadHook.resetCounters();
+    }
+  }, [uploadHook.resetCounters]);
+
+  // Verificación de seguridad: si el hook no está listo, mostrar loading
+  if (!uploadHook || !uploadHook.formData) {
+    return (
+      <section className="form-section-upload">
+        <h2 className="form-title">Cargar nueva imagen</h2>
+        <div style={{ padding: "20px", textAlign: "center", color: "#666" }}>
+          Cargando formulario...
+        </div>
+      </section>
+    );
+  }
+
   // Derivados
   const categories = getCategoriesForTechnique(uploadHook.formData.selectedTechnique, techniques);
-  const grupos = ["Ejemplo 1", "Ejemplo 2", "Ejemplo 3", "Ejemplo 4"]; // TODO: Obtener de API
 
   return (
     <section className="form-section-upload">
@@ -27,6 +50,11 @@ const UploadSection = ({ uploadHook }) => {
               </option>
             ))}
           </select>
+          {uploadHook.validationErrors.selectedTechnique && (
+            <div style={{ color: "#FF416C", fontSize: "0.95em", marginTop: "4px" }}>
+              {uploadHook.validationErrors.selectedTechnique}
+            </div>
+          )}
         </div>
 
         <div className="form-group">
@@ -43,26 +71,40 @@ const UploadSection = ({ uploadHook }) => {
               </option>
             ))}
           </select>
+          {uploadHook.validationErrors.selectedCategory && (
+            <div style={{ color: "#FF416C", fontSize: "0.95em", marginTop: "4px" }}>
+              {uploadHook.validationErrors.selectedCategory}
+            </div>
+          )}
         </div>
 
         <div className="form-group">
-          <label>Nombre de la imagen: Caracteres {uploadHook.nameImageCount}</label>
+          <label>Nombre de la imagen: Caracteres {nameImageCount}</label>
           <input
             type="text"
             value={uploadHook.formData.imageName}
-            onChange={(e) => uploadHook.handleTextChange("imageName", e.target.value, VALIDATION_CONSTANTS.MAX_NAME_LENGTH, (count) => {/* count handled in hook */})}
+            onChange={(e) => uploadHook.handleTextChange("imageName", e.target.value, VALIDATION_CONSTANTS.MAX_NAME_LENGTH, setNameImageCount)}
             placeholder="Ej: Paisaje azul"
           />
+          {uploadHook.validationErrors.imageName && (
+            <div style={{ color: "#FF416C", fontSize: "0.95em", marginTop: "4px" }}>
+              {uploadHook.validationErrors.imageName}
+            </div>
+          )}
         </div>
 
         <div className="form-group">
-          <label>Descripcion: Caracteres {uploadHook.descriptionImageCount}</label>
+          <label>Descripcion: Caracteres {descriptionImageCount}</label>
           <textarea
-            type="text"
             value={uploadHook.formData.descriptionImage}
-            onChange={(e) => uploadHook.handleTextChange("descriptionImage", e.target.value, VALIDATION_CONSTANTS.MAX_DESCRIPTION_LENGTH, (count) => {/* count handled in hook */})}
+            onChange={(e) => uploadHook.handleTextChange("descriptionImage", e.target.value, VALIDATION_CONSTANTS.MAX_DESCRIPTION_LENGTH, setDescriptionImageCount)}
             placeholder="Descripcion de la imagen"
           />
+          {uploadHook.validationErrors.descriptionImage && (
+            <div style={{ color: "#FF416C", fontSize: "0.95em", marginTop: "4px" }}>
+              {uploadHook.validationErrors.descriptionImage}
+            </div>
+          )}
         </div>
 
         <div>
@@ -90,15 +132,26 @@ const UploadSection = ({ uploadHook }) => {
           <>
             <div className="form-group">
               <label>Seleccionar grupo existente:</label>
-              <select
-                value={uploadHook.formData.grupoSeleccionado}
-                onChange={(e) => uploadHook.updateField("grupoSeleccionado", e.target.value)}
-              >
-                <option value="">Seleccionar grupo</option>
-                {grupos.map((g, idx) => (
-                  <option key={idx} value={g}>{g}</option>
-                ))}
-              </select>
+              {uploadHook.isLoadingGroups ? (
+                <div style={{ padding: "8px", color: "#666" }}>Cargando grupos...</div>
+              ) : uploadHook.groupsError ? (
+                <div style={{ padding: "8px", color: "#FF416C" }}>{uploadHook.groupsError}</div>
+              ) : (
+                <select
+                  value={uploadHook.formData.grupoSeleccionado}
+                  onChange={(e) => uploadHook.updateField("grupoSeleccionado", e.target.value)}
+                >
+                  <option value="">Seleccionar grupo</option>
+                  {uploadHook.availableGroups.map((group, idx) => (
+                    <option key={idx} value={group.group_name}>{group.group_name}</option>
+                  ))}
+                </select>
+              )}
+              {uploadHook.validationErrors.grupoSeleccionado && (
+                <div style={{ color: "#FF416C", fontSize: "0.95em", marginTop: "4px" }}>
+                  {uploadHook.validationErrors.grupoSeleccionado}
+                </div>
+              )}
             </div>
             <div className="form-group check-group">
               <label className="custom-checkbox">
@@ -146,6 +199,36 @@ const UploadSection = ({ uploadHook }) => {
                 onChange={(e) => uploadHook.updateField("nombreNuevoGrupo", e.target.value)}
                 placeholder="Nombre del nuevo grupo"
               />
+              {uploadHook.validationErrors.nombreNuevoGrupo && (
+                <div style={{ color: "#FF416C", fontSize: "0.95em", marginTop: "4px" }}>
+                  {uploadHook.validationErrors.nombreNuevoGrupo}
+                </div>
+              )}
+            </div>
+            <div className="form-group">
+              <label>Imagen de portada del grupo:</label>
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  uploadHook.handleCoverFileChange(file);
+                  if (file) {
+                    const ext = file.name.split('.').pop().toLowerCase();
+                    if (!VALIDATION_CONSTANTS.ALLOWED_FILE_TYPES.includes(ext)) {
+                      e.target.value = null;
+                    }
+                  }
+                }}
+              />
+              {uploadHook.validationErrors.coverImageFile && (
+                <div style={{ color: "#FF416C", fontSize: "0.95em", marginTop: "4px" }}>
+                  {uploadHook.validationErrors.coverImageFile}
+                </div>
+              )}
+              <div style={{ fontSize: "0.9em", color: "#666", marginTop: "4px" }}>
+                Si no seleccionas una imagen de portada, se usará la imagen principal como portada.
+              </div>
             </div>
             <div className="form-group check-group">
               <label className="custom-checkbox" style={{ textDecoration: "line-through", color: "#aaa" }}>
@@ -226,6 +309,11 @@ const UploadSection = ({ uploadHook }) => {
               }
             }}
           />
+          {uploadHook.validationErrors.imageFile && (
+            <div style={{ color: "#FF416C", fontSize: "0.95em", marginTop: "4px" }}>
+              {uploadHook.validationErrors.imageFile}
+            </div>
+          )}
         </div>
 
         <button type="button" className="submit-btn"
