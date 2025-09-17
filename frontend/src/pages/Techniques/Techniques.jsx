@@ -154,9 +154,7 @@ const Techniques = () => {
             groupName={selectedGroup.group_name}
             images={groupImages.images}
             isLoading={groupImages.isLoading}
-            onImageClick={(image) => {
-              console.log('Imagen clickeada:', image);
-            }}
+            onBackToGroups={handleBack}
           />
         )}
       </Box>
