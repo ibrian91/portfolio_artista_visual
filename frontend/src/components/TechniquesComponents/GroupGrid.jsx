@@ -6,8 +6,7 @@ const GroupGrid = ({
   groups,
   isLoading,
   showNoImagesMessage,
-  onGroupClick,
-  paginationControls
+  onGroupClick
 }) => {
 
   // Estado de carga
@@ -65,7 +64,6 @@ const GroupGrid = ({
             {renderDynamicContent(group)}
           </Card>
         ))}
-        {paginationControls}
       </>
     );
   }

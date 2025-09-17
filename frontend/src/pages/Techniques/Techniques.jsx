@@ -145,13 +145,6 @@ const Techniques = () => {
             isLoading={dynamicGroups.isLoadingDynamic}
             showNoImagesMessage={dynamicGroups.showNoImagesMessage}
             onGroupClick={handleItemClick}
-            paginationControls={
-              <PaginationControls
-                currentPage={paginationInfo.currentPage}
-                totalPages={paginationInfo.totalPages}
-                onPageChange={pagination.setPage}
-              />
-            }
           />
         )}
 
