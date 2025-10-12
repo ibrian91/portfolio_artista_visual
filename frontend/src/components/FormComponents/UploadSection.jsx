@@ -154,33 +154,69 @@ const UploadSection = ({ uploadHook }) => {
               )}
             </div>
             <div className="form-group check-group">
-              <label className="custom-checkbox">
+              <label 
+                className="custom-checkbox" 
+                style={{ 
+                  opacity: (uploadHook.formData.isRotatingImage || uploadHook.formData.isSmallImage) ? 0.5 : 1,
+                  textDecoration: (uploadHook.formData.isRotatingImage || uploadHook.formData.isSmallImage) ? 'line-through' : 'none',
+                  cursor: (uploadHook.formData.isRotatingImage || uploadHook.formData.isSmallImage) ? 'not-allowed' : 'pointer'
+                }}
+              >
                 <input
                   type="checkbox"
                   checked={uploadHook.formData.isMockupImage}
-                  onChange={() => uploadHook.updateField("isMockupImage", !uploadHook.formData.isMockupImage)}
+                  disabled={uploadHook.formData.isRotatingImage || uploadHook.formData.isSmallImage}
+                  onChange={() => {
+                    if (!uploadHook.formData.isRotatingImage && !uploadHook.formData.isSmallImage) {
+                      uploadHook.updateField("isMockupImage", !uploadHook.formData.isMockupImage);
+                    }
+                  }}
                 />
                 <span className="checkmark" />
                 ¿Mock up?
               </label>
             </div>
             <div className="form-group check-group">
-              <label className="custom-checkbox">
+              <label 
+                className="custom-checkbox"
+                style={{ 
+                  opacity: (uploadHook.formData.isMockupImage || uploadHook.formData.isSmallImage) ? 0.5 : 1,
+                  textDecoration: (uploadHook.formData.isMockupImage || uploadHook.formData.isSmallImage) ? 'line-through' : 'none',
+                  cursor: (uploadHook.formData.isMockupImage || uploadHook.formData.isSmallImage) ? 'not-allowed' : 'pointer'
+                }}
+              >
                 <input
                   type="checkbox"
                   checked={uploadHook.formData.isRotatingImage}
-                  onChange={() => uploadHook.updateField("isRotatingImage", !uploadHook.formData.isRotatingImage)}
+                  disabled={uploadHook.formData.isMockupImage || uploadHook.formData.isSmallImage}
+                  onChange={() => {
+                    if (!uploadHook.formData.isMockupImage && !uploadHook.formData.isSmallImage) {
+                      uploadHook.updateField("isRotatingImage", !uploadHook.formData.isRotatingImage);
+                    }
+                  }}
                 />
                 <span className="checkmark" />
                 ¿Es giratoria?
               </label>
             </div>
             <div className="form-group check-group">
-              <label className="custom-checkbox">
+              <label 
+                className="custom-checkbox"
+                style={{ 
+                  opacity: (uploadHook.formData.isMockupImage || uploadHook.formData.isRotatingImage) ? 0.5 : 1,
+                  textDecoration: (uploadHook.formData.isMockupImage || uploadHook.formData.isRotatingImage) ? 'line-through' : 'none',
+                  cursor: (uploadHook.formData.isMockupImage || uploadHook.formData.isRotatingImage) ? 'not-allowed' : 'pointer'
+                }}
+              >
                 <input
                   type="checkbox"
                   checked={uploadHook.formData.isSmallImage}
-                  onChange={() => uploadHook.updateField("isSmallImage", !uploadHook.formData.isSmallImage)}
+                  disabled={uploadHook.formData.isMockupImage || uploadHook.formData.isRotatingImage}
+                  onChange={() => {
+                    if (!uploadHook.formData.isMockupImage && !uploadHook.formData.isRotatingImage) {
+                      uploadHook.updateField("isSmallImage", !uploadHook.formData.isSmallImage);
+                    }
+                  }}
                 />
                 <span className="checkmark" />
                 ¿Es imagen chiquita?

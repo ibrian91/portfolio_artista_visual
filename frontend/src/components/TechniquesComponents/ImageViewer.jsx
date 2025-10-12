@@ -5,7 +5,9 @@ const ImageViewer = ({
   images = [],
   initialIndex = 0,
   onClose,
-  groupName
+  groupName,
+  hasMockUp = false,
+  onBackToMockUp = null
 }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
@@ -16,27 +18,39 @@ const ImageViewer = ({
   const currentImage = images[currentIndex];
 
   const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    // Si estamos en la primera imagen Y hay MockUp disponible, volver al MockUp
+    if (currentIndex === 0 && hasMockUp && onBackToMockUp) {
+      onBackToMockUp();
+    } else {
+      // Navegación normal circular
+      setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    }
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'ArrowLeft') {
-      handlePrevious();
-    } else if (e.key === 'ArrowRight') {
-      handleNext();
-    } else if (e.key === 'Escape') {
-      onClose();
+    // Si estamos en la última imagen Y hay MockUp disponible, volver al MockUp
+    if (currentIndex === images.length - 1 && hasMockUp && onBackToMockUp) {
+      onBackToMockUp();
+    } else {
+      // Navegación normal circular
+      setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     }
   };
 
   React.useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowLeft') {
+        handlePrevious();
+      } else if (e.key === 'ArrowRight') {
+        handleNext();
+      } else if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [currentIndex, images.length, onClose]);
 
   return (
     <Box
@@ -168,7 +182,7 @@ const ImageViewer = ({
       </Box>
 
       {/* Información de la imagen */}
-      {currentImage.image_name && (
+      {(currentImage.image_name || currentImage.description) && (
         <Box
           position="absolute"
           bottom={20}
@@ -182,9 +196,11 @@ const ImageViewer = ({
           textAlign="center"
           zIndex={10001}
         >
-          <Typography variant="h6" sx={{ textShadow: "0 2px 8px rgba(0,0,0,0.8)" }}>
-            {currentImage.image_name}
-          </Typography>
+          {currentImage.image_name && (
+            <Typography variant="h6" sx={{ textShadow: "0 2px 8px rgba(0,0,0,0.8)" }}>
+              {currentImage.image_name}
+            </Typography>
+          )}
           {currentImage.description && (
             <Typography variant="body1" sx={{ mt: 1, opacity: 0.9 }}>
               {currentImage.description}
