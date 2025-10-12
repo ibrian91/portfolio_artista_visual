@@ -11,6 +11,10 @@ const RotatingImageViewer = ({
   onNext = null
 }) => {
   const [isPaused, setIsPaused] = useState(false);
+  const [rotation, setRotation] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [currentRotation, setCurrentRotation] = useState(0);
 
   if (!rotatingImage) {
     return null;
@@ -19,6 +23,42 @@ const RotatingImageViewer = ({
   const handleTogglePause = () => {
     setIsPaused(prev => !prev);
   };
+
+  // Manejo de arrastre del mouse
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.clientX);
+    setCurrentRotation(rotation);
+    setIsPaused(true); // Pausar rotación automática al arrastrar
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    
+    const deltaX = e.clientX - startX;
+    const rotationChange = deltaX * 0.5; // Sensibilidad del arrastre
+    setRotation(currentRotation + rotationChange);
+  };
+
+  const handleMouseUp = () => {
+    if (isDragging) {
+      setIsDragging(false);
+      setIsPaused(false); // Reanudar rotación automática
+    }
+  };
+
+  // Efecto para manejar mouse events globales
+  React.useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDragging, startX, currentRotation]);
 
   const handlePrevious = () => {
     if (hasMockUp && onBackToMockUp) {
@@ -105,6 +145,7 @@ const RotatingImageViewer = ({
       {/* Contenedor de la imagen con rotación 3D */}
       <Box
         onClick={(e) => e.stopPropagation()}
+        onMouseDown={handleMouseDown}
         sx={{
           width: '70vw',
           height: '70vh',
@@ -114,6 +155,8 @@ const RotatingImageViewer = ({
           alignItems: 'center',
           justifyContent: 'center',
           perspective: '1500px', // Perspectiva 3D
+          cursor: isDragging ? 'grabbing' : 'grab',
+          userSelect: 'none',
         }}
       >
         <Box
@@ -122,13 +165,15 @@ const RotatingImageViewer = ({
             height: '100%',
             position: 'relative',
             transformStyle: 'preserve-3d',
-            animation: isPaused ? 'none' : 'rotate3D 6s linear infinite',
+            transform: `rotateY(${rotation}deg)`,
+            animation: isPaused || isDragging ? 'none' : 'rotate3D 6s linear infinite',
+            transition: isDragging ? 'none' : 'transform 0.1s ease-out',
             '@keyframes rotate3D': {
               '0%': {
-                transform: 'rotateY(0deg)',
+                transform: `rotateY(${rotation}deg)`,
               },
               '100%': {
-                transform: 'rotateY(360deg)',
+                transform: `rotateY(${rotation + 360}deg)`,
               },
             },
           }}
@@ -311,7 +356,7 @@ const RotatingImageViewer = ({
             </Typography>
           )}
           <Typography variant="caption" sx={{ mt: 1, opacity: 0.7, display: 'block' }}>
-            Presiona ESPACIO para pausar/reanudar | ESC para salir
+            🖱️ Arrastra para rotar manualmente | ESPACIO: pausar/reanudar | ESC: salir
           </Typography>
         </Box>
       )}

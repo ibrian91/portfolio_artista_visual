@@ -26,6 +26,13 @@ const GroupImagesView = ({
     }
   }, [safeImages]);
 
+  // Si no hay imágenes y ya no está cargando, volver automáticamente
+  useEffect(() => {
+    if (safeImages.length === 0 && !isLoading && onBackToGroups) {
+      onBackToGroups();
+    }
+  }, [safeImages.length, isLoading, onBackToGroups]);
+
   // Separar imágenes especiales de las regulares (verificación estricta)
   const mockupImage = safeImages.find(img => img.is_mockup_image === true);
   const rotatingImage = safeImages.find(img => img.is_rotating_image === true);
@@ -167,13 +174,8 @@ const GroupImagesView = ({
     );
   }
 
-  // Si no hay imágenes, mostrar mensaje y volver automáticamente
+  // Si no hay imágenes, mostrar mensaje (el useEffect de arriba se encarga de volver)
   if (safeImages.length === 0) {
-    React.useEffect(() => {
-      if (onBackToGroups) {
-        onBackToGroups();
-      }
-    }, []);
     return (
       <Box
         sx={{
