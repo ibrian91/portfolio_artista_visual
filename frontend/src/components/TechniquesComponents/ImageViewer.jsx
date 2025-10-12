@@ -6,8 +6,9 @@ const ImageViewer = ({
   initialIndex = 0,
   onClose,
   groupName,
-  hasMockUp = false,
-  onBackToMockUp = null
+  hasSpecialImage = false,
+  onBackToPrevious = null, // Callback para ir a la imagen especial anterior (Rotating)
+  onBackToBeginning = null // Callback para volver al inicio del ciclo (MockUp)
 }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
@@ -18,9 +19,9 @@ const ImageViewer = ({
   const currentImage = images[currentIndex];
 
   const handlePrevious = () => {
-    // Si estamos en la primera imagen Y hay MockUp disponible, volver al MockUp
-    if (currentIndex === 0 && hasMockUp && onBackToMockUp) {
-      onBackToMockUp();
+    // Si estamos en la primera imagen Y hay callback, ir a imagen especial anterior
+    if (currentIndex === 0 && hasSpecialImage && onBackToPrevious) {
+      onBackToPrevious();
     } else {
       // Navegación normal circular
       setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -28,9 +29,9 @@ const ImageViewer = ({
   };
 
   const handleNext = () => {
-    // Si estamos en la última imagen Y hay MockUp disponible, volver al MockUp
-    if (currentIndex === images.length - 1 && hasMockUp && onBackToMockUp) {
-      onBackToMockUp();
+    // Si estamos en la última imagen Y hay callback, volver al inicio del ciclo
+    if (currentIndex === images.length - 1 && hasSpecialImage && onBackToBeginning) {
+      onBackToBeginning();
     } else {
       // Navegación normal circular
       setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));

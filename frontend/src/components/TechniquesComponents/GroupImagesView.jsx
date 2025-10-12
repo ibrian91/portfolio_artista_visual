@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Box } from "@mui/material";
-import { ImageViewer, MockUpViewer } from './index';
+import { ImageViewer, MockUpViewer, RotatingImageViewer } from './index';
 
 const GroupImagesView = ({
   groupName,
@@ -11,6 +11,7 @@ const GroupImagesView = ({
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [showMockUp, setShowMockUp] = useState(false);
+  const [showRotating, setShowRotating] = useState(false);
 
   // Asegurar que images sea un array
   const safeImages = Array.isArray(images) ? images : [];
@@ -25,25 +26,33 @@ const GroupImagesView = ({
     }
   }, [safeImages]);
 
-  // Separar MockUp de otras imágenes (verificación estricta)
+  // Separar imágenes especiales de las regulares (verificación estricta)
   const mockupImage = safeImages.find(img => img.is_mockup_image === true);
-  const regularImages = safeImages.filter(img => img.is_mockup_image !== true);
+  const rotatingImage = safeImages.find(img => img.is_rotating_image === true);
+  const regularImages = safeImages.filter(img => 
+    img.is_mockup_image !== true && img.is_rotating_image !== true
+  );
 
-  // Abrir automáticamente el MockUp si existe, sino el viewer normal
+  // Abrir automáticamente según el tipo de imagen especial
+  // Flujo: MockUp → Rotating → Imágenes Regulares
   useEffect(() => {
-    if (safeImages.length > 0 && !isLoading && selectedImageIndex === null && !showMockUp && !isViewerOpen) {
+    if (safeImages.length > 0 && !isLoading && selectedImageIndex === null && !showMockUp && !showRotating && !isViewerOpen) {
       if (mockupImage) {
-        // Si hay MockUp, mostrarlo primero en fullscreen
+        // Prioridad 1: MockUp en fullscreen
         console.log('✅ Detectado MockUp:', mockupImage.image_name);
         setShowMockUp(true);
+      } else if (rotatingImage) {
+        // Prioridad 2: Imagen rotatoria 3D (solo si no hay MockUp)
+        console.log('✅ Detectado Rotating Image:', rotatingImage.image_name);
+        setShowRotating(true);
       } else {
-        // Si no hay MockUp, abrir viewer normal con TODAS las imágenes
-        console.log('✅ No hay MockUp, mostrando viewer normal con', safeImages.length, 'imágenes');
+        // Si no hay imágenes especiales, abrir viewer normal
+        console.log('✅ No hay imágenes especiales, mostrando viewer normal con', regularImages.length, 'imágenes');
         setSelectedImageIndex(0);
         setIsViewerOpen(true);
       }
     }
-  }, [safeImages.length, isLoading, mockupImage]);
+  }, [safeImages.length, isLoading, mockupImage, rotatingImage]);
 
   const handleCloseViewer = () => {
     setIsViewerOpen(false);
@@ -57,8 +66,12 @@ const GroupImagesView = ({
   const handleMockUpExit = () => {
     setShowMockUp(false);
     
-    // Si hay imágenes regulares, mostrar el viewer normal
-    if (regularImages.length > 0) {
+    // Después del MockUp, verificar si hay Rotating Image
+    if (rotatingImage) {
+      console.log('✅ Mostrando Rotating después del MockUp');
+      setShowRotating(true);
+    } else if (regularImages.length > 0) {
+      // Si no hay Rotating, mostrar imágenes regulares
       setSelectedImageIndex(0);
       setIsViewerOpen(true);
     } else {
@@ -69,10 +82,47 @@ const GroupImagesView = ({
     }
   };
 
-  const handleBackToMockUp = () => {
-    // Cerrar el viewer normal y volver a mostrar el MockUp
+  const handleBackToBeginning = () => {
+    // Volver al inicio del ciclo completo (MockUp si existe, sino Rotating)
     setIsViewerOpen(false);
     setSelectedImageIndex(null);
+    
+    // Siempre volver al inicio: MockUp primero, luego Rotating
+    if (mockupImage) {
+      console.log('✅ Volviendo al inicio del ciclo: MockUp');
+      setShowMockUp(true);
+    } else if (rotatingImage) {
+      console.log('✅ Volviendo al inicio del ciclo: Rotating');
+      setShowRotating(true);
+    }
+  };
+
+  const handleRotatingExit = () => {
+    setShowRotating(false);
+    
+    // Después del Rotating, mostrar imágenes regulares
+    if (regularImages.length > 0) {
+      console.log('✅ Mostrando imágenes regulares después del Rotating');
+      setSelectedImageIndex(0);
+      setIsViewerOpen(true);
+    } else {
+      // Si solo había Rotating (y tal vez MockUp), volver a grupos
+      if (onBackToGroups) {
+        onBackToGroups();
+      }
+    }
+  };
+
+  const handleBackToRotating = () => {
+    // Cerrar el viewer normal y volver al Rotating
+    setIsViewerOpen(false);
+    setSelectedImageIndex(null);
+    setShowRotating(true);
+  };
+
+  const handleBackToMockUpFromRotating = () => {
+    // Cerrar Rotating y volver al MockUp
+    setShowRotating(false);
     setShowMockUp(true);
   };
 
@@ -177,15 +227,29 @@ const GroupImagesView = ({
         />
       )}
 
+      {/* Rotating Image Viewer - Rotación 3D */}
+      {showRotating && rotatingImage && (
+        <RotatingImageViewer
+          rotatingImage={rotatingImage}
+          onClose={handleRotatingExit}
+          groupName={groupName}
+          hasMockUp={!!mockupImage}
+          hasRegularImages={regularImages.length > 0}
+          onBackToMockUp={mockupImage ? handleBackToMockUpFromRotating : null}
+          onNext={regularImages.length > 0 ? handleRotatingExit : null}
+        />
+      )}
+
       {/* Image Viewer normal - para imágenes regulares */}
-      {isViewerOpen && selectedImageIndex !== null && !showMockUp && (
+      {isViewerOpen && selectedImageIndex !== null && !showMockUp && !showRotating && (
         <ImageViewer
-          images={mockupImage ? regularImages : safeImages}
+          images={regularImages}
           initialIndex={selectedImageIndex}
           onClose={handleCloseViewer}
           groupName={groupName}
-          hasMockUp={!!mockupImage}
-          onBackToMockUp={mockupImage ? handleBackToMockUp : null}
+          hasSpecialImage={!!(rotatingImage || mockupImage)}
+          onBackToPrevious={rotatingImage ? handleBackToRotating : mockupImage ? handleBackToBeginning : null}
+          onBackToBeginning={(rotatingImage || mockupImage) ? handleBackToBeginning : null}
         />
       )}
     </>
