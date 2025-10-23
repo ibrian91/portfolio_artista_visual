@@ -1,0 +1,39 @@
+[
+  {
+    "title": "Dibujo",
+    "categorias": [
+      "Digital",
+      "Fibra",
+      "Lapiz",
+      "Tecnica Mixta",
+      "Tinta Birome",
+      "Tinta China"
+    ]
+  },
+  {
+    "title": "Pintura",
+    "categorias": [
+      "Tecnica Mixta",
+      "Acrilico",
+      "Acuarela",
+      "Pastel",
+      "Serigrafia"
+    ]
+  },
+  {
+    "title": "Fotografía",
+    "categorias": [
+      "Blanco y Negro",
+      "Color"
+    ]
+  },
+  {
+    "title": "Escritos",
+    "categorias": [
+      "Poesía",
+      "Cuento",
+      "Ensayo",
+      "Crónica"
+    ]
+  }
+]
