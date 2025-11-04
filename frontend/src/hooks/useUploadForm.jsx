@@ -15,6 +15,8 @@ export const useUploadForm = () => {
     selectedCategory: "",
     imageName: "",
     imageFile: null,
+    imageFiles: [], // Array para subida masiva (grupo existente)
+    imageFilesMetadata: [], // Array con {file, name, description} para cada archivo
     grupoExistente: null,
     grupoSeleccionado: "",
     nombreNuevoGrupo: "",
@@ -65,6 +67,20 @@ export const useUploadForm = () => {
     loadGroups();
   }, [formData.selectedTechnique, formData.selectedCategory]);
 
+  // Auto-seleccionar "nuevo grupo" cuando no hay grupos disponibles
+  useEffect(() => {
+    if (availableGroups.length === 0 && formData.selectedTechnique && formData.selectedCategory) {
+      setFormData(prev => ({
+        ...prev,
+        grupoExistente: false,
+        grupoSeleccionado: "",
+        isMockupImage: false,
+        isRotatingImage: false,
+        isSmallImage: true
+      }));
+    }
+  }, [availableGroups.length, formData.selectedTechnique, formData.selectedCategory]);
+
   // Función para actualizar campos del formulario
   const updateField = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -97,7 +113,9 @@ export const useUploadForm = () => {
       isMockupImage: false,
       isRotatingImage: false,
       isSmallImage: false,
-      nombreNuevoGrupo: ""
+      nombreNuevoGrupo: "",
+      imageFiles: [], // Limpiar archivos múltiples al cambiar a grupo existente
+      imageFilesMetadata: [] // Limpiar metadata
     }));
   };
 
@@ -109,7 +127,9 @@ export const useUploadForm = () => {
       isMockupImage: false,
       isRotatingImage: false,
       isSmallImage: true, // chiquita por defecto
-      grupoSeleccionado: ""
+      grupoSeleccionado: "",
+      imageFiles: [], // Limpiar archivos múltiples al cambiar a grupo nuevo
+      imageFilesMetadata: [] // Limpiar metadata
     }));
   };
 
@@ -135,6 +155,13 @@ export const useUploadForm = () => {
       }
 
       updateField("imageFile", file);
+      // NO limpiar imageFiles/imageFilesMetadata en modo carga masiva
+      // Solo limpiar si NO estamos en modo carga masiva (grupo existente + imagen chiquita)
+      const isBulkUploadMode = formData.grupoExistente === true && formData.isSmallImage && !formData.isMockupImage && !formData.isRotatingImage;
+      if (!isBulkUploadMode) {
+        updateField("imageFiles", []); // Limpiar archivos múltiples solo si NO es modo masivo
+        updateField("imageFilesMetadata", []); // Limpiar metadata solo si NO es modo masivo
+      }
       setValidationErrors(prev => ({
         ...prev,
         imageFile: null
@@ -183,6 +210,131 @@ export const useUploadForm = () => {
     }
   };
 
+  // Función para manejar múltiples archivos (grupo existente)
+  const handleMultipleFilesChange = (files, shouldAppend = true) => {
+    const MAX_FILES = 5;
+    const newFileArray = Array.from(files);
+    
+    // Si shouldAppend es true, combinar con archivos existentes
+    const existingMetadata = shouldAppend ? formData.imageFilesMetadata : [];
+    const combinedLength = existingMetadata.length + newFileArray.length;
+    
+    // Verificar que no exceda el máximo
+    if (combinedLength > MAX_FILES) {
+      setValidationErrors(prev => ({
+        ...prev,
+        imageFiles: `Solo puedes subir hasta ${MAX_FILES} archivos. Ya tienes ${existingMetadata.length} seleccionados.`
+      }));
+      return;
+    }
+    
+    const errors = [];
+    const validFilesMetadata = [];
+
+    newFileArray.forEach((file, index) => {
+      if (!isValidFileType(file)) {
+        errors.push(`${file.name}: Solo se permiten .jpg, .jpeg o .png`);
+      } else if (!isValidFileSize(file)) {
+        errors.push(`${file.name}: No debe superar 10MB`);
+      } else {
+        // Crear metadata para cada archivo con nombre por defecto
+        const fileNameWithoutExt = file.name.split('.').slice(0, -1).join('.');
+        validFilesMetadata.push({
+          file: file,
+          name: fileNameWithoutExt,
+          description: ""
+        });
+      }
+    });
+
+    if (errors.length > 0) {
+      setValidationErrors(prev => ({
+        ...prev,
+        imageFiles: errors.join(". ")
+      }));
+      // Agregar solo los archivos válidos
+      const newMetadata = [...existingMetadata, ...validFilesMetadata];
+      updateField("imageFilesMetadata", newMetadata);
+      updateField("imageFiles", newMetadata.map(m => m.file)); // Mantener array simple para compatibilidad
+      updateField("imageFile", null); // Limpiar archivo individual
+    } else {
+      const newMetadata = [...existingMetadata, ...validFilesMetadata];
+      updateField("imageFilesMetadata", newMetadata);
+      updateField("imageFiles", newMetadata.map(m => m.file)); // Mantener array simple para compatibilidad
+      updateField("imageFile", null); // Limpiar archivo individual
+      setValidationErrors(prev => ({
+        ...prev,
+        imageFiles: null
+      }));
+    }
+  };
+
+  // Función para eliminar un archivo de la selección
+  const removeFileFromSelection = (index) => {
+    const newMetadata = formData.imageFilesMetadata.filter((_, idx) => idx !== index);
+    updateField("imageFilesMetadata", newMetadata);
+    updateField("imageFiles", newMetadata.map(m => m.file));
+    
+    // Limpiar error si ya no hay problema
+    if (newMetadata.length <= 5) {
+      setValidationErrors(prev => ({
+        ...prev,
+        imageFiles: null
+      }));
+    }
+  };
+
+  // Función para actualizar nombre de un archivo específico
+  const updateFileMetadata = (index, field, value) => {
+    const newMetadata = [...formData.imageFilesMetadata];
+    newMetadata[index] = {
+      ...newMetadata[index],
+      [field]: value
+    };
+    updateField("imageFilesMetadata", newMetadata);
+  };
+
+  // Función para agregar imagen actual a la cola (para carga masiva)
+  const addImageToQueue = () => {
+    // Validar que haya archivo, nombre y descripción
+    if (!formData.imageFile) {
+      setValidationErrors(prev => ({ ...prev, imageFile: "Debes seleccionar un archivo" }));
+      return false;
+    }
+    if (!formData.imageName || formData.imageName.trim() === "") {
+      setValidationErrors(prev => ({ ...prev, imageName: "El nombre es obligatorio" }));
+      return false;
+    }
+
+    // Verificar límite de 5 imágenes
+    if (formData.imageFilesMetadata.length >= 5) {
+      alert("⚠️ Ya tienes 5 imágenes en la cola. Sube estas primero antes de agregar más.");
+      return false;
+    }
+
+    // Agregar a la cola
+    const newMetadata = {
+      file: formData.imageFile,
+      name: formData.imageName,
+      description: formData.descriptionImage
+    };
+
+    setFormData(prev => ({
+      ...prev,
+      imageFilesMetadata: [...prev.imageFilesMetadata, newMetadata],
+      imageFiles: [...prev.imageFiles, formData.imageFile],
+      // Limpiar campos para la siguiente imagen
+      imageFile: null,
+      imageName: "",
+      descriptionImage: ""
+    }));
+
+    // Limpiar errores
+    setValidationErrors({});
+    
+    return true;
+  };
+
   // Validación del formulario usando función auxiliar
   const validation = validateUploadForm(formData);
   const isFormValid = validation.isValid;
@@ -222,23 +374,54 @@ export const useUploadForm = () => {
         }, coverImage);
       }
 
-      // Preparar FormData para la subida
-      const formDataToSend = new FormData();
-      formDataToSend.append("technique", formData.selectedTechnique);
-      formDataToSend.append("category", formData.selectedCategory);
-      formDataToSend.append("group_name", formData.grupoExistente === true ? formData.grupoSeleccionado : formData.nombreNuevoGrupo);
-      formDataToSend.append("image_name", formData.imageName);
-      formDataToSend.append("description", formData.descriptionImage);
-      formDataToSend.append("is_mockup_image", formData.isMockupImage);
-      formDataToSend.append("is_rotating_image", formData.isRotatingImage);
-      formDataToSend.append("is_small_image", formData.isSmallImage);
-      formDataToSend.append("upload_key", formData.uploadKey);
-      formDataToSend.append("image", formData.imageFile);
+      // Determinar si es subida múltiple (grupo existente con varios archivos)
+      const isMultipleUpload = formData.grupoExistente === true && formData.imageFilesMetadata.length > 0;
+      const itemsToUpload = isMultipleUpload 
+        ? formData.imageFilesMetadata 
+        : [{ file: formData.imageFile, name: formData.imageName, description: formData.descriptionImage }];
+      
+      let successCount = 0;
+      let failCount = 0;
 
-      // Subir la imagen usando el servicio
-      const result = await ApiService.uploadImage(formDataToSend);
+      // Subir cada archivo
+      for (let i = 0; i < itemsToUpload.length; i++) {
+        const item = itemsToUpload[i];
+        if (!item.file) continue;
 
-      alert("Imagen subida correctamente");
+        try {
+          const formDataToSend = new FormData();
+          formDataToSend.append("technique", formData.selectedTechnique);
+          formDataToSend.append("category", formData.selectedCategory);
+          formDataToSend.append("group_name", formData.grupoExistente === true ? formData.grupoSeleccionado : formData.nombreNuevoGrupo);
+          
+          // Usar nombre y descripción del item (metadata o formulario individual)
+          formDataToSend.append("image_name", item.name);
+          formDataToSend.append("description", item.description || "");
+          formDataToSend.append("is_mockup_image", formData.isMockupImage);
+          formDataToSend.append("is_rotating_image", formData.isRotatingImage);
+          formDataToSend.append("is_small_image", formData.isSmallImage);
+          formDataToSend.append("upload_key", formData.uploadKey);
+          formDataToSend.append("image", item.file);
+
+          // Subir la imagen usando el servicio
+          await ApiService.uploadImage(formDataToSend);
+          successCount++;
+        } catch (fileError) {
+          console.error(`Error subiendo archivo ${i + 1}:`, fileError);
+          failCount++;
+        }
+      }
+
+      // Mostrar mensaje de resultado
+      if (isMultipleUpload) {
+        if (failCount === 0) {
+          alert(`✅ ${successCount} imagen${successCount > 1 ? 'es' : ''} subida${successCount > 1 ? 's' : ''} correctamente`);
+        } else {
+          alert(`⚠️ ${successCount} imagen${successCount > 1 ? 'es' : ''} subida${successCount > 1 ? 's' : ''} correctamente, ${failCount} fallaron`);
+        }
+      } else {
+        alert("Imagen subida correctamente");
+      }
 
       // Limpiar formulario
       setFormData({
@@ -246,6 +429,8 @@ export const useUploadForm = () => {
         selectedCategory: "",
         imageName: "",
         imageFile: null,
+        imageFiles: [],
+        imageFilesMetadata: [],
         grupoExistente: null,
         grupoSeleccionado: "",
         nombreNuevoGrupo: "",
@@ -299,6 +484,10 @@ export const useUploadForm = () => {
     handleNewGroup,
     handleFileChange,
     handleCoverFileChange,
+    handleMultipleFilesChange,
+    removeFileFromSelection,
+    updateFileMetadata,
+    addImageToQueue,
     resetCounters: () => {
       setNameImageCount(VALIDATION_CONSTANTS.MAX_NAME_LENGTH);
       setDescriptionImageCount(VALIDATION_CONSTANTS.MAX_DESCRIPTION_LENGTH);

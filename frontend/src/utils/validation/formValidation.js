@@ -77,20 +77,29 @@ export const validateUploadForm = (formData) => {
     isValid = false;
   }
 
-  // Validar nombre de imagen
-  if (!isValidTextLength(formData.imageName, VALIDATION_CONSTANTS.MAX_NAME_LENGTH)) {
+  // Validar nombre de imagen (solo obligatorio para grupo nuevo o subida única)
+  const isMultipleUpload = formData.grupoExistente === true && formData.imageFiles && formData.imageFiles.length > 0;
+  if (!isMultipleUpload && !isValidTextLength(formData.imageName, VALIDATION_CONSTANTS.MAX_NAME_LENGTH)) {
     errors.imageName = `El nombre debe tener entre 1 y ${VALIDATION_CONSTANTS.MAX_NAME_LENGTH} caracteres`;
     isValid = false;
   }
 
-  // Validar descripción
-  if (!isValidTextLength(formData.descriptionImage, VALIDATION_CONSTANTS.MAX_DESCRIPTION_LENGTH)) {
+  // Validar descripción (opcional para subida múltiple)
+  if (!isMultipleUpload && !isValidTextLength(formData.descriptionImage, VALIDATION_CONSTANTS.MAX_DESCRIPTION_LENGTH)) {
     errors.descriptionImage = `La descripción debe tener entre 1 y ${VALIDATION_CONSTANTS.MAX_DESCRIPTION_LENGTH} caracteres`;
     isValid = false;
   }
 
-  // Validar archivo
-  if (!formData.imageFile) {
+  // Validar archivo(s)
+  // Si es grupo existente y hay múltiples archivos, validar array
+  if (formData.grupoExistente === true && formData.imageFiles && formData.imageFiles.length > 0) {
+    // Validar múltiples archivos (grupo existente)
+    if (formData.imageFiles.length > 5) {
+      errors.imageFiles = "No se pueden subir más de 5 archivos a la vez";
+      isValid = false;
+    }
+  } else if (!formData.imageFile) {
+    // Validar archivo único (grupo nuevo)
     errors.imageFile = "Debe seleccionar un archivo";
     isValid = false;
   } else {
