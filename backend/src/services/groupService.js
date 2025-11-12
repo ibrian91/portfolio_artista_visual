@@ -10,9 +10,10 @@ const techniquesFile = path.join(__dirname, '../data/techniques_categories.json'
 
 // Validar técnica y categoría
 const isValidTechniqueCategory = (technique, category) => {
+  if (!technique || !category) return false;
   const data = JSON.parse(fs.readFileSync(techniquesFile));
   const found = data.find(t => t.title === technique);
-  return found && found.categorias.includes(category);
+  return found ? found.categorias.includes(category) : false;
 };
 
 // Crear grupo único por técnica/categoría

@@ -11,5 +11,18 @@
     "is_small_image": true,
     "file_url": "/uploads/portfolio/Dibujo/Digital/dibujo digital group/optimized-nombre dibujo.jpg",
     "created_at": "2025-11-12T00:53:47.018Z"
+  },
+  {
+    "id": "1762917274264",
+    "technique": "Dibujo",
+    "category": "Fibra",
+    "group_name": "sdsd",
+    "image_name": "sdsa",
+    "description": "sda",
+    "is_mockup_image": false,
+    "is_rotating_image": true,
+    "is_small_image": true,
+    "file_url": "/uploads/portfolio/Dibujo/Fibra/sdsd/optimized-sdsa.jpg",
+    "created_at": "2025-11-12T03:14:34.264Z"
   }
 ]

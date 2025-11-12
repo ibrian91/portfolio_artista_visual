@@ -27,7 +27,7 @@ const authenticateToken = (req, res, next) => {
 
 // Middleware para verificar clave de acceso simple
 const verifyAccessKey = (req, res, next) => {
-  const { access_key } = req.body || req.query;
+  const access_key = req.body?.access_key || req.query?.access_key;
   
   if (!access_key || access_key !== process.env.ACCESS_KEY) {
     return res.status(401).json({

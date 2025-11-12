@@ -65,7 +65,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 // Rutas de la API
 app.use('/api/images', imageRoutes);
 app.use('/api/upload', uploadRoutes);
-app.use('/api', groupRoutes);
+app.use('/api/groups', groupRoutes);
 
 // Ruta de salud de la API
 app.get('/api/health', (req, res) => {
