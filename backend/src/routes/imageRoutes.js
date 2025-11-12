@@ -41,4 +41,7 @@ router.head('/image/:type/:filename', (req, res) => {
 // GET /api/images?technique={}&category={}&group_name={}
 router.get('/', imageController.getImages);
 
+// DELETE /api/images/:id
+router.delete('/:id', imageController.deleteImage);
+
 export default router;

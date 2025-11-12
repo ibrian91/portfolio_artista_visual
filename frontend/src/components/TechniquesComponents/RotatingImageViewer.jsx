@@ -29,7 +29,7 @@ const RotatingImageViewer = ({
     setIsDragging(true);
     setStartX(e.clientX);
     setCurrentRotation(rotation);
-    setIsPaused(true); // Pausar rotación automática al arrastrar
+    setIsPaused(true);
   };
 
   const handleMouseMove = (e) => {
@@ -123,7 +123,7 @@ const RotatingImageViewer = ({
         zIndex={10001}
       >
         <Typography variant="h6" sx={{ textShadow: "0 2px 8px rgba(0,0,0,0.8)" }}>
-          {groupName} - Rotación 3D
+        
         </Typography>
         <Button
           onClick={(e) => {
@@ -313,21 +313,7 @@ const RotatingImageViewer = ({
         zIndex={10001}
         onClick={(e) => e.stopPropagation()}
       >
-        <Button
-          onClick={handleTogglePause}
-          sx={{
-            color: 'white',
-            bgcolor: 'rgba(0, 0, 0, 0.7)',
-            padding: '12px 24px',
-            borderRadius: '8px',
-            fontWeight: 'bold',
-            '&:hover': {
-              bgcolor: 'rgba(255, 255, 255, 0.2)',
-            },
-          }}
-        >
-          {isPaused ? '▶ Reanudar' : '⏸ Pausar'}
-        </Button>
+       
       </Box>
 
       {/* Información de la imagen */}
@@ -355,9 +341,6 @@ const RotatingImageViewer = ({
               {rotatingImage.description}
             </Typography>
           )}
-          <Typography variant="caption" sx={{ mt: 1, opacity: 0.7, display: 'block' }}>
-            🖱️ Arrastra para rotar manualmente | ESPACIO: pausar/reanudar | ESC: salir
-          </Typography>
         </Box>
       )}
     </Box>

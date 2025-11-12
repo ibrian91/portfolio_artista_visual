@@ -164,9 +164,21 @@ export const validateDeleteForm = (formData) => {
     isValid = false;
   }
 
-  // Validar nombre de imagen
-  if (!isNotEmpty(formData.imageName)) {
-    errors.imageName = "Debe ingresar el nombre de la imagen";
+  // Validar que se haya seleccionado si eliminar grupo o imagen
+  if (formData.deleteEntireGroup === null) {
+    errors.deleteEntireGroup = "Debe seleccionar si eliminar grupo completo o imagen específica";
+    isValid = false;
+  }
+
+  // Validar grupo seleccionado
+  if (!isNotEmpty(formData.selectedGroup)) {
+    errors.selectedGroup = "Debe seleccionar un grupo";
+    isValid = false;
+  }
+
+  // Si NO se elimina grupo completo, validar que se haya seleccionado una imagen
+  if (formData.deleteEntireGroup === false && !formData.selectedImageId) {
+    errors.selectedImageId = "Debe seleccionar una imagen";
     isValid = false;
   }
 

@@ -111,12 +111,53 @@ const getGroupsCoverImages = async (req, res) => {
 
 // GET /api/groups - Devuelve la lista de grupos por técnica/categoría
 const getGroups = async (req, res) => {
+  const { technique, category } = req.query;
+  
   try {
-    const groups = await groupService.getAllGroups();
-    return res.json({ groups });
+    const allGroups = await groupService.getAllGroups();
+    
+    // Filtrar por técnica y categoría si se proporcionan
+    let filteredGroups = allGroups;
+    
+    if (technique && category) {
+      filteredGroups = allGroups.filter(g => 
+        g.technique === technique && g.category === category
+      );
+    }
+    
+    return res.json({ groups: filteredGroups });
   } catch (err) {
+    console.error('Error en getGroups:', err);
     return res.status(500).json({ error: 'Error al obtener los grupos.' });
   }
 };
 
-export default { createGroup, getGroupsCoverImages, getGroups };
+// DELETE /api/groups - Eliminar grupo completo con sus imágenes
+const deleteGroup = async (req, res) => {
+  const { technique, category, group_name, upload_key } = req.body;
+
+  // Validar clave
+  if (!validateUploadKey(upload_key)) {
+    return res.status(401).json({ error: 'Clave de eliminación incorrecta' });
+  }
+
+  if (!technique || !category || !group_name) {
+    return res.status(400).json({ error: 'Faltan parámetros: technique, category, group_name' });
+  }
+
+  try {
+    const result = await groupService.deleteGroup(technique, category, group_name);
+    return res.json({ 
+      message: 'Grupo eliminado correctamente',
+      deletedGroup: result 
+    });
+  } catch (err) {
+    console.error('Error en deleteGroup controller:', err);
+    if (err.message === 'Grupo no encontrado') {
+      return res.status(404).json({ error: 'Grupo no encontrado' });
+    }
+    return res.status(500).json({ error: 'Error al eliminar el grupo: ' + err.message });
+  }
+};
+
+export default { createGroup, getGroupsCoverImages, getGroups, deleteGroup };

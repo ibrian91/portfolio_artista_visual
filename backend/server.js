@@ -29,8 +29,10 @@ const PORT = process.env.PORT || 5000;
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100, // límite de 100 requests por IP por ventana de tiempo
-  message: 'Demasiadas solicitudes desde esta IP, intenta de nuevo más tarde.'
+  max: process.env.NODE_ENV === 'development' ? 1000 : 100, // 1000 en dev, 100 en prod
+  message: 'Demasiadas solicitudes desde esta IP, intenta de nuevo más tarde.',
+  standardHeaders: true, // Devuelve info de rate limit en headers `RateLimit-*`
+  legacyHeaders: false, // Desactiva headers `X-RateLimit-*`
 });
 
 // Middleware de seguridad

@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import "./FormPage.css";
 import { useUploadForm } from "../../hooks/useUploadForm";
-import { useDeleteForm } from "../../hooks/useDeleteForm";
+import { useDeleteFormV2 } from "../../hooks/useDeleteFormV2";
 import UploadSection from "../../components/FormComponents/UploadSection";
 import DeleteSection from "../../components/FormComponents/DeleteSection";
 import { validateAccessKey } from "../../utils/validation/formValidation.js";
@@ -14,7 +14,11 @@ const FormPage = () => {
 
   // Usar hooks personalizados
   const uploadHook = useUploadForm();
-  const deleteHook = useDeleteForm();
+  const deleteHook = useDeleteFormV2();
+  
+  console.log('🔍🔍🔍 FormPage - deleteHook keys:', Object.keys(deleteHook));
+  console.log('🔍🔍🔍 FormPage - handleCategoryChange exists?', 'handleCategoryChange' in deleteHook);
+  console.log('🔍🔍🔍 FormPage - handleCategoryChange type:', typeof deleteHook.handleCategoryChange);
 
   if (!validateAccessKey(key, ACCESS_KEY)) {
     return (

@@ -18,5 +18,6 @@ const uploadCover = multer({ storage: coverStorage });
 router.post('/groups', uploadCover.single('cover_image'), groupController.createGroup);
 router.get('/groups', groupController.getGroups);
 router.get('/groups/cover-images', groupController.getGroupsCoverImages);
+router.delete('/groups', groupController.deleteGroup);
 
 export default router;

@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import { validateDeleteForm } from "../utils/validation/formValidation.js";
 import ApiService from "../services/ApiService.js";
 
-export const useDeleteForm = () => {
-  console.log('🔍🔍🔍 useDeleteForm hook initialized - NEW VERSION 2024 🔍🔍🔍');
-  console.log('🔍🔍🔍 If you see this, the cache is cleared! 🔍🔍🔍');
+export const useDeleteFormV2 = () => {
+  console.log('🔍🔍🔍 useDeleteFormV2 hook initialized - NEW FILE 🔍🔍🔍');
   
   // Estados del formulario de eliminación
   const [formData, setFormData] = useState({
@@ -227,7 +226,7 @@ export const useDeleteForm = () => {
     deleteImage,
   };
   
-  console.log('🔍 useDeleteForm returning:', Object.keys(hookReturn));
+  console.log('🔍 useDeleteFormV2 returning:', Object.keys(hookReturn));
   console.log('🔍 handleCategoryChange type:', typeof handleCategoryChange);
 
   return hookReturn;

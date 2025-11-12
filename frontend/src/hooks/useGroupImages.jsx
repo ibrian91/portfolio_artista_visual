@@ -11,16 +11,15 @@ const useGroupImages = () => {
 
     try {
       console.log('📡 Making API call to getImagesByGroup...');
-      const response = await ApiService.getImagesByGroup(technique, category, groupName);
-      console.log('✅ API Response:', response);
+      const images = await ApiService.getImagesByGroup(technique, category, groupName);
+      console.log('✅ API Response (array):', images);
 
-      if (response.images && response.images.length > 0) {
-        setGroupImages(response.images);
+      // ApiService ahora devuelve directamente el array de imágenes
+      if (Array.isArray(images) && images.length > 0) {
+        setGroupImages(images);
       } else {
         setGroupImages([]);
-        if (response.message) {
-          console.log('📝 Backend message:', response.message);
-        }
+        console.log('📝 No images found or empty array');
       }
     } catch (error) {
       console.error('❌ Error cargando imágenes del grupo:', error);
