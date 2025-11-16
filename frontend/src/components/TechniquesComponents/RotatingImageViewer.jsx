@@ -166,14 +166,14 @@ const RotatingImageViewer = ({
             position: 'relative',
             transformStyle: 'preserve-3d',
             transform: `rotateY(${rotation}deg)`,
-            animation: isPaused || isDragging ? 'none' : 'rotate3D 6s linear infinite',
+            animation: isPaused || isDragging ? 'none' : 'continuousRotate 6s linear infinite',
             transition: isDragging ? 'none' : 'transform 0.1s ease-out',
-            '@keyframes rotate3D': {
-              '0%': {
-                transform: `rotateY(${rotation}deg)`,
+            '@keyframes continuousRotate': {
+              'from': {
+                transform: 'rotateY(0deg)',
               },
-              '100%': {
-                transform: `rotateY(${rotation + 360}deg)`,
+              'to': {
+                transform: 'rotateY(360deg)',
               },
             },
           }}

@@ -1,11 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import pool from '../config/database.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const groupsFile = path.join(__dirname, '../data/groups.json');
 const techniquesFile = path.join(__dirname, '../data/techniques_categories.json');
 
 // Validar técnica y categoría
@@ -18,71 +18,80 @@ const isValidTechniqueCategory = (technique, category) => {
 
 // Crear grupo único por técnica/categoría
 const createGroup = async (technique, category, group_name) => {
-  let groups = [];
-  if (fs.existsSync(groupsFile)) {
-    groups = JSON.parse(fs.readFileSync(groupsFile));
+  try {
+    // Verificar si el grupo ya existe
+    const [existing] = await pool.query(
+      'SELECT * FROM groups_table WHERE technique = ? AND category = ? AND group_name = ?',
+      [technique, category, group_name]
+    );
+
+    if (existing.length > 0) {
+      return { error: 'El grupo ya existe en esta técnica/categoría.' };
+    }
+
+    // Crear el nuevo grupo
+    const [result] = await pool.query(
+      'INSERT INTO groups_table (technique, category, group_name) VALUES (?, ?, ?)',
+      [technique, category, group_name]
+    );
+
+    const newGroup = {
+      id: result.insertId,
+      technique,
+      category,
+      group_name,
+      created_at: new Date()
+    };
+
+    return { group: newGroup };
+  } catch (error) {
+    console.error('Error en createGroup (MySQL):', error);
+    throw error;
   }
-  // Buscar si ya existe el grupo en esa técnica/categoría
-  const exists = groups.find(g => g.technique === technique && g.category === category && g.group_name === group_name);
-  if (exists) {
-    return { error: 'El grupo ya existe en esta técnica/categoría.' };
-  }
-  // Crear y guardar
-  const newGroup = { technique, category, group_name };
-  groups.push(newGroup);
-  fs.writeFileSync(groupsFile, JSON.stringify(groups, null, 2));
-  return { group: newGroup };
 };
 
 // Obtener todos los grupos
 const getAllGroups = async () => {
-  if (!fs.existsSync(groupsFile)) return [];
-  const groups = JSON.parse(fs.readFileSync(groupsFile));
-  return groups;
+  try {
+    const [groups] = await pool.query('SELECT * FROM groups_table ORDER BY created_at DESC');
+    return groups;
+  } catch (error) {
+    console.error('Error en getAllGroups (MySQL):', error);
+    throw error;
+  }
 };
 
 // Eliminar un grupo y todas sus imágenes
 const deleteGroup = async (technique, category, group_name) => {
-  const imagesFile = path.join(__dirname, '../data/images.json');
-  
-  // Leer grupos
-  if (!fs.existsSync(groupsFile)) {
-    throw new Error('Archivo de grupos no encontrado');
-  }
-  
-  let groups = JSON.parse(fs.readFileSync(groupsFile));
-  const groupIndex = groups.findIndex(g => 
-    g.technique === technique && 
-    g.category === category && 
-    g.group_name === group_name
-  );
-
-  if (groupIndex === -1) {
-    throw new Error('Grupo no encontrado');
-  }
-
-  const groupToDelete = groups[groupIndex];
-
-  // Eliminar todas las imágenes del grupo
-  if (fs.existsSync(imagesFile)) {
-    let images = JSON.parse(fs.readFileSync(imagesFile));
-    const imagesToDelete = images.filter(img => 
-      img.technique === technique && 
-      img.category === category && 
-      img.group_name === group_name
+  try {
+    // Verificar que el grupo existe en MySQL
+    const [groups] = await pool.query(
+      'SELECT * FROM groups_table WHERE technique = ? AND category = ? AND group_name = ?',
+      [technique, category, group_name]
     );
 
-    // Eliminar archivos físicos de imágenes
-    for (const image of imagesToDelete) {
-      // Extraer el nombre del archivo desde file_url si filename no existe
+    if (groups.length === 0) {
+      throw new Error('Grupo no encontrado');
+    }
+
+    const groupToDelete = groups[0];
+
+    // Obtener todas las imágenes del grupo
+    const [images] = await pool.query(
+      'SELECT * FROM images WHERE technique = ? AND category = ? AND group_name = ?',
+      [technique, category, group_name]
+    );
+
+    // Eliminar archivos físicos de las imágenes
+    for (const image of images) {
       const filename = image.filename || path.basename(image.file_url);
-      
       const imagePath = path.join(__dirname, '../../uploads/portfolio', 
         image.technique, 
         image.category, 
         image.group_name, 
         filename
       );
+      
       try {
         if (fs.existsSync(imagePath)) {
           fs.unlinkSync(imagePath);
@@ -95,32 +104,35 @@ const deleteGroup = async (technique, category, group_name) => {
       }
     }
 
-    // Actualizar JSON de imágenes
-    images = images.filter(img => !(
-      img.technique === technique && 
-      img.category === category && 
-      img.group_name === group_name
-    ));
-    fs.writeFileSync(imagesFile, JSON.stringify(images, null, 2));
-  }
+    // Eliminar registros de imágenes de MySQL (CASCADE lo hará automáticamente)
+    await pool.query(
+      'DELETE FROM images WHERE technique = ? AND category = ? AND group_name = ?',
+      [technique, category, group_name]
+    );
 
-  // Eliminar directorio del grupo
-  const groupDir = path.join(__dirname, '../../uploads/portfolio', technique, category, group_name);
-  try {
-    if (fs.existsSync(groupDir)) {
-      fs.rmSync(groupDir, { recursive: true, force: true });
-      console.log(`🗑️ Directorio eliminado: ${groupDir}`);
+    // Eliminar directorio del grupo
+    const groupDir = path.join(__dirname, '../../uploads/portfolio', technique, category, group_name);
+    try {
+      if (fs.existsSync(groupDir)) {
+        fs.rmSync(groupDir, { recursive: true, force: true });
+        console.log(`🗑️ Directorio eliminado: ${groupDir}`);
+      }
+    } catch (err) {
+      console.error('Error al eliminar directorio:', err);
     }
-  } catch (err) {
-    console.error('Error al eliminar directorio:', err);
+
+    // Eliminar grupo de MySQL
+    await pool.query(
+      'DELETE FROM groups_table WHERE technique = ? AND category = ? AND group_name = ?',
+      [technique, category, group_name]
+    );
+
+    console.log(`✅ Grupo eliminado: ${group_name}`);
+    return groupToDelete;
+  } catch (error) {
+    console.error('Error en deleteGroup (MySQL):', error);
+    throw error;
   }
-
-  // Eliminar grupo del JSON
-  groups.splice(groupIndex, 1);
-  fs.writeFileSync(groupsFile, JSON.stringify(groups, null, 2));
-
-  console.log(`✅ Grupo eliminado: ${group_name}`);
-  return groupToDelete;
 };
 
 export default { isValidTechniqueCategory, createGroup, getAllGroups, deleteGroup };

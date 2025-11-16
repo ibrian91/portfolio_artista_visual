@@ -8,9 +8,6 @@ import pool from '../config/database.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Definir la ruta del archivo groups.json
-const groupsFile = path.join(__dirname, '../data/groups.json');
-
 // Configuración de multer
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
@@ -146,8 +143,6 @@ const uploadController = {
   // Subir imagen específica para portfolio
   async uploadPortfolioImage(req, res) {
     try {
-      console.log('\n🚨🚨🚨 UPLOAD INICIADO - VERSIÓN CON DEBUG 🚨🚨🚨\n');
-      
       const {
         technique,
         category,
@@ -157,29 +152,13 @@ const uploadController = {
         upload_key
       } = req.body;
 
-      // 🔍 DEBUG: Ver valores RAW que llegan desde FormData
-      console.log('\n============================================');
-      console.log('📦 VALORES RAW DE req.body:');
-      console.log('  is_mockup_image:', req.body.is_mockup_image, '(tipo:', typeof req.body.is_mockup_image + ')');
-      console.log('  is_rotating_image:', req.body.is_rotating_image, '(tipo:', typeof req.body.is_rotating_image + ')');
-      console.log('  is_small_image:', req.body.is_small_image, '(tipo:', typeof req.body.is_small_image + ')');
-      console.log('============================================\n');
-
       // Convertir correctamente los valores booleanos desde strings de FormData
       // FormData siempre envía strings, entonces "true" o "false"
       const is_mockup_image = String(req.body.is_mockup_image) === 'true';
       const is_rotating_image = String(req.body.is_rotating_image) === 'true';
       const is_small_image = String(req.body.is_small_image) === 'true';
 
-      console.log('✅ VALORES CONVERTIDOS:');
-      console.log('  is_mockup_image:', is_mockup_image);
-      console.log('  is_rotating_image:', is_rotating_image);
-      console.log('  is_small_image:', is_small_image);
-      console.log('============================================\n');
-
       // Validar clave
-      console.log('🔑 upload_key recibido:', upload_key);
-      console.log('🔑 UPLOAD_SECRET .env:', process.env.UPLOAD_SECRET);
       if (String(upload_key) !== String(process.env.UPLOAD_SECRET)) {
         if (req.file) {
           await fs.unlink(req.file.path).catch(() => {});
@@ -192,16 +171,13 @@ const uploadController = {
         return res.status(400).json({ error: 'No se proporcionó archivo' });
       }
 
-      // Validar grupo existente
-      let groups = [];
-      try {
-        await fs.stat(groupsFile);
-        groups = JSON.parse(await fs.readFile(groupsFile));
-      } catch (e) {
-        groups = [];
-      }
-      const groupExists = groups.find(g => g.technique === technique && g.category === category && g.group_name === group_name);
-      if (!groupExists) {
+      // Validar grupo existente en MySQL
+      const [groups] = await pool.query(
+        'SELECT * FROM groups_table WHERE technique = ? AND category = ? AND group_name = ?',
+        [technique, category, group_name]
+      );
+      
+      if (groups.length === 0) {
         await fs.unlink(req.file.path).catch(() => {});
         return res.status(404).json({ error: 'El grupo no existe' });
       }
@@ -221,24 +197,13 @@ const uploadController = {
       await fs.unlink(req.file.path);
 
       // Si es MockUp, eliminar cualquier MockUp anterior del mismo grupo
-      const imagesFile = path.join(__dirname, '../data/images.json');
-      let images = [];
-      try {
-        const imagesContent = await fs.readFile(imagesFile, 'utf-8');
-        images = JSON.parse(imagesContent);
-      } catch (e) {
-        images = [];
-      }
+      const [previousMockups] = await pool.query(
+        'SELECT * FROM images WHERE technique = ? AND category = ? AND group_name = ? AND is_mockup_image = true',
+        [technique, category, group_name]
+      );
 
-      if (is_mockup_image) {
-        // Filtrar y eliminar archivos físicos de MockUps anteriores del mismo grupo
-        const previousMockups = images.filter(img => 
-          img.technique === technique && 
-          img.category === category && 
-          img.group_name === group_name && 
-          img.is_mockup_image === true
-        );
-
+      if (is_mockup_image && previousMockups.length > 0) {
+        // Eliminar archivos físicos de MockUps anteriores
         for (const oldMockup of previousMockups) {
           try {
             const oldFilePath = path.join(__dirname, '../..', oldMockup.file_url);
@@ -250,25 +215,21 @@ const uploadController = {
           }
         }
 
-        // Eliminar MockUps anteriores de la lista
-        images = images.filter(img => !(
-          img.technique === technique && 
-          img.category === category && 
-          img.group_name === group_name && 
-          img.is_mockup_image === true
-        ));
+        // Eliminar MockUps anteriores de MySQL
+        await pool.query(
+          'DELETE FROM images WHERE technique = ? AND category = ? AND group_name = ? AND is_mockup_image = true',
+          [technique, category, group_name]
+        );
       }
 
       // Si es Rotating Image, eliminar cualquier Rotating anterior del mismo grupo
-      if (is_rotating_image) {
-        // Filtrar y eliminar archivos físicos de Rotating anteriores del mismo grupo
-        const previousRotating = images.filter(img => 
-          img.technique === technique && 
-          img.category === category && 
-          img.group_name === group_name && 
-          img.is_rotating_image === true
-        );
+      const [previousRotating] = await pool.query(
+        'SELECT * FROM images WHERE technique = ? AND category = ? AND group_name = ? AND is_rotating_image = true',
+        [technique, category, group_name]
+      );
 
+      if (is_rotating_image && previousRotating.length > 0) {
+        // Eliminar archivos físicos de Rotating anteriores
         for (const oldRotating of previousRotating) {
           try {
             const oldFilePath = path.join(__dirname, '../..', oldRotating.file_url);
@@ -280,18 +241,41 @@ const uploadController = {
           }
         }
 
-        // Eliminar Rotating anteriores de la lista
-        images = images.filter(img => !(
-          img.technique === technique && 
-          img.category === category && 
-          img.group_name === group_name && 
-          img.is_rotating_image === true
-        ));
+        // Eliminar Rotating anteriores de MySQL
+        await pool.query(
+          'DELETE FROM images WHERE technique = ? AND category = ? AND group_name = ? AND is_rotating_image = true',
+          [technique, category, group_name]
+        );
       }
 
-      // Guardar metadata
+      // Guardar metadata en MySQL
+      const imageId = Date.now();
+      const fileUrl = `/uploads/portfolio/${technique}/${category}/${group_name}/${optimizedFileName}`;
+      
+      await pool.query(
+        `INSERT INTO images (
+          id, technique, category, group_name, image_name, description,
+          is_mockup_image, is_rotating_image, is_small_image, file_url,
+          file_size, mime_type, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
+        [
+          imageId,
+          technique,
+          category,
+          group_name,
+          image_name,
+          description,
+          is_mockup_image ? 1 : 0,
+          is_rotating_image ? 1 : 0,
+          is_small_image ? 1 : 0,
+          fileUrl,
+          req.file.size || null,
+          req.file.mimetype || null
+        ]
+      );
+
       const imageData = {
-        id: Date.now().toString(),
+        id: imageId,
         technique,
         category,
         group_name,
@@ -300,15 +284,9 @@ const uploadController = {
         is_mockup_image: is_mockup_image,
         is_rotating_image: is_rotating_image,
         is_small_image: is_small_image,
-        file_url: `/uploads/portfolio/${technique}/${category}/${group_name}/${optimizedFileName}`,
+        file_url: fileUrl,
         created_at: new Date().toISOString()
       };
-
-      // Agregar nueva imagen
-      images.push(imageData);
-
-      // Guardar en archivo
-      await fs.writeFile(imagesFile, JSON.stringify(images, null, 2), 'utf-8');
 
       // Respuesta
       res.status(201).json({

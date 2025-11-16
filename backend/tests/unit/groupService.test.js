@@ -4,24 +4,32 @@ import { MOCK_GROUP, MOCK_IMAGE } from '../setup.js';
 // Crear mocks antes de importar el servicio
 const mockExistsSync = jest.fn();
 const mockReadFileSync = jest.fn();
-const mockWriteFileSync = jest.fn();
 const mockRmSync = jest.fn();
 const mockUnlinkSync = jest.fn();
+
+// Mock de MySQL pool
+const mockQuery = jest.fn();
+const mockPool = {
+  query: mockQuery
+};
 
 // Mock de fs usando jest.unstable_mockModule
 await jest.unstable_mockModule('fs', () => ({
   default: {
     existsSync: mockExistsSync,
     readFileSync: mockReadFileSync,
-    writeFileSync: mockWriteFileSync,
     rmSync: mockRmSync,
     unlinkSync: mockUnlinkSync
   },
   existsSync: mockExistsSync,
   readFileSync: mockReadFileSync,
-  writeFileSync: mockWriteFileSync,
   rmSync: mockRmSync,
   unlinkSync: mockUnlinkSync
+}));
+
+// Mock del pool de MySQL
+await jest.unstable_mockModule('../../src/config/database.js', () => ({
+  default: mockPool
 }));
 
 // Ahora importar el servicio (después del mock)
@@ -33,9 +41,9 @@ describe('GroupService - Unit Tests', () => {
     jest.clearAllMocks();
     mockExistsSync.mockClear();
     mockReadFileSync.mockClear();
-    mockWriteFileSync.mockClear();
     mockRmSync.mockClear();
     mockUnlinkSync.mockClear();
+    mockQuery.mockClear();
   });
 
   describe('isValidTechniqueCategory', () => {
@@ -91,9 +99,14 @@ describe('GroupService - Unit Tests', () => {
   describe('createGroup', () => {
     it('debería crear un grupo correctamente', async () => {
       // Arrange
-      mockExistsSync.mockReturnValue(true);
-      mockReadFileSync.mockReturnValue(JSON.stringify([]));
-      mockWriteFileSync.mockImplementation(() => {});
+      // Mock para verificar si existe (retorna array vacío)
+      mockQuery.mockResolvedValueOnce([[]]);
+      // Mock para INSERT (retorna resultado de inserción)
+      const mockResult = {
+        insertId: 1,
+        affectedRows: 1
+      };
+      mockQuery.mockResolvedValueOnce([mockResult]);
 
       // Act
       const result = await groupService.createGroup('Dibujo', 'Digital', 'Test Group');
@@ -101,43 +114,43 @@ describe('GroupService - Unit Tests', () => {
       // Assert
       expect(result.group).toBeDefined();
       expect(result.group.group_name).toBe('Test Group');
-      expect(mockWriteFileSync).toHaveBeenCalledTimes(1);
+      expect(result.group.technique).toBe('Dibujo');
+      expect(result.group.category).toBe('Digital');
+      expect(mockQuery).toHaveBeenCalledWith(
+        expect.stringContaining('SELECT * FROM groups_table WHERE'),
+        ['Dibujo', 'Digital', 'Test Group']
+      );
+      expect(mockQuery).toHaveBeenCalledWith(
+        expect.stringContaining('INSERT INTO groups_table'),
+        ['Dibujo', 'Digital', 'Test Group']
+      );
     });
 
     it('debería rechazar grupo duplicado', async () => {
       // Arrange
-      const existingGroup = { ...MOCK_GROUP };
-      mockExistsSync.mockReturnValue(true);
-      mockReadFileSync.mockReturnValue(JSON.stringify([existingGroup]));
+      const existingGroup = { 
+        id: 1, 
+        technique: 'Dibujo', 
+        category: 'Digital', 
+        group_name: 'Test Group' 
+      };
+      mockQuery.mockResolvedValueOnce([[existingGroup]]); // Grupo existe
 
       // Act
-      const result = await groupService.createGroup(
-        existingGroup.technique, 
-        existingGroup.category, 
-        existingGroup.group_name
-      );
+      const result = await groupService.createGroup('Dibujo', 'Digital', 'Test Group');
 
       // Assert
       expect(result.error).toBeDefined();
       expect(result.error).toContain('ya existe');
     });
 
-    it('debería crear archivo groups.json si no existe', async () => {
+    it('debería manejar errores de base de datos', async () => {
       // Arrange
-      mockExistsSync.mockReturnValue(false);
-      mockWriteFileSync.mockImplementation(() => {});
+      mockQuery.mockRejectedValueOnce(new Error('Database error'));
 
-      // Act
-      const result = await groupService.createGroup('Dibujo', 'Digital', 'New Group');
-
-      // Assert
-      expect(result.group).toBeDefined();
-      expect(mockWriteFileSync).toHaveBeenCalledTimes(1);
-      // Verificar que se llamó con un array que incluye el nuevo grupo
-      const writeCall = mockWriteFileSync.mock.calls[0][1];
-      const writtenData = JSON.parse(writeCall);
-      expect(writtenData).toHaveLength(1);
-      expect(writtenData[0].group_name).toBe('New Group');
+      // Act & Assert
+      await expect(groupService.createGroup('Dibujo', 'Digital', 'Test Group'))
+        .rejects.toThrow('Database error');
     });
   });
 
@@ -145,68 +158,91 @@ describe('GroupService - Unit Tests', () => {
     it('debería retornar todos los grupos', async () => {
       // Arrange
       const mockGroups = [
-        { ...MOCK_GROUP },
-        { ...MOCK_GROUP, group_name: 'Group 2' }
+        { id: 1, technique: 'Dibujo', category: 'Digital', group_name: 'Group 1', created_at: new Date() },
+        { id: 2, technique: 'Dibujo', category: 'Fibra', group_name: 'Group 2', created_at: new Date() }
       ];
-      mockExistsSync.mockReturnValue(true);
-      mockReadFileSync.mockReturnValue(JSON.stringify(mockGroups));
+      mockQuery.mockResolvedValueOnce([mockGroups]);
 
       // Act
       const result = await groupService.getAllGroups();
 
       // Assert
       expect(result).toHaveLength(2);
-      expect(mockReadFileSync).toHaveBeenCalledTimes(1);
+      expect(mockQuery).toHaveBeenCalledWith(
+        expect.stringContaining('SELECT * FROM groups_table')
+      );
     });
 
     it('debería retornar array vacío si no hay grupos', async () => {
       // Arrange
-      mockExistsSync.mockReturnValue(false);
+      mockQuery.mockResolvedValueOnce([[]]);
 
       // Act
       const result = await groupService.getAllGroups();
 
       // Assert
       expect(result).toEqual([]);
-      expect(mockReadFileSync).not.toHaveBeenCalled();
     });
   });
 
   describe('deleteGroup', () => {
     it('debería eliminar un grupo con todas sus imágenes', async () => {
       // Arrange
-      const mockGroups = [MOCK_GROUP];
+      const mockGroup = {
+        id: 1,
+        technique: 'Dibujo',
+        category: 'Digital',
+        group_name: 'TestGroup'
+      };
       const mockImages = [
-        { ...MOCK_IMAGE, id: '1', file_url: '/path/image1.jpg' },
-        { ...MOCK_IMAGE, id: '2', file_url: '/path/image2.jpg' }
+        { 
+          id: 1, 
+          file_url: '/uploads/portfolio/Dibujo/Digital/TestGroup/image1.jpg',
+          technique: 'Dibujo',
+          category: 'Digital',
+          group_name: 'TestGroup'
+        },
+        { 
+          id: 2, 
+          file_url: '/uploads/portfolio/Dibujo/Digital/TestGroup/image2.jpg',
+          technique: 'Dibujo',
+          category: 'Digital',
+          group_name: 'TestGroup'
+        }
       ];
 
+      // Mock para SELECT group (verificar que existe)
+      mockQuery.mockResolvedValueOnce([[mockGroup]]);
+      // Mock para SELECT images
+      mockQuery.mockResolvedValueOnce([mockImages]);
+      // Mock para DELETE images (aunque CASCADE lo maneja, el código no lo usa explícitamente)
+      // Mock para DELETE group
+      mockQuery.mockResolvedValueOnce([{ affectedRows: 1 }]);
+
       mockExistsSync.mockReturnValue(true);
-      mockReadFileSync
-        .mockReturnValueOnce(JSON.stringify(mockGroups))  // groups.json
-        .mockReturnValueOnce(JSON.stringify(mockImages)); // images.json
       mockUnlinkSync.mockImplementation(() => {});
       mockRmSync.mockImplementation(() => {});
-      mockWriteFileSync.mockImplementation(() => {});
 
       // Act
-      const result = await groupService.deleteGroup(
-        MOCK_GROUP.technique,
-        MOCK_GROUP.category,
-        MOCK_GROUP.group_name
-      );
+      const result = await groupService.deleteGroup('Dibujo', 'Digital', 'TestGroup');
 
       // Assert
-      expect(result.group_name).toBe(MOCK_GROUP.group_name);
+      expect(result.group_name).toBe('TestGroup');
       expect(mockUnlinkSync).toHaveBeenCalledTimes(2); // 2 imágenes
       expect(mockRmSync).toHaveBeenCalledTimes(1); // directorio
-      expect(mockWriteFileSync).toHaveBeenCalledTimes(2); // images.json y groups.json
+      expect(mockQuery).toHaveBeenCalledWith(
+        expect.stringContaining('SELECT * FROM groups_table WHERE'),
+        ['Dibujo', 'Digital', 'TestGroup']
+      );
+      expect(mockQuery).toHaveBeenCalledWith(
+        expect.stringContaining('SELECT * FROM images'),
+        ['Dibujo', 'Digital', 'TestGroup']
+      );
     });
 
     it('debería lanzar error si el grupo no existe', async () => {
       // Arrange
-      mockExistsSync.mockReturnValue(true);
-      mockReadFileSync.mockReturnValue(JSON.stringify([]));
+      mockQuery.mockResolvedValueOnce([[]]); // No group found
 
       // Act & Assert
       await expect(groupService.deleteGroup('Dibujo', 'Digital', 'NoExiste'))
@@ -215,23 +251,25 @@ describe('GroupService - Unit Tests', () => {
 
     it('debería manejar correctamente cuando no hay imágenes asociadas', async () => {
       // Arrange
-      const mockGroups = [MOCK_GROUP];
+      const mockGroup = {
+        id: 1,
+        technique: 'Dibujo',
+        category: 'Digital',
+        group_name: 'TestGroup'
+      };
+
+      mockQuery.mockResolvedValueOnce([[mockGroup]]); // Group exists
+      mockQuery.mockResolvedValueOnce([[]]); // No images
+      mockQuery.mockResolvedValueOnce([{ affectedRows: 1 }]); // Group deleted
+
       mockExistsSync.mockReturnValue(true);
-      mockReadFileSync
-        .mockReturnValueOnce(JSON.stringify(mockGroups))
-        .mockReturnValueOnce(JSON.stringify([])); // No images
       mockRmSync.mockImplementation(() => {});
-      mockWriteFileSync.mockImplementation(() => {});
 
       // Act
-      const result = await groupService.deleteGroup(
-        MOCK_GROUP.technique,
-        MOCK_GROUP.category,
-        MOCK_GROUP.group_name
-      );
+      const result = await groupService.deleteGroup('Dibujo', 'Digital', 'TestGroup');
 
       // Assert
-      expect(result.group_name).toBe(MOCK_GROUP.group_name);
+      expect(result.group_name).toBe('TestGroup');
       expect(mockUnlinkSync).not.toHaveBeenCalled(); // No hay imágenes
       expect(mockRmSync).toHaveBeenCalledTimes(1); // Pero sí elimina directorio
     });

@@ -16,16 +16,6 @@ const GroupImagesView = ({
   // Asegurar que images sea un array
   const safeImages = Array.isArray(images) ? images : [];
 
-  // Debug: ver qué imágenes llegan
-  useEffect(() => {
-    if (safeImages.length > 0) {
-      console.log('🖼️ Imágenes recibidas en GroupImagesView:', safeImages.map(img => ({
-        name: img.image_name,
-        is_mockup: img.is_mockup_image
-      })));
-    }
-  }, [safeImages]);
-
   // Si no hay imágenes y ya no está cargando, volver automáticamente
   useEffect(() => {
     if (safeImages.length === 0 && !isLoading && onBackToGroups) {
@@ -34,10 +24,11 @@ const GroupImagesView = ({
   }, [safeImages.length, isLoading, onBackToGroups]);
 
   // Separar imágenes especiales de las regulares (verificación estricta)
-  const mockupImage = safeImages.find(img => img.is_mockup_image === true);
-  const rotatingImage = safeImages.find(img => img.is_rotating_image === true);
+  const mockupImage = safeImages.find(img => img.is_mockup_image === true || img.is_mockup_image === 1);
+  const rotatingImage = safeImages.find(img => img.is_rotating_image === true || img.is_rotating_image === 1);
   const regularImages = safeImages.filter(img => 
-    img.is_mockup_image !== true && img.is_rotating_image !== true
+    (img.is_mockup_image !== true && img.is_mockup_image !== 1) && 
+    (img.is_rotating_image !== true && img.is_rotating_image !== 1)
   );
 
   // Abrir automáticamente según el tipo de imagen especial
@@ -46,15 +37,12 @@ const GroupImagesView = ({
     if (safeImages.length > 0 && !isLoading && selectedImageIndex === null && !showMockUp && !showRotating && !isViewerOpen) {
       if (mockupImage) {
         // Prioridad 1: MockUp en fullscreen
-        console.log('✅ Detectado MockUp:', mockupImage.image_name);
         setShowMockUp(true);
       } else if (rotatingImage) {
-        // Prioridad 2: Imagen rotatoria 3D (solo si no hay MockUp)
-        console.log('✅ Detectado Rotating Image:', rotatingImage.image_name);
+        // Prioridad 2: Rotating Image
         setShowRotating(true);
       } else {
         // Si no hay imágenes especiales, abrir viewer normal
-        console.log('✅ No hay imágenes especiales, mostrando viewer normal con', regularImages.length, 'imágenes');
         setSelectedImageIndex(0);
         setIsViewerOpen(true);
       }

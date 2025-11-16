@@ -37,9 +37,10 @@ await jest.unstable_mockModule('sharp', () => ({
 }));
 
 // Mock de pool (database)
+const mockPoolQuery = jest.fn();
 await jest.unstable_mockModule('../../src/config/database.js', () => ({
   default: {
-    query: jest.fn()
+    query: mockPoolQuery
   }
 }));
 
@@ -76,6 +77,7 @@ describe('UploadController - Unit Tests', () => {
     mockSharpResize.mockReturnThis();
     mockSharpJpeg.mockReturnThis();
     mockSharpToFile.mockResolvedValue();
+    mockPoolQuery.mockClear();
   });
 
   describe('uploadImages', () => {
@@ -247,8 +249,19 @@ describe('UploadController - Unit Tests', () => {
 
     it('debería retornar 404 si el grupo no existe', async () => {
       // Arrange
-      mockStat.mockResolvedValue(); // groups.json existe
-      mockReadFile.mockResolvedValue(JSON.stringify([])); // pero está vacío
+      req.body = {
+        upload_key: 'test_secret',
+        technique: 'Dibujo',
+        category: 'Digital',
+        group_name: 'NonExistent'
+      };
+      req.file = {
+        path: '/tmp/test.jpg',
+        filename: 'test.jpg'
+      };
+
+      // Mock pool query para retornar grupo vacío (no existe)
+      mockPoolQuery.mockResolvedValueOnce([[]]); // No groups found
 
       // Act
       await uploadController.uploadPortfolioImage(req, res);
@@ -259,17 +272,32 @@ describe('UploadController - Unit Tests', () => {
         error: 'El grupo no existe' 
       });
       expect(mockUnlink).toHaveBeenCalledWith('/tmp/test.jpg');
+      expect(mockPoolQuery).toHaveBeenCalledWith(
+        expect.stringContaining('SELECT * FROM groups_table'),
+        ['Dibujo', 'Digital', 'NonExistent']
+      );
     });
 
     it('debería retornar 400 con extensión no permitida', async () => {
       // Arrange
-      req.file.filename = 'test.gif';
-      mockStat.mockResolvedValue();
-      mockReadFile.mockResolvedValue(JSON.stringify([{
+      req.body = {
+        upload_key: 'test_secret',
         technique: 'Dibujo',
         category: 'Digital',
         group_name: 'Test Group'
-      }]));
+      };
+      req.file = {
+        path: '/tmp/test.gif',
+        filename: 'test.gif'
+      };
+
+      // Mock pool query para retornar que el grupo existe
+      mockPoolQuery.mockResolvedValueOnce([[{
+        id: 1,
+        technique: 'Dibujo',
+        category: 'Digital',
+        group_name: 'Test Group'
+      }]]);
 
       // Act
       await uploadController.uploadPortfolioImage(req, res);
@@ -288,21 +316,23 @@ describe('UploadController - Unit Tests', () => {
       req.body.is_rotating_image = 'true';
       req.body.is_small_image = 'false';
       
-      mockStat.mockResolvedValue();
-      mockReadFile
-        .mockResolvedValueOnce(JSON.stringify([{ // groups.json
-          technique: 'Dibujo',
-          category: 'Digital',
-          group_name: 'Test Group'
-        }]))
-        .mockResolvedValueOnce(JSON.stringify([])); // images.json vacío
+      // Mock pool query para retornar que el grupo existe
+      mockPoolQuery.mockResolvedValueOnce([[{
+        id: 1,
+        technique: 'Dibujo',
+        category: 'Digital',
+        group_name: 'Test Group'
+      }]]);
+      // Mock pool query para verificar mockup existente
+      mockPoolQuery.mockResolvedValueOnce([[]]);
+      // Mock pool query para INSERT
+      mockPoolQuery.mockResolvedValueOnce([{ insertId: 1, affectedRows: 1 }]);
 
       // Act
       await uploadController.uploadPortfolioImage(req, res);
 
       // Assert
-      // Verifica que se llamó writeFile (puede fallar sharp pero llega a intentar guardar metadata)
-      // O que se retornó algún status code
+      // Verifica que se llamó algún status code
       expect(res.status).toHaveBeenCalled();
       const statusCode = res.status.mock.calls[0][0];
       // Acepta 201 (éxito), 500 (error sharp), o cualquier otro
@@ -311,14 +341,17 @@ describe('UploadController - Unit Tests', () => {
 
     it('debería procesar imagen correctamente con grupo existente', async () => {
       // Arrange
-      mockStat.mockResolvedValue();
-      mockReadFile
-        .mockResolvedValueOnce(JSON.stringify([{ // groups.json
-          technique: 'Dibujo',
-          category: 'Digital',
-          group_name: 'Test Group'
-        }]))
-        .mockResolvedValueOnce(JSON.stringify([])); // images.json
+      // Mock pool query para retornar que el grupo existe
+      mockPoolQuery.mockResolvedValueOnce([[{
+        id: 1,
+        technique: 'Dibujo',
+        category: 'Digital',
+        group_name: 'Test Group'
+      }]]);
+      // Mock pool query para verificar mockup existente
+      mockPoolQuery.mockResolvedValueOnce([[]]);
+      // Mock pool query para INSERT
+      mockPoolQuery.mockResolvedValueOnce([{ insertId: 1, affectedRows: 1 }]);
 
       // Act
       await uploadController.uploadPortfolioImage(req, res);
@@ -336,7 +369,7 @@ describe('UploadController - Unit Tests', () => {
       req.body.is_mockup_image = 'true';
       
       const oldMockup = {
-        id: 'old-123',
+        id: 123,
         technique: 'Dibujo',
         category: 'Digital',
         group_name: 'Test Group',
@@ -344,14 +377,19 @@ describe('UploadController - Unit Tests', () => {
         file_url: '/uploads/portfolio/Dibujo/Digital/Test Group/old-mockup.jpg'
       };
 
-      mockStat.mockResolvedValue();
-      mockReadFile
-        .mockResolvedValueOnce(JSON.stringify([{ // groups.json
-          technique: 'Dibujo',
-          category: 'Digital',
-          group_name: 'Test Group'
-        }]))
-        .mockResolvedValueOnce(JSON.stringify([oldMockup])); // images.json con mockup viejo
+      // Mock pool query para retornar que el grupo existe
+      mockPoolQuery.mockResolvedValueOnce([[{
+        id: 1,
+        technique: 'Dibujo',
+        category: 'Digital',
+        group_name: 'Test Group'
+      }]]);
+      // Mock pool query para verificar mockup existente (retorna el viejo)
+      mockPoolQuery.mockResolvedValueOnce([[oldMockup]]);
+      // Mock pool query para DELETE del mockup viejo
+      mockPoolQuery.mockResolvedValueOnce([{ affectedRows: 1 }]);
+      // Mock pool query para INSERT nuevo
+      mockPoolQuery.mockResolvedValueOnce([{ insertId: 124, affectedRows: 1 }]);
 
       // Act
       await uploadController.uploadPortfolioImage(req, res);
@@ -364,14 +402,15 @@ describe('UploadController - Unit Tests', () => {
 
     it('debería manejar error en procesamiento de Sharp', async () => {
       // Arrange
-      mockStat.mockResolvedValue();
-      mockReadFile
-        .mockResolvedValueOnce(JSON.stringify([{
-          technique: 'Dibujo',
-          category: 'Digital',
-          group_name: 'Test Group'
-        }]))
-        .mockResolvedValueOnce(JSON.stringify([]));
+      // Mock pool query para retornar que el grupo existe
+      mockPoolQuery.mockResolvedValueOnce([[{
+        id: 1,
+        technique: 'Dibujo',
+        category: 'Digital',
+        group_name: 'Test Group'
+      }]]);
+      // Mock pool query para verificar mockup existente
+      mockPoolQuery.mockResolvedValueOnce([[]]);
       
       mockSharpToFile.mockRejectedValue(new Error('Sharp processing error'));
 
