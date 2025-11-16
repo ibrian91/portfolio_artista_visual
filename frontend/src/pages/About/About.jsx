@@ -8,6 +8,8 @@ const images = [biografia1, biografia2];
 const About = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loadedIndexes, setLoadedIndexes] = useState([false, false]);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [fullscreenIndex, setFullscreenIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -32,8 +34,70 @@ const About = () => {
     });
   };
 
+  const openFullscreen = (index) => {
+    setFullscreenIndex(index);
+    setIsFullscreen(true);
+  };
+
+  const closeFullscreen = () => {
+    setIsFullscreen(false);
+  };
+
+  const nextFullscreen = () => {
+    setFullscreenIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevFullscreen = () => {
+    setFullscreenIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  // Cerrar con tecla ESC
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!isFullscreen) return;
+      
+      if (e.key === 'Escape') {
+        closeFullscreen();
+      } else if (e.key === 'ArrowRight') {
+        nextFullscreen();
+      } else if (e.key === 'ArrowLeft') {
+        prevFullscreen();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isFullscreen]);
+
   return (
-    <section className="slideshow-section">
+    <>
+      {/* Modal de pantalla completa */}
+      {isFullscreen && (
+        <div className="fullscreen-modal" onClick={closeFullscreen}>
+          <button className="fullscreen-close" onClick={closeFullscreen}>✕</button>
+          
+          <button className="fullscreen-prev" onClick={(e) => { e.stopPropagation(); prevFullscreen(); }}>
+            ‹
+          </button>
+          
+          <img 
+            src={images[fullscreenIndex]} 
+            alt={`Biografía ${fullscreenIndex + 1}`}
+            className="fullscreen-image"
+            onClick={(e) => e.stopPropagation()}
+          />
+          
+          <button className="fullscreen-next" onClick={(e) => { e.stopPropagation(); nextFullscreen(); }}>
+            ›
+          </button>
+
+          <div className="fullscreen-counter">
+            {fullscreenIndex + 1} / {images.length}
+          </div>
+        </div>
+      )}
+
+      <section className="slideshow-section">
       <div className="slideshow-tittle">
         <h1>
           <span className="first-name">Matias</span> <span className="last-name">Borsalino</span>
@@ -59,10 +123,12 @@ const About = () => {
                 width: "100%",
                 height: "auto",
                 filter: loadedIndexes[index] ? "none" : "blur(8px)",
-                transition: "filter 0.5s"
+                transition: "filter 0.5s",
+                cursor: "pointer"
               }}
               loading="eager"
               onLoad={() => handleImageLoad(index)}
+              onClick={() => openFullscreen(index)}
             />
           </div>
         ))}
@@ -110,6 +176,7 @@ const About = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 

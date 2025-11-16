@@ -184,13 +184,45 @@ body, html {
 
 /* Responsive */
 @media (max-width: 768px) {
+  .slideshow-section {
+    padding: 80px 10px 20px 10px; /* Aumentado el padding-top para que no tape el NavBar */
+  }
+
+  /* Reducir el título significativamente */
+  .slideshow-tittle {
+    padding-top: 10px; /* Reducido de 20px */
+    margin-bottom: 15px;
+  }
+
+  .slideshow-tittle h1 {
+    font-size: 1.8rem; /* Reducido de 3rem a 1.8rem */
+    letter-spacing: 1px;
+  }
+
+  .slideshow-tittle h1::after {
+    height: 2px;
+    bottom: -5px;
+  }
+
+  /* Aumentar el protagonismo de las imágenes */
+  .slideshow-container {
+    width: 95%; /* Más ancho */
+    height: auto;
+    margin: 0 auto;
+  }
+
+  .slide {
+    min-height: 400px; /* Aumentado de 320px */
+  }
+
   .slide img {
-    max-height: 60vh;
+    max-height: 70vh; /* Aumentado de 60vh para más protagonismo */
+    border-radius: 15px;
   }
 
   .control-btn {
-    font-size: 2rem;
-    padding: 6px 14px;
+    font-size: 1.8rem; /* Reducido ligeramente */
+    padding: 8px 15px;
   }
 
   .dot {
@@ -198,8 +230,205 @@ body, html {
     height: 10px;
     margin: 0 4px;
   }
+
+  /* Ajustar el texto */
+  .slideshow-text {
+    font-size: 1.1rem; /* Reducido de 1.5rem */
+    margin: 30px 15px;
+  }
+
+  .statement-scrollbox {
+    font-size: 0.95rem; /* Reducido de 1.1rem */
+    padding: 15px 18px;
+    max-height: 200px;
+  }
+
+  .statement-scrollbox strong {
+    font-size: 1rem; /* Reducido de 1.2rem */
+  }
+}
+
+/* Extra pequeño - Galaxy S8 y similares (360px) */
+@media (max-width: 400px) {
+  .slideshow-section {
+    padding: 75px 10px 20px 10px; /* Ajustado para Galaxy S8 */
+  }
+
+  .slideshow-tittle {
+    padding-top: 5px; /* Aún menos espacio */
+    margin-bottom: 10px;
+  }
+
+  .slideshow-tittle h1 {
+    font-size: 1.5rem; /* Aún más pequeño en pantallas muy pequeñas */
+    letter-spacing: 0.5px;
+  }
+
+  .slideshow-container {
+    width: 98%;
+  }
+
+  .slide {
+    min-height: 350px;
+  }
+
+  .slide img {
+    max-height: 65vh;
+    border-radius: 12px;
+  }
+
+  .control-btn {
+    font-size: 1.5rem;
+    padding: 6px 12px;
+  }
+
+  .slideshow-text {
+    font-size: 1rem;
+    margin: 20px 10px;
+  }
+
+  .statement-scrollbox {
+    font-size: 0.9rem;
+    padding: 12px 15px;
+    max-height: 180px;
+  }
 }
 
 .javanese-text {
     font-family: 'Javanese Text Regular', serif;
   }
+
+/* Modal de pantalla completa */
+.fullscreen-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fullscreen-image {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  animation: zoomIn 0.3s ease;
+  box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+}
+
+@keyframes zoomIn {
+  from { 
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to { 
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.fullscreen-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 3rem;
+  cursor: pointer;
+  z-index: 10001;
+  transition: all 0.3s ease;
+  font-weight: 300;
+  line-height: 1;
+  padding: 0;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullscreen-close:hover {
+  transform: rotate(90deg) scale(1.1);
+  color: #ff6b6b;
+}
+
+.fullscreen-prev,
+.fullscreen-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  font-size: 4rem;
+  cursor: pointer;
+  z-index: 10001;
+  padding: 20px 30px;
+  transition: all 0.3s ease;
+  font-weight: 300;
+  backdrop-filter: blur(5px);
+}
+
+.fullscreen-prev {
+  left: 20px;
+}
+
+.fullscreen-next {
+  right: 20px;
+}
+
+.fullscreen-prev:hover,
+.fullscreen-next:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.fullscreen-counter {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  font-size: 1.2rem;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  border-radius: 20px;
+  backdrop-filter: blur(5px);
+  font-family: 'ACESansdemo', Arial, sans-serif;
+}
+
+/* Ocultar flechas de navegación fullscreen en móvil */
+@media (max-width: 768px) {
+  .fullscreen-prev,
+  .fullscreen-next {
+    display: none;
+  }
+
+  .fullscreen-close {
+    font-size: 2.5rem;
+    right: 15px;
+    top: 15px;
+  }
+
+  .fullscreen-image {
+    max-width: 95vw;
+    max-height: 85vh;
+  }
+
+  .fullscreen-counter {
+    bottom: 15px;
+    font-size: 1rem;
+    padding: 8px 15px;
+  }
+}
