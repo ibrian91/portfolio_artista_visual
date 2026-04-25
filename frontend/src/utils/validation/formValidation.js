@@ -114,12 +114,6 @@ export const validateUploadForm = (formData) => {
     }
   }
 
-  // Validar clave de subida
-  if (!isNotEmpty(formData.uploadKey)) {
-    errors.uploadKey = "Debe ingresar la clave de subida";
-    isValid = false;
-  }
-
   // Validar selección de grupo
   if (formData.grupoExistente === null) {
     errors.grupoExistente = "Debe seleccionar si el grupo existe o no";
@@ -179,12 +173,6 @@ export const validateDeleteForm = (formData) => {
   // Si NO se elimina grupo completo, validar que se haya seleccionado una imagen
   if (formData.deleteEntireGroup === false && !formData.selectedImageId) {
     errors.selectedImageId = "Debe seleccionar una imagen";
-    isValid = false;
-  }
-
-  // Validar clave de eliminación
-  if (!isNotEmpty(formData.uploadKey)) {
-    errors.uploadKey = "Debe ingresar la clave de eliminación";
     isValid = false;
   }
 

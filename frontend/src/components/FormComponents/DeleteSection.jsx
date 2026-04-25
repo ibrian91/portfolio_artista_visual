@@ -144,38 +144,13 @@ const DeleteSection = ({ deleteHook }) => {
           </>
         )}
 
-        <div className="form-group password-group">
-          <label>Clave de eliminación:</label>
-          <div className="input-eye-wrapper">
-            <input
-              type={showUploadKeyDelete ? "text" : "password"}
-              value={deleteHook.formData.uploadKey}
-              onChange={(e) => deleteHook.updateField("uploadKey", e.target.value)}
-              placeholder="Clave secreta"
-              autoComplete="off"
-            />
-            <span
-              className="eye-icon"
-              onClick={() => setShowUploadKeyDelete((prev) => !prev)}
-              tabIndex={0}
-              style={{ cursor: "pointer" }}
-              aria-label={showUploadKeyDelete ? "Ocultar clave" : "Mostrar clave"}
-            >
-              {showUploadKeyDelete ? <FaEyeSlash /> : <FaEye />}
-            </span>
-          </div>
-        </div>
-
-        <button type="button" className="submit-btn"
-          disabled={!deleteHook.isFormValid || deleteHook.isSubmitting}
-          onClick={deleteHook.deleteImage}
-          style={{
-            backgroundColor: deleteHook.formData.deleteEntireGroup ? "#d32f2f" : "#FF416C"
-          }}
+        <button
+          type="button"
+          onClick={deleteHook.handleSubmit}
+          className="submit-button"
+          disabled={deleteHook.isSubmitting}
         >
-          {deleteHook.isSubmitting ? "Eliminando..." : (
-            deleteHook.formData.deleteEntireGroup ? "🗑️ Eliminar grupo completo" : "🗑️ Eliminar imagen"
-          )}
+          {deleteHook.isSubmitting ? "Eliminando..." : "Confirmar Eliminación"}
         </button>
       </form>
     </section>

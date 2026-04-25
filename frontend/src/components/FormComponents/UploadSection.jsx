@@ -358,135 +358,14 @@ const UploadSection = ({ uploadHook }) => {
           </>
         )}
 
-        <div className="form-group password-group">
-          <label>Clave de subida:</label>
-          <div className="input-eye-wrapper">
-            <input
-              type={showUploadKey ? "text" : "password"}
-              value={uploadHook.formData.uploadKey}
-              onChange={(e) => uploadHook.updateField("uploadKey", e.target.value)}
-              placeholder="Clave secreta"
-              autoComplete="off"
-            />
-            <span
-              className="eye-icon"
-              onClick={() => setShowUploadKey((prev) => !prev)}
-              tabIndex={0}
-              style={{ cursor: "pointer" }}
-              aria-label={showUploadKey ? "Ocultar clave" : "Mostrar clave"}
-            >
-              {showUploadKey ? <FaEyeSlash /> : <FaEye />}
-            </span>
-          </div>
-          {uploadHook.uploadKeyError && (
-            <div style={{ color: "#FF416C", fontSize: "0.95em", marginTop: "4px" }}>
-              {uploadHook.uploadKeyError}
-            </div>
-          )}
-        </div>
-
-        {/* Mostrar lista de imágenes acumuladas para subida masiva */}
-        {uploadHook.formData.grupoExistente === true && uploadHook.formData.isSmallImage && !uploadHook.formData.isMockupImage && !uploadHook.formData.isRotatingImage && uploadHook.formData.imageFilesMetadata.length > 0 && (
-          <div style={{ marginBottom: "20px", padding: "12px", backgroundColor: "#e8f5e9", borderRadius: "6px", border: "1px solid #4caf50" }}>
-            <strong style={{ display: "block", marginBottom: "10px", color: "#2e7d32" }}>
-              ✅ Imágenes listas para subir ({uploadHook.formData.imageFilesMetadata.length}/5):
-            </strong>
-            <ul style={{ margin: "0", paddingLeft: "20px", listStyle: "none" }}>
-              {uploadHook.formData.imageFilesMetadata.map((fileData, idx) => (
-                <li key={idx} style={{ marginBottom: "6px", display: "flex", alignItems: "center", gap: "10px", fontSize: "0.9em" }}>
-                  <span style={{ flex: 1 }}>
-                    📎 <strong>{fileData.name}</strong> ({fileData.file.name})
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => uploadHook.removeFileFromSelection(idx)}
-                    style={{
-                      background: "#d32f2f",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "3px",
-                      padding: "2px 8px",
-                      cursor: "pointer",
-                      fontSize: "0.8em"
-                    }}
-                  >
-                    ✕
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <div style={{ marginTop: "10px", fontSize: "0.85em", color: "#555", fontStyle: "italic" }}>
-              💡 Cuando termines de agregar imágenes, haz clic en "Subir imagen" para enviar todas a la vez
-            </div>
-          </div>
-        )}
-
-        {/* Input de archivo - ahora siempre usa el formulario estándar */}
-        {(uploadHook.formData.grupoExistente === true || uploadHook.formData.grupoExistente === false) && (
-          <div className="form-group">
-            <label>Archivo de imagen:</label>
-            <input
-              type="file"
-              accept=".jpg,.jpeg,.png"
-              onChange={(e) => {
-                const file = e.target.files[0];
-                uploadHook.handleFileChange(file);
-                if (file) {
-                  const ext = file.name.split('.').pop().toLowerCase();
-                  if (!VALIDATION_CONSTANTS.ALLOWED_FILE_TYPES.includes(ext)) {
-                    e.target.value = null;
-                  }
-                }
-              }}
-            />
-            {uploadHook.validationErrors.imageFile && (
-              <div style={{ color: "#FF416C", fontSize: "0.95em", marginTop: "4px" }}>
-                {uploadHook.validationErrors.imageFile}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Botones según modo de carga */}
-        {uploadHook.formData.grupoExistente === true && uploadHook.formData.isSmallImage && !uploadHook.formData.isMockupImage && !uploadHook.formData.isRotatingImage ? (
-          // Modo carga masiva: dos botones
-          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-            <button 
-              type="button" 
-              className="submit-btn"
-              disabled={!uploadHook.formData.imageFile || !uploadHook.formData.imageName}
-              onClick={() => {
-                const added = uploadHook.addImageToQueue();
-                if (added) {
-                  setNameImageCount(VALIDATION_CONSTANTS.MAX_NAME_LENGTH);
-                  setDescriptionImageCount(VALIDATION_CONSTANTS.MAX_DESCRIPTION_LENGTH);
-                }
-              }}
-              style={{ flex: 1, minWidth: "200px" }}
-            >
-              ➕ Agregar a la cola ({uploadHook.formData.imageFilesMetadata.length}/5)
-            </button>
-            {uploadHook.formData.imageFilesMetadata.length > 0 && (
-              <button 
-                type="button" 
-                className="submit-btn"
-                disabled={uploadHook.isSubmitting}
-                onClick={uploadHook.uploadImage}
-                style={{ flex: 1, minWidth: "200px", backgroundColor: "#4caf50" }}
-              >
-                {uploadHook.isSubmitting ? "Subiendo..." : `🚀 Subir ${uploadHook.formData.imageFilesMetadata.length} imagen${uploadHook.formData.imageFilesMetadata.length > 1 ? 'es' : ''}`}
-              </button>
-            )}
-          </div>
-        ) : (
-          // Modo normal: un solo botón
-          <button type="button" className="submit-btn"
-            disabled={!uploadHook.isFormValid || uploadHook.isSubmitting}
-            onClick={uploadHook.uploadImage}
-          >
-            {uploadHook.isSubmitting ? "Subiendo..." : "Subir imagen"}
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={uploadHook.handleSubmit}
+          className="submit-button"
+          disabled={uploadHook.isSubmitting}
+        >
+          {uploadHook.isSubmitting ? "Cargando..." : "Cargar Imagen"}
+        </button>
       </form>
     </section>
   );

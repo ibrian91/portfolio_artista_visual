@@ -39,15 +39,7 @@ const verifyAccessKey = (req, res, next) => {
   next();
 };
 
-// Middleware para verificar clave de subida
-const verifyUploadKey = (req, res, next) => {
-  const { upload_key } = req.body;
-  
-  if (!upload_key || upload_key !== process.env.UPLOAD_SECRET) {
-    return res.status(401).json({
-      error: 'Clave de subida incorrecta',
-      message: 'No tiene permisos para subir archivos'
-    });
+export { authenticateToken, verifyAccessKey };
   }
 
   next();

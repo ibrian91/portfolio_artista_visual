@@ -23,7 +23,6 @@ export const useUploadForm = () => {
     isMockupImage: false,
     isRotatingImage: false,
     isSmallImage: false,
-    uploadKey: "",
     descriptionImage: "",
     coverImageFile: null, // Nuevo campo para imagen de portada
   });
@@ -31,7 +30,6 @@ export const useUploadForm = () => {
   // Estados de UI
   const [nameImageCount, setNameImageCount] = useState(VALIDATION_CONSTANTS.MAX_NAME_LENGTH);
   const [descriptionImageCount, setDescriptionImageCount] = useState(VALIDATION_CONSTANTS.MAX_DESCRIPTION_LENGTH);
-  const [uploadKeyError, setUploadKeyError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
   
@@ -470,9 +468,7 @@ export const useUploadForm = () => {
     formData,
     nameImageCount,
     descriptionImageCount,
-    uploadKeyError,
     isSubmitting,
-    isFormValid,
     validationErrors,
     availableGroups,
     isLoadingGroups,

@@ -12,7 +12,6 @@ export const useDeleteFormV2 = () => {
     deleteEntireGroup: null, // true = eliminar grupo completo, false = eliminar imagen específica
     selectedGroup: "",
     selectedImageId: "",
-    uploadKey: "",
   });
 
   // Estados de UI
