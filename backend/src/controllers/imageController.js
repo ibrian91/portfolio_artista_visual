@@ -23,12 +23,6 @@ const getImages = async (req, res) => {
 
 const deleteImage = async (req, res) => {
   const { id } = req.params;
-  const { upload_key } = req.body;
-
-  // Validar clave de subida
-  if (!upload_key || upload_key !== process.env.UPLOAD_SECRET) {
-    return res.status(401).json({ error: 'Clave de eliminación incorrecta' });
-  }
 
   if (!id) {
     return res.status(400).json({ error: 'Falta el ID de la imagen' });

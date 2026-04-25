@@ -14,8 +14,6 @@ const mockFsReaddirSync = jest.fn();
 const mockSharpResize = jest.fn().mockReturnThis();
 const mockSharpToFile = jest.fn().mockResolvedValue();
 
-const mockValidateUploadKey = jest.fn();
-
 // Mock de groupService
 await jest.unstable_mockModule('../../src/services/groupService.js', () => ({
   default: {
@@ -48,11 +46,6 @@ await jest.unstable_mockModule('sharp', () => ({
   }))
 }));
 
-// Mock de auth middleware
-await jest.unstable_mockModule('../../src/middleware/auth.js', () => ({
-  validateUploadKey: mockValidateUploadKey
-}));
-
 describe('GroupController - createGroup Integration Tests', () => {
   let groupController;
   let req, res;
@@ -68,8 +61,7 @@ describe('GroupController - createGroup Integration Tests', () => {
       body: {
         technique: 'Dibujo',
         category: 'Digital',
-        group_name: 'New Test Group',
-        upload_key: 'test_secret'
+        group_name: 'New Test Group'
       },
       file: {
         path: '/tmp/cover.jpg',
@@ -92,25 +84,8 @@ describe('GroupController - createGroup Integration Tests', () => {
   });
 
   describe('createGroup - Validaciones', () => {
-    it('debería retornar 401 con clave incorrecta', async () => {
-      // Arrange
-      mockValidateUploadKey.mockReturnValue(false);
-
-      // Act
-      await groupController.createGroup(req, res);
-
-      // Assert
-      expect(mockValidateUploadKey).toHaveBeenCalledWith('test_secret');
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({ 
-        error: 'Clave de subida incorrecta' 
-      });
-      expect(mockFsUnlinkSync).toHaveBeenCalledWith('/tmp/cover.jpg');
-    });
-
     it('debería retornar 400 con técnica/categoría inválida', async () => {
       // Arrange
-      mockValidateUploadKey.mockReturnValue(true);
       mockIsValidTechniqueCategory.mockReturnValue(false);
 
       // Act
@@ -127,7 +102,6 @@ describe('GroupController - createGroup Integration Tests', () => {
 
     it('debería retornar 400 si no hay imagen de portada', async () => {
       // Arrange
-      mockValidateUploadKey.mockReturnValue(true);
       mockIsValidTechniqueCategory.mockReturnValue(true);
       req.file = null;
 
@@ -143,7 +117,6 @@ describe('GroupController - createGroup Integration Tests', () => {
 
     it('debería retornar 409 si el grupo ya existe', async () => {
       // Arrange
-      mockValidateUploadKey.mockReturnValue(true);
       mockIsValidTechniqueCategory.mockReturnValue(true);
       mockCreateGroup.mockResolvedValue({ 
         error: 'El grupo ya existe en esta técnica/categoría.' 
@@ -163,7 +136,6 @@ describe('GroupController - createGroup Integration Tests', () => {
 
     it('debería retornar 400 con extensión no permitida', async () => {
       // Arrange
-      mockValidateUploadKey.mockReturnValue(true);
       mockIsValidTechniqueCategory.mockReturnValue(true);
       mockCreateGroup.mockResolvedValue({ 
         group: { technique: 'Dibujo', category: 'Digital', group_name: 'New Test Group' }
@@ -184,7 +156,6 @@ describe('GroupController - createGroup Integration Tests', () => {
 
   describe('createGroup - Flujo exitoso', () => {
     beforeEach(() => {
-      mockValidateUploadKey.mockReturnValue(true);
       mockIsValidTechniqueCategory.mockReturnValue(true);
       mockCreateGroup.mockResolvedValue({ 
         group: { 
@@ -291,7 +262,6 @@ describe('GroupController - createGroup Integration Tests', () => {
 
   describe('createGroup - Manejo de errores', () => {
     beforeEach(() => {
-      mockValidateUploadKey.mockReturnValue(true);
       mockIsValidTechniqueCategory.mockReturnValue(true);
       mockCreateGroup.mockResolvedValue({ 
         group: { technique: 'Dibujo', category: 'Digital', group_name: 'New Test Group' }
@@ -327,7 +297,6 @@ describe('GroupController - createGroup Integration Tests', () => {
 
   describe('createGroup - Casos edge', () => {
     beforeEach(() => {
-      mockValidateUploadKey.mockReturnValue(true);
       mockIsValidTechniqueCategory.mockReturnValue(true);
       mockCreateGroup.mockResolvedValue({ 
         group: { technique: 'Dibujo', category: 'Digital', group_name: 'Test' }

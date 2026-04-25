@@ -1,12 +1,8 @@
 import { useState, useEffect } from "react";
 import techniques from "../../assets/techniques.json";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { VALIDATION_CONSTANTS, getCategoriesForTechnique } from "../../utils/validation/formValidation.js";
-import ApiService from "../../services/ApiService.js";
 
 const UploadSection = ({ uploadHook }) => {
-  const [showUploadKey, setShowUploadKey] = useState(false);
-
   // Usar los contadores del hook
   const [nameImageCount, setNameImageCount] = useState(VALIDATION_CONSTANTS.MAX_NAME_LENGTH);
   const [descriptionImageCount, setDescriptionImageCount] = useState(VALIDATION_CONSTANTS.MAX_DESCRIPTION_LENGTH);

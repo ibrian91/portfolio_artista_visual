@@ -67,9 +67,6 @@ describe('UploadController - Unit Tests', () => {
       json: jest.fn().mockReturnThis()
     };
 
-    // Configurar env
-    process.env.UPLOAD_SECRET = 'test_secret';
-
     // Clear mocks
     jest.clearAllMocks();
     mockMkdir.mockResolvedValue();
@@ -94,25 +91,6 @@ describe('UploadController - Unit Tests', () => {
         error: 'No se proporcionaron archivos',
         message: 'Debe seleccionar al menos una imagen para subir'
       });
-    });
-
-    it('debería retornar 401 con clave incorrecta', async () => {
-      // Arrange
-      req.files = [
-        { path: '/tmp/test.jpg', originalname: 'test.jpg', filename: 'test.jpg' }
-      ];
-      req.body.upload_key = 'wrong_key';
-
-      // Act
-      await uploadController.uploadImages(req, res);
-
-      // Assert
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({
-        error: 'Clave de acceso incorrecta',
-        message: 'No tiene permisos para subir archivos'
-      });
-      expect(mockUnlink).toHaveBeenCalledWith('/tmp/test.jpg');
     });
 
     it('debería procesar archivos correctamente con clave válida', async () => {
@@ -219,18 +197,6 @@ describe('UploadController - Unit Tests', () => {
         filename: 'test.jpg',
         originalname: 'test.jpg'
       };
-    });
-
-    it('debería retornar 401 con clave incorrecta', async () => {
-      // Arrange
-      req.body.upload_key = 'wrong_key';
-
-      // Act
-      await uploadController.uploadPortfolioImage(req, res);
-
-      // Assert
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(mockUnlink).toHaveBeenCalledWith('/tmp/test.jpg');
     });
 
     it('debería retornar 400 si no hay archivo', async () => {

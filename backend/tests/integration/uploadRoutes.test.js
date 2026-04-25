@@ -52,7 +52,6 @@ describe('UploadRoutes - POST /api/upload (Integration)', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    process.env.UPLOAD_SECRET = 'test_secret';
     
     // Mock defaults
     mockMkdir.mockResolvedValue();
@@ -61,26 +60,12 @@ describe('UploadRoutes - POST /api/upload (Integration)', () => {
   });
 
   describe('Validaciones básicas', () => {
-    it('debería retornar 401 con clave incorrecta', async () => {
-      const response = await request(app)
-        .post('/api/upload')
-        .field('technique_name', 'Dibujo')
-        .field('category_name', 'Digital')
-        .field('group_name', 'Test Group')
-        .field('upload_key', 'wrong_key')
-        .attach('image', Buffer.from('fake image'), 'test.jpg');
-
-      expect(response.status).toBe(401);
-      expect(response.body).toHaveProperty('error', 'Clave de acceso incorrecta');
-    });
-
     it('debería retornar 400 si no se proporciona archivo', async () => {
       const response = await request(app)
         .post('/api/upload')
         .field('technique_name', 'Dibujo')
         .field('category_name', 'Digital')
-        .field('group_name', 'Test Group')
-        .field('upload_key', 'test_secret');
+        .field('group_name', 'Test Group');
 
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty('error', 'No se proporcionó archivo');
@@ -101,7 +86,6 @@ describe('UploadRoutes - POST /api/upload (Integration)', () => {
         .field('technique_name', 'Dibujo')
         .field('category_name', 'Digital')
         .field('group_name', 'Test Group')
-        .field('upload_key', 'test_secret')
         .attach('image', Buffer.from('fake image'), 'test.jpg');
 
       expect(response.status).toBe(409);
@@ -123,7 +107,6 @@ describe('UploadRoutes - POST /api/upload (Integration)', () => {
         .field('technique_name', 'Dibujo')
         .field('category_name', 'Digital')
         .field('group_name', 'Test Group')
-        .field('upload_key', 'test_secret')
         .attach('image', Buffer.from('fake image'), 'test.gif');
 
       expect(response.status).toBe(400);
@@ -150,7 +133,6 @@ describe('UploadRoutes - POST /api/upload (Integration)', () => {
         .field('category_name', 'Digital')
         .field('group_name', 'Test Group')
         .field('image_name', 'test-image')
-        .field('upload_key', 'test_secret')
         .attach('image', Buffer.from('fake image'), 'test.jpg');
 
       // Puede ser 201 o 500 dependiendo de si Sharp funciona en el entorno de test
@@ -170,7 +152,6 @@ describe('UploadRoutes - POST /api/upload (Integration)', () => {
         .field('technique_name', 'Dibujo')
         .field('category_name', 'Digital')
         .field('group_name', 'Test Group')
-        .field('upload_key', 'test_secret')
         .attach('image', Buffer.from('fake image'), 'test.png');
 
       expect([201, 500]).toContain(response.status);
@@ -182,7 +163,6 @@ describe('UploadRoutes - POST /api/upload (Integration)', () => {
         .field('technique_name', 'Dibujo')
         .field('category_name', 'Digital')
         .field('group_name', 'Test Group')
-        .field('upload_key', 'test_secret')
         .attach('image', Buffer.from('fake image'), 'test.jpg');
 
       expect(mockMkdir).toHaveBeenCalledWith(
@@ -200,7 +180,6 @@ describe('UploadRoutes - POST /api/upload (Integration)', () => {
         .field('is_mockup_image', 'true')
         .field('is_rotating_image', 'false')
         .field('is_small_image', 'true')
-        .field('upload_key', 'test_secret')
         .attach('image', Buffer.from('fake image'), 'test.jpg');
 
       if (response.status === 201) {
@@ -217,7 +196,6 @@ describe('UploadRoutes - POST /api/upload (Integration)', () => {
         .field('category_name', 'Digital')
         .field('group_name', 'Test Group')
         .field('description', 'Descripción de prueba')
-        .field('upload_key', 'test_secret')
         .attach('image', Buffer.from('fake image'), 'test.jpg');
 
       if (response.status === 201) {
@@ -235,7 +213,6 @@ describe('UploadRoutes - POST /api/upload (Integration)', () => {
         .field('technique_name', 'Dibujo')
         .field('category_name', 'Digital')
         .field('group_name', 'Test Group')
-        .field('upload_key', 'test_secret')
         .attach('image', Buffer.from('fake image'), 'test.jpg');
 
       // Si no puede leer groups.json, debería asumir array vacío y retornar 409
@@ -258,7 +235,6 @@ describe('UploadRoutes - POST /api/upload (Integration)', () => {
         .field('technique_name', 'Dibujo')
         .field('category_name', 'Digital')
         .field('group_name', 'Test Group')
-        .field('upload_key', 'test_secret')
         .attach('image', Buffer.from('fake image'), 'test.jpg');
 
       // Debería intentar limpiar archivo original
@@ -284,7 +260,6 @@ describe('UploadRoutes - POST /api/upload (Integration)', () => {
         .field('technique_name', 'Dibujo')
         .field('category_name', 'Digital')
         .field('group_name', 'Test Group')
-        .field('upload_key', 'test_secret')
         .attach('image', Buffer.from('fake image'), 'test.jpg');
 
       expect(response.status).toBe(500);
@@ -301,7 +276,6 @@ describe('UploadRoutes - POST /api/upload (Integration)', () => {
         .post('/api/upload')
         .field('category_name', 'Digital')
         .field('group_name', 'Test Group')
-        .field('upload_key', 'test_secret')
         .attach('image', Buffer.from('fake image'), 'test.jpg');
 
       // Sin technique_name, no puede encontrar el grupo
@@ -322,7 +296,6 @@ describe('UploadRoutes - POST /api/upload (Integration)', () => {
         .field('technique_name', 'Dibujo')
         .field('category_name', 'Digital')
         .field('group_name', 'Test Group')
-        .field('upload_key', 'test_secret')
         .attach('image', Buffer.from('fake image'), 'test.jpeg');
 
       expect([201, 500]).toContain(response.status);

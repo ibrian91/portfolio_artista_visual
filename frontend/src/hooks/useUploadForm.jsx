@@ -32,6 +32,7 @@ export const useUploadForm = () => {
   const [descriptionImageCount, setDescriptionImageCount] = useState(VALIDATION_CONSTANTS.MAX_DESCRIPTION_LENGTH);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState({});
+  const [uploadKeyError, setUploadKeyError] = useState("");
   
   // Estados para grupos dinámicos
   const [availableGroups, setAvailableGroups] = useState([]);
@@ -367,8 +368,7 @@ export const useUploadForm = () => {
         await ApiService.createGroupWithCover({
           technique: formData.selectedTechnique,
           category: formData.selectedCategory,
-          group_name: formData.nombreNuevoGrupo,
-          upload_key: formData.uploadKey
+          group_name: formData.nombreNuevoGrupo
         }, coverImage);
       }
 
@@ -398,7 +398,6 @@ export const useUploadForm = () => {
           formDataToSend.append("is_mockup_image", formData.isMockupImage);
           formDataToSend.append("is_rotating_image", formData.isRotatingImage);
           formDataToSend.append("is_small_image", formData.isSmallImage);
-          formDataToSend.append("upload_key", formData.uploadKey);
           formDataToSend.append("image", item.file);
 
           // Subir la imagen usando el servicio
@@ -435,7 +434,6 @@ export const useUploadForm = () => {
         isMockupImage: false,
         isRotatingImage: false,
         isSmallImage: false,
-        uploadKey: "",
         descriptionImage: "",
         coverImageFile: null,
       });
@@ -451,7 +449,7 @@ export const useUploadForm = () => {
       if (error.response?.status === 409) {
         setUploadKeyError(`El grupo "${formData.nombreNuevoGrupo}" ya existe en ${formData.selectedTechnique} > ${formData.selectedCategory}. Por favor, elige un nombre diferente o selecciona "Grupo existente".`);
       } else if (error.response?.status === 401) {
-        setUploadKeyError("Clave de acceso incorrecta. Verifica tu clave de subida.");
+        setUploadKeyError("No autorizado. Verificá permisos o sesión.");
       } else if (error.response?.status === 400) {
         setUploadKeyError(error.response?.data?.error || "Datos inválidos. Verifica la información del formulario.");
       } else {
@@ -469,6 +467,7 @@ export const useUploadForm = () => {
     nameImageCount,
     descriptionImageCount,
     isSubmitting,
+    uploadKeyError,
     validationErrors,
     availableGroups,
     isLoadingGroups,

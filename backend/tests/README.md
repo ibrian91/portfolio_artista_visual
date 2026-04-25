@@ -96,8 +96,7 @@ export default {
 ### Variables de Entorno para Tests
 Definidas en `tests/setup.js`:
 - `NODE_ENV=test`
-- `PORT=3001`
-- `UPLOAD_SECRET=test_secret_key`
+- `PORT=5001`
 
 ## 📝 Agregar Nuevos Tests
 

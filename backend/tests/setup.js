@@ -7,7 +7,6 @@ const __dirname = path.dirname(__filename);
 // Variables de entorno para testing
 process.env.NODE_ENV = 'test';
 process.env.PORT = 5001;
-process.env.UPLOAD_SECRET = 'test_secret_key';
 process.env.JWT_SECRET = 'test_jwt_secret';
 process.env.ACCESS_KEY = 'test_access_key';
 

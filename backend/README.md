@@ -69,7 +69,6 @@ DB_NAME=portfolio_db
 # Claves de seguridad
 JWT_SECRET=tu_jwt_secret_muy_seguro
 ACCESS_KEY=mb_Acceso2025-Form
-UPLOAD_SECRET=tu_clave_secreta_para_subir
 
 # Frontend URL para CORS
 FRONTEND_URL=http://localhost:5173
@@ -151,8 +150,7 @@ El servidor estará disponible en `http://localhost:5000`
 El sistema utiliza múltiples niveles de autenticación:
 
 1. **ACCESS_KEY**: Para operaciones CRUD básicas
-2. **UPLOAD_SECRET**: Para subida de archivos
-3. **JWT**: Para sesiones de administrador
+2. **JWT**: Para sesiones de administrador
 
 ### Rate Limiting
 - 100 requests por IP cada 15 minutos

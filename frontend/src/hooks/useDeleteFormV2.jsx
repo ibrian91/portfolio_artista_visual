@@ -149,8 +149,7 @@ export const useDeleteFormV2 = () => {
         await ApiService.deleteGroup(
           formData.selectedTechnique,
           formData.selectedCategory,
-          formData.selectedGroup,
-          formData.uploadKey
+          formData.selectedGroup
         );
         
         alert(`✅ Grupo "${formData.selectedGroup}" eliminado correctamente`);
@@ -167,8 +166,7 @@ export const useDeleteFormV2 = () => {
         }
 
         await ApiService.deleteImage(
-          formData.selectedImageId,
-          formData.uploadKey
+          formData.selectedImageId
         );
         
         alert(`✅ Imagen "${selectedImage?.image_name}" eliminada correctamente`);
@@ -181,7 +179,6 @@ export const useDeleteFormV2 = () => {
         deleteEntireGroup: null,
         selectedGroup: "",
         selectedImageId: "",
-        uploadKey: "",
       });
       setAvailableGroups([]);
       setAvailableImages([]);
@@ -192,7 +189,7 @@ export const useDeleteFormV2 = () => {
       console.error('Error al eliminar:', error);
       
       if (error.response?.status === 401) {
-        alert("❌ Clave de eliminación incorrecta");
+        alert("❌ No autorizado");
       } else if (error.response?.status === 404) {
         alert("❌ No se encontró el elemento a eliminar");
       } else {

@@ -19,7 +19,6 @@ class ApiService {
       formData.append('technique', groupData.technique);
       formData.append('category', groupData.category);
       formData.append('group_name', groupData.group_name);
-      formData.append('upload_key', groupData.upload_key);
       formData.append('cover_image', coverImageFile);
 
       const response = await this.client.post('/groups', formData, {
@@ -125,11 +124,9 @@ class ApiService {
   // Método para eliminar una imagen específica
   async deleteImage(imageId, uploadKey) {
     try {
-      console.log('🗑️ ApiService.deleteImage called with:', { imageId, uploadKey });
+      console.log('🗑️ ApiService.deleteImage called with:', { imageId });
       const response = await this.client.delete(`/images/${imageId}`, {
-        data: {
-          upload_key: uploadKey
-        }
+        data: {}
       });
 
       console.log('✅ Image deleted:', response.data);
@@ -143,13 +140,12 @@ class ApiService {
   // Método para eliminar un grupo completo
   async deleteGroup(technique, category, groupName, uploadKey) {
     try {
-      console.log('🗑️ ApiService.deleteGroup called with:', { technique, category, groupName, uploadKey });
+      console.log('🗑️ ApiService.deleteGroup called with:', { technique, category, groupName });
       const response = await this.client.delete('/groups', {
         data: {
           technique: technique,
           category: category,
           group_name: groupName,
-          upload_key: uploadKey
         }
       });
 

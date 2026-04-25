@@ -60,20 +60,10 @@ router.post('/', upload.single('image'), handleMulterError, async (req, res) => 
       description,
       is_mockup_image = false,
       is_rotating_image = false,
-      is_small_image = false,
-      upload_key
+      is_small_image = false
     } = req.body;
 
-    // Validar clave de acceso
-    if (String(upload_key) !== String(process.env.UPLOAD_SECRET)) {
-      if (req.file) {
-        await fs.unlink(req.file.path).catch(() => {});
-      }
-      return res.status(401).json({
-        error: 'Clave de acceso incorrecta',
-        message: 'No tiene permisos para subir archivos'
-      });
-    }
+    // Nota: ya no se requiere clave de acceso para subir
 
     // Validar archivo
     if (!req.file) {

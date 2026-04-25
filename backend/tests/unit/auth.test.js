@@ -11,7 +11,7 @@ await jest.unstable_mockModule('jsonwebtoken', () => ({
 
 // Importar después del mock
 const auth = (await import('../../src/middleware/auth.js'));
-const { authenticateToken, verifyAccessKey, verifyUploadKey, optionalAuth, validateUploadKey } = auth;
+const { authenticateToken, verifyAccessKey, optionalAuth } = auth;
 
 describe('Auth Middleware - Unit Tests', () => {
   let req, res, next;
@@ -33,7 +33,6 @@ describe('Auth Middleware - Unit Tests', () => {
     // Configurar variables de entorno
     process.env.JWT_SECRET = 'test_jwt_secret';
     process.env.ACCESS_KEY = 'test_access_key';
-    process.env.UPLOAD_SECRET = 'test_upload_secret';
     
     jest.clearAllMocks();
   });
@@ -158,48 +157,6 @@ describe('Auth Middleware - Unit Tests', () => {
     });
   });
 
-  describe('verifyUploadKey', () => {
-    it('debería rechazar sin upload_key', () => {
-      // Arrange
-      req.body = {};
-
-      // Act
-      verifyUploadKey(req, res, next);
-
-      // Assert
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({
-        error: 'Clave de subida incorrecta',
-        message: 'No tiene permisos para subir archivos'
-      });
-      expect(next).not.toHaveBeenCalled();
-    });
-
-    it('debería rechazar upload_key incorrecta', () => {
-      // Arrange
-      req.body.upload_key = 'wrong_upload_key';
-
-      // Act
-      verifyUploadKey(req, res, next);
-
-      // Assert
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(next).not.toHaveBeenCalled();
-    });
-
-    it('debería aceptar upload_key correcta', () => {
-      // Arrange
-      req.body.upload_key = 'test_upload_secret';
-
-      // Act
-      verifyUploadKey(req, res, next);
-
-      // Assert
-      expect(next).toHaveBeenCalledTimes(1);
-      expect(res.status).not.toHaveBeenCalled();
-    });
-  });
-
   describe('optionalAuth', () => {
     it('debería continuar sin token estableciendo user como null', () => {
       // Arrange - sin token
@@ -245,48 +202,6 @@ describe('Auth Middleware - Unit Tests', () => {
       expect(req.user).toEqual(mockDecoded);
       expect(next).toHaveBeenCalledTimes(1);
       expect(res.status).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('validateUploadKey', () => {
-    it('debería retornar true con clave correcta', () => {
-      // Act
-      const result = validateUploadKey('test_upload_secret');
-
-      // Assert
-      expect(result).toBe(true);
-    });
-
-    it('debería retornar false con clave incorrecta', () => {
-      // Act
-      const result = validateUploadKey('wrong_key');
-
-      // Assert
-      expect(result).toBe(false);
-    });
-
-    it('debería retornar false con undefined', () => {
-      // Act
-      const result = validateUploadKey(undefined);
-
-      // Assert
-      expect(result).toBe(false);
-    });
-
-    it('debería retornar false con null', () => {
-      // Act
-      const result = validateUploadKey(null);
-
-      // Assert
-      expect(result).toBe(false);
-    });
-
-    it('debería retornar false con string vacío', () => {
-      // Act
-      const result = validateUploadKey('');
-
-      // Assert
-      expect(result).toBe(false);
     });
   });
 });

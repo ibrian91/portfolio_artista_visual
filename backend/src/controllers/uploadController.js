@@ -64,19 +64,6 @@ const uploadController = {
         });
       }
 
-      // Verificar clave de acceso
-      const { upload_key } = req.body;
-      if (upload_key !== process.env.UPLOAD_SECRET) {
-        // Eliminar archivos subidos si la clave es incorrecta
-        await Promise.all(req.files.map(file => fs.unlink(file.path).catch(() => {})));
-        
-        return res.status(401).json({
-          error: 'Clave de acceso incorrecta',
-          message: 'No tiene permisos para subir archivos'
-        });
-      }
-
-
       const uploadType = req.body.upload_type || 'portfolio';
       let processedCount = 0;
       const filesInfo = [];
@@ -148,8 +135,7 @@ const uploadController = {
         category,
         group_name,
         image_name,
-        description,
-        upload_key
+        description
       } = req.body;
 
       // Convertir correctamente los valores booleanos desde strings de FormData
@@ -157,14 +143,6 @@ const uploadController = {
       const is_mockup_image = String(req.body.is_mockup_image) === 'true';
       const is_rotating_image = String(req.body.is_rotating_image) === 'true';
       const is_small_image = String(req.body.is_small_image) === 'true';
-
-      // Validar clave
-      if (String(upload_key) !== String(process.env.UPLOAD_SECRET)) {
-        if (req.file) {
-          await fs.unlink(req.file.path).catch(() => {});
-        }
-        return res.status(401).json({ error: 'Clave de acceso incorrecta', message: 'No tiene permisos para subir archivos' });
-      }
 
       // Validar archivo
       if (!req.file) {
@@ -309,15 +287,7 @@ const uploadController = {
   async deleteFile(req, res) {
     try {
       const { id } = req.params;
-      const { delete_key } = req.body;
-
-      // Verificar clave de eliminación
-      if (delete_key !== process.env.UPLOAD_SECRET) {
-        return res.status(401).json({
-          error: 'Clave de acceso incorrecta',
-          message: 'No tiene permisos para eliminar archivos'
-        });
-      }
+      // Nota: no se requiere clave para eliminar archivos
 
       
       if (!file) {

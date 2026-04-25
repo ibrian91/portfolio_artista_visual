@@ -1,5 +1,4 @@
 import groupService from '../services/groupService.js';
-import { validateUploadKey } from '../middleware/auth.js';
 import path from 'path';
 import fs from 'fs';
 import sharp from 'sharp';
@@ -10,14 +9,8 @@ const __dirname = path.dirname(__filename);
 
 // POST /api/groups - Crear grupo con imagen de portada obligatoria
 const createGroup = async (req, res) => {
-  const { technique, category, group_name, upload_key } = req.body;
+  const { technique, category, group_name } = req.body;
   const coverImage = req.file;
-
-  // Validar clave
-  if (!validateUploadKey(upload_key)) {
-    if (coverImage) fs.unlinkSync(coverImage.path);
-    return res.status(401).json({ error: 'Clave de subida incorrecta' });
-  }
 
   // Validar técnica y categoría
   const isValid = groupService.isValidTechniqueCategory(technique, category);
@@ -134,12 +127,7 @@ const getGroups = async (req, res) => {
 
 // DELETE /api/groups - Eliminar grupo completo con sus imágenes
 const deleteGroup = async (req, res) => {
-  const { technique, category, group_name, upload_key } = req.body;
-
-  // Validar clave
-  if (!validateUploadKey(upload_key)) {
-    return res.status(401).json({ error: 'Clave de eliminación incorrecta' });
-  }
+  const { technique, category, group_name } = req.body;
 
   if (!technique || !category || !group_name) {
     return res.status(400).json({ error: 'Faltan parámetros: technique, category, group_name' });

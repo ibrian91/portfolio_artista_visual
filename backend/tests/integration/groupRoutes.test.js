@@ -29,8 +29,6 @@ describe('Group Routes - Integration Tests', () => {
     jest.clearAllMocks();
     mockGetAllGroups.mockClear();
     mockDeleteGroup.mockClear();
-    // Configurar UPLOAD_SECRET para los tests
-    process.env.UPLOAD_SECRET = 'test_secret';
   });
 
   describe('GET /api/groups', () => {
@@ -122,30 +120,13 @@ describe('Group Routes - Integration Tests', () => {
         .send({
           technique: 'Dibujo',
           category: 'Digital',
-          group_name: 'Test Group',
-          upload_key: 'test_secret'
+          group_name: 'Test Group'
         });
 
       // Assert
       expect(response.status).toBe(200);
       expect(response.body.message).toContain('eliminado correctamente');
       expect(response.body.deletedGroup).toEqual(mockDeletedGroup);
-    });
-
-    it('debería retornar 401 con clave incorrecta', async () => {
-      // Act
-      const response = await request(app)
-        .delete('/api/groups')
-        .send({
-          technique: 'Dibujo',
-          category: 'Digital',
-          group_name: 'Test',
-          upload_key: 'wrong_key'
-        });
-
-      // Assert
-      expect(response.status).toBe(401);
-      expect(mockDeleteGroup).not.toHaveBeenCalled();
     });
 
     it('debería retornar 400 si faltan parámetros', async () => {
@@ -155,7 +136,6 @@ describe('Group Routes - Integration Tests', () => {
         .send({
           technique: 'Dibujo',
           // Falta category y group_name
-          upload_key: 'test_secret'
         });
 
       // Assert
@@ -175,8 +155,7 @@ describe('Group Routes - Integration Tests', () => {
         .send({
           technique: 'Dibujo',
           category: 'Digital',
-          group_name: 'Inexistente',
-          upload_key: 'test_secret'
+          group_name: 'Inexistente'
         });
 
       // Assert

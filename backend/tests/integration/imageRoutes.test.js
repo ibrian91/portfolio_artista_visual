@@ -29,8 +29,6 @@ describe('Image Routes - Integration Tests', () => {
     jest.clearAllMocks();
     mockGetImagesByGroup.mockClear();
     mockDeleteImageById.mockClear();
-    // Configurar UPLOAD_SECRET para los tests
-    process.env.UPLOAD_SECRET = 'test_secret';
   });
 
   describe('GET /api/images', () => {
@@ -88,24 +86,12 @@ describe('Image Routes - Integration Tests', () => {
       // Act
       const response = await request(app)
         .delete('/api/images/123')
-        .send({ upload_key: 'test_secret' });
+        .send({});
 
       // Assert
       expect(response.status).toBe(200);
       expect(response.body.message).toContain('eliminada correctamente');
       expect(mockDeleteImageById).toHaveBeenCalledWith('123');
-    });
-
-    it('debería retornar 401 con clave incorrecta', async () => {
-      // Act
-      const response = await request(app)
-        .delete('/api/images/123')
-        .send({ upload_key: 'wrong_key' });
-
-      // Assert
-      expect(response.status).toBe(401);
-      expect(response.body.error).toContain('incorrecta');
-      expect(mockDeleteImageById).not.toHaveBeenCalled();
     });
 
     it('debería retornar 404 si la imagen no existe', async () => {
@@ -117,7 +103,7 @@ describe('Image Routes - Integration Tests', () => {
       // Act
       const response = await request(app)
         .delete('/api/images/999')
-        .send({ upload_key: 'test_secret' });
+        .send({});
 
       // Assert
       expect(response.status).toBe(404);
@@ -127,7 +113,7 @@ describe('Image Routes - Integration Tests', () => {
       // Act - DELETE a la ruta sin ID retorna 404 (no encontrada)
       const response = await request(app)
         .delete('/api/images/')
-        .send({ upload_key: 'test_secret' });
+        .send({});
 
       // Assert
       expect(response.status).toBe(404);

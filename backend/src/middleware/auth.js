@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-// Middleware para verificar autenticación con JWT
+// Middleware para verificar autenticación con JWT (requerido)
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
@@ -25,26 +25,6 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-// Middleware para verificar clave de acceso simple
-const verifyAccessKey = (req, res, next) => {
-  const access_key = req.body?.access_key || req.query?.access_key;
-  
-  if (!access_key || access_key !== process.env.ACCESS_KEY) {
-    return res.status(401).json({
-      error: 'Clave de acceso incorrecta',
-      message: 'No tiene permisos para realizar esta acción'
-    });
-  }
-
-  next();
-};
-
-export { authenticateToken, verifyAccessKey };
-  }
-
-  next();
-};
-
 // Middleware opcional para autenticación (no falla si no hay token)
 const optionalAuth = (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -56,24 +36,23 @@ const optionalAuth = (req, res, next) => {
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      req.user = null;
-    } else {
-      req.user = decoded;
-    }
+    req.user = err ? null : decoded;
     next();
   });
 };
 
+// Middleware para verificar clave de acceso simple
+const verifyAccessKey = (req, res, next) => {
+  const access_key = req.body?.access_key || req.query?.access_key;
 
-const validateUploadKey = (key) => {
-  return key === process.env.UPLOAD_SECRET;
+  if (!access_key || access_key !== process.env.ACCESS_KEY) {
+    return res.status(401).json({
+      error: 'Clave de acceso incorrecta',
+      message: 'No tiene permisos para realizar esta acción'
+    });
+  }
+
+  next();
 };
 
-export {
-  authenticateToken,
-  verifyAccessKey,
-  verifyUploadKey,
-  optionalAuth,
-  validateUploadKey
-};
+export { authenticateToken, optionalAuth, verifyAccessKey };

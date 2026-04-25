@@ -339,8 +339,8 @@ body, html {
 
 .fullscreen-close {
   position: absolute;
-  top: 20px;
-  right: 30px;
+  top: 30px;
+  right: 60px;
   background: transparent;
   border: none;
   color: white;
@@ -417,8 +417,8 @@ body, html {
 
   .fullscreen-close {
     font-size: 2.5rem;
-    right: 15px;
-    top: 15px;
+    right: 35px;
+    top: 20px;
   }
 
   .fullscreen-image {

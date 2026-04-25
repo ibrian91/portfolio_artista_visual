@@ -42,8 +42,7 @@ describe('groupController.deleteGroup() - Unit Tests', () => {
       body: {
         technique: 'Dibujo',
         category: 'Digital',
-        group_name: 'Test Group',
-        upload_key: 'test_secret'
+        group_name: 'Test Group'
       }
     };
 
@@ -51,43 +50,6 @@ describe('groupController.deleteGroup() - Unit Tests', () => {
       status: jest.fn().mockReturnThis(),
       json: jest.fn().mockReturnThis()
     };
-
-    // Mock environment variable
-    process.env.UPLOAD_SECRET = 'test_secret';
-  });
-
-  afterEach(() => {
-    delete process.env.UPLOAD_SECRET;
-  });
-
-  // ========================================
-  // GRUPO 1: Validaciones de autenticación
-  // ========================================
-  describe('Validaciones de autenticación', () => {
-    
-    it('debería retornar 401 con clave incorrecta', async () => {
-      req.body.upload_key = 'wrong_key';
-
-      await groupController.deleteGroup(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({
-        error: 'Clave de eliminación incorrecta'
-      });
-      expect(mockDeleteGroup).not.toHaveBeenCalled();
-    });
-
-    it('debería retornar 401 si no se proporciona clave', async () => {
-      delete req.body.upload_key;
-
-      await groupController.deleteGroup(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({
-        error: 'Clave de eliminación incorrecta'
-      });
-      expect(mockDeleteGroup).not.toHaveBeenCalled();
-    });
   });
 
   // ========================================
@@ -166,8 +128,7 @@ describe('groupController.deleteGroup() - Unit Tests', () => {
       req.body = {
         technique: 'Pintura',
         category: 'Acuarela',
-        group_name: 'Grupo Especial',
-        upload_key: 'test_secret'
+        group_name: 'Grupo Especial'
       };
 
       await groupController.deleteGroup(req, res);

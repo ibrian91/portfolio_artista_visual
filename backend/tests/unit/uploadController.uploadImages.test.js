@@ -65,7 +65,6 @@ describe('uploadController.uploadImages() - Unit Tests', () => {
     // Setup request/response objects
     req = {
       body: {
-        upload_key: 'test_secret',
         upload_type: 'portfolio'
       },
       files: []
@@ -75,13 +74,6 @@ describe('uploadController.uploadImages() - Unit Tests', () => {
       status: jest.fn().mockReturnThis(),
       json: jest.fn().mockReturnThis()
     };
-
-    // Mock environment variable
-    process.env.UPLOAD_SECRET = 'test_secret';
-  });
-
-  afterEach(() => {
-    delete process.env.UPLOAD_SECRET;
   });
 
   // ========================================
@@ -113,25 +105,6 @@ describe('uploadController.uploadImages() - Unit Tests', () => {
       });
     });
 
-    it('debería retornar 401 con clave incorrecta y eliminar archivos', async () => {
-      req.body.upload_key = 'wrong_key';
-      req.files = [
-        { path: '/uploads/test1.jpg', filename: 'test1.jpg', originalname: 'img1.jpg' },
-        { path: '/uploads/test2.jpg', filename: 'test2.jpg', originalname: 'img2.jpg' }
-      ];
-
-      await uploadController.uploadImages(req, res);
-
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({
-        error: 'Clave de acceso incorrecta',
-        message: 'No tiene permisos para subir archivos'
-      });
-      // Verificar que se eliminaron ambos archivos
-      expect(mockUnlink).toHaveBeenCalledTimes(2);
-      expect(mockUnlink).toHaveBeenCalledWith('/uploads/test1.jpg');
-      expect(mockUnlink).toHaveBeenCalledWith('/uploads/test2.jpg');
-    });
   });
 
   // ========================================

@@ -1,11 +1,7 @@
-import { useState } from "react";
 import techniques from "../../assets/techniques.json";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { getCategoriesForTechnique } from "../../utils/validation/formValidation.js";
 
 const DeleteSection = ({ deleteHook }) => {
-  const [showUploadKeyDelete, setShowUploadKeyDelete] = useState(false);
-
   // Derivados
   const categories = getCategoriesForTechnique(deleteHook.formData.selectedTechnique, techniques);
   
