@@ -131,7 +131,7 @@ const RotatingImageViewer = ({
             color: 'white',
             minWidth: 'auto',
             padding: '8px',
-            mr: 3,
+            mr: 1,
             fontSize: '20px',
             fontWeight: 'bold'
           }}
