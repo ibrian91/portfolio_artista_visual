@@ -25,6 +25,7 @@ const Techniques = () => {
   const location = useLocation();
   const categories = location.state?.categories || {};
   const initialTechnique = location.state?.categories?.title || "Dibujo";
+  const shouldShowCategoryGrid = categories.title !== "Escritos";
 
   // Estado local para navegación
   const [selectedTechnique, setSelectedTechnique] = useState(initialTechnique);
@@ -131,7 +132,7 @@ const Techniques = () => {
         minHeight="320px"
       >
         {/* Mostrar categorías */}
-        {!selectedCategory && !selectedGroup && categories.categoria && (
+        {!selectedCategory && !selectedGroup && shouldShowCategoryGrid && categories.categoria && (
           <CategoryGrid
             categories={categories.categoria}
             onCategoryClick={handleCategoryClick}
