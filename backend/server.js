@@ -67,6 +67,16 @@ app.use('/api/images', imageRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/groups', groupRoutes);
 
+// Ruta raíz para healthcheck y evitar 404 en /
+app.get('/', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'Portfolio Backend API funcionando correctamente',
+    timestamp: new Date().toISOString(),
+    version: '1.0.0'
+  });
+});
+
 // Ruta de salud de la API
 app.get('/api/health', (req, res) => {
   res.json({
