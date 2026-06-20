@@ -488,5 +488,6 @@ export const useUploadForm = () => {
       setDescriptionImageCount(VALIDATION_CONSTANTS.MAX_DESCRIPTION_LENGTH);
     },
     uploadImage,
+    handleSubmit: uploadImage,
   };
 };
