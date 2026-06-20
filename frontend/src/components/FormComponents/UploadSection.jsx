@@ -211,6 +211,77 @@ const UploadSection = ({ uploadHook }) => {
               )}
             </div>
 
+            {uploadHook.formData.grupoExistente === true && (
+              <div className="form-group">
+                <label>Seleccionar varias imágenes (hasta 5 archivos)</label>
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,.png"
+                  multiple
+                  onChange={(e) => {
+                    uploadHook.handleMultipleFilesChange(e.target.files);
+                    e.target.value = null;
+                  }}
+                />
+                {uploadHook.validationErrors.imageFiles && (
+                  <div style={{ color: "#FF416C", fontSize: "0.95em", marginTop: "4px" }}>
+                    {uploadHook.validationErrors.imageFiles}
+                  </div>
+                )}
+                {uploadHook.formData.imageFilesMetadata && uploadHook.formData.imageFilesMetadata.length > 0 && (
+                  <div style={{ marginTop: "12px" }}>
+                    <strong>Imágenes en cola:</strong>
+                    <ul style={{ marginTop: "8px", paddingLeft: "20px", color: "#333" }}>
+                      {uploadHook.formData.imageFilesMetadata.map((item, idx) => (
+                        <li key={idx} style={{ marginBottom: "10px", borderBottom: "1px solid #eee", paddingBottom: "8px" }}>
+                          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                            <div style={{ fontWeight: 500 }}>{item.file.name}</div>
+                            <div>
+                              <button
+                                type="button"
+                                style={{ marginLeft: "10px", color: "#d9534f", background: "none", border: "none", cursor: "pointer" }}
+                                onClick={() => uploadHook.removeFileFromSelection(idx)}
+                              >
+                                eliminar
+                              </button>
+                            </div>
+                          </div>
+                          <div style={{ marginTop: "8px" }}>
+                            <input
+                              type="text"
+                              placeholder="Nombre de la imagen"
+                              value={item.name}
+                              onChange={(e) => uploadHook.updateFileMetadata(idx, 'name', e.target.value)}
+                              style={{ width: '60%', marginRight: '8px' }}
+                            />
+                            <input
+                              type="text"
+                              placeholder="Descripción (opcional)"
+                              value={item.description}
+                              onChange={(e) => uploadHook.updateFileMetadata(idx, 'description', e.target.value)}
+                              style={{ width: '35%' }}
+                            />
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {/* Botón para agregar la imagen individual actual a la cola */}
+                <div style={{ marginTop: '8px' }}>
+                  <button
+                    type="button"
+                    onClick={() => uploadHook.addImageToQueue()}
+                    className="submit-button"
+                    disabled={!uploadHook.formData.imageFile}
+                    style={{ padding: '6px 12px', fontSize: '0.95em' }}
+                  >
+                    Agregar a la cola
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div className="form-group check-group">
               <label 
                 className="custom-checkbox" 
