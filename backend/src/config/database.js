@@ -3,9 +3,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const rawDbHost = process.env.DB_HOST;
+const dbHost = rawDbHost === 'localhost' ? '127.0.0.1' : rawDbHost;
+
 // Configuración de la conexión a la base de datos
 const dbConfig = {
-  host: process.env.DB_HOST,
+  host: dbHost,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
