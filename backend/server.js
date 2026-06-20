@@ -80,6 +80,17 @@ app.get('/', (req, res) => {
   });
 });
 
+// Ruta base de API para evitar 404 en /api o /api/
+app.get(['/api', '/api/'], (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'API base endpoint',
+    endpoints: ['/api/health', '/api/groups', '/api/images', '/api/upload'],
+    timestamp: new Date().toISOString(),
+    version: '1.0.0'
+  });
+});
+
 // Ruta de salud de la API
 app.get('/api/health', (req, res) => {
   res.json({

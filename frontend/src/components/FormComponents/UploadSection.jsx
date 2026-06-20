@@ -29,10 +29,17 @@ const UploadSection = ({ uploadHook }) => {
   // Derivados
   const categories = getCategoriesForTechnique(uploadHook.formData.selectedTechnique, techniques);
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (uploadHook.handleSubmit) {
+      uploadHook.handleSubmit();
+    }
+  };
+
   return (
     <section className="form-section-upload">
       <h2 className="form-title">Cargar nueva imagen</h2>
-      <form className="image-upload-form">
+      <form className="image-upload-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Técnica:</label>
           <select
@@ -355,8 +362,7 @@ const UploadSection = ({ uploadHook }) => {
         )}
 
         <button
-          type="button"
-          onClick={uploadHook.handleSubmit}
+          type="submit"
           className="submit-button"
           disabled={uploadHook.isSubmitting}
         >
