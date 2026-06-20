@@ -115,7 +115,7 @@ export const useUploadForm = () => {
     formDataToSend.append("images", formData.imageFile);
 
     try {
-      const response = await fetch("http://localhost:5000/api/upload/portfolio-image", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || '/api'}/upload/portfolio-image`, {
         method: "POST",
         body: formDataToSend,
         headers: {

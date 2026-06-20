@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography } from "@mui/material";
+import { IMAGE_BASE_URL } from '../../utils/constants';
 
 const RotatingImageViewer = ({
   rotatingImage,
@@ -221,7 +222,7 @@ const RotatingImageViewer = ({
               }}
             >
               <img
-                src={`http://localhost:5000${rotatingImage.file_url}`}
+                src={`${IMAGE_BASE_URL}${rotatingImage.file_url}`}
                 alt={rotatingImage.image_name || 'Imagen rotatoria'}
                 style={{
                   maxWidth: '100%',
@@ -252,7 +253,7 @@ const RotatingImageViewer = ({
               }}
             >
               <img
-                src={`http://localhost:5000${rotatingImage.file_url}`}
+                src={`${IMAGE_BASE_URL}${rotatingImage.file_url}`}
                 alt={rotatingImage.image_name || 'Imagen rotatoria - reverso'}
                 style={{
                   maxWidth: '100%',

@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Constantes
-import { ITEMS_PER_PAGE } from './constants';
+import { IMAGE_BASE_URL, ITEMS_PER_PAGE } from './constants';
 
 export { ITEMS_PER_PAGE };
 
@@ -39,7 +39,7 @@ export const renderLogoContent = (element) => {
 // Función auxiliar para renderizar contenido dinámico de grupos
 export const renderDynamicContent = (group) => {
   if (group.cover_image_url) {
-    const imageUrl = `http://localhost:5000${group.cover_image_url}`;
+    const imageUrl = `${IMAGE_BASE_URL}${group.cover_image_url}`;
 
     return (
       <img

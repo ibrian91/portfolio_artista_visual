@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button } from "@mui/material";
+import { IMAGE_BASE_URL } from '../../utils/constants';
 
 const MockUpViewer = ({
   mockupImage,
@@ -129,7 +130,7 @@ const MockUpViewer = ({
     >
       {/* Imagen MockUp a pantalla completa */}
       <img
-        src={`http://localhost:5000${mockupImage.file_url}`}
+        src={`${IMAGE_BASE_URL}${mockupImage.file_url}`}
         alt={mockupImage.image_name || 'MockUp'}
         style={{
           maxWidth: '100%',

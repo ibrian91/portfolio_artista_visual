@@ -1,5 +1,6 @@
 // Hook para manejo de imágenes
 import { useState, useCallback } from 'react';
+import { IMAGE_BASE_URL } from '../utils/constants';
 
 const useImageHandler = () => {
   const [imageErrors, setImageErrors] = useState(new Set());
@@ -19,7 +20,7 @@ const useImageHandler = () => {
 
   const getImageUrl = useCallback((relativeUrl) => {
     if (!relativeUrl) return '';
-    return `http://localhost:5000${relativeUrl}`;
+    return `${IMAGE_BASE_URL}${relativeUrl}`;
   }, []);
 
   const preloadImage = useCallback((url) => {

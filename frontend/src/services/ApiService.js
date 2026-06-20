@@ -34,6 +34,17 @@ class ApiService {
     }
   }
 
+  // Método para verificar que el backend responde
+  async getHealth() {
+    try {
+      const response = await this.client.get('/health');
+      return response.data;
+    } catch (error) {
+      console.error('❌ ApiService.getHealth error:', error);
+      throw error;
+    }
+  }
+
   // Método para subir una imagen
   async uploadImage(formData) {
     try {

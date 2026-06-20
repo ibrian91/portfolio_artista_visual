@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography } from "@mui/material";
+import { IMAGE_BASE_URL } from '../../utils/constants';
 
 const ImageViewer = ({
   images = [],
@@ -142,7 +143,7 @@ const ImageViewer = ({
           overflow="hidden"
         >
           <img
-            src={`http://localhost:5000${currentImage.file_url}`}
+            src={`${IMAGE_BASE_URL}${currentImage.file_url}`}
             alt={currentImage.image_name || `Imagen ${currentIndex + 1}`}
             style={{
               maxWidth: "100%",

@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import ApiService from "../../services/ApiService";
 import HomePrincipal from "../../data/images/Home/HomePrincipal.jpeg";
 //import TittlePortfolio from "/assets/images/tittle_portfolio/TittlePortfolio.png";
 
@@ -59,6 +61,12 @@ const preloadAllImages = () => {
 
 const Home = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    ApiService.getHealth().catch(() => {
+      // La home sigue cargando aunque el backend no responda.
+    });
+  }, []);
 
   const handleEntrar = () => {
     preloadAllImages();
