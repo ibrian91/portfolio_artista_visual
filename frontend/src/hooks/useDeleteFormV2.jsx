@@ -220,6 +220,7 @@ export const useDeleteFormV2 = () => {
     handleTechniqueChange,
     handleCategoryChange,
     deleteImage,
+    handleSubmit: deleteImage,
   };
   
   console.log('🔍 useDeleteFormV2 returning:', Object.keys(hookReturn));
