@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography } from "@mui/material";
-import { IMAGE_BASE_URL } from '../../utils/constants';
 
 const ImageViewer = ({
   images = [],
@@ -18,6 +17,7 @@ const ImageViewer = ({
   }
 
   const currentImage = images[currentIndex];
+  const baseImageUrl = import.meta.env.VITE_API_URL?.replace(/\/api$/, '') || 'http://localhost:5000';
 
   const handlePrevious = () => {
     // Si estamos en la primera imagen Y hay callback, ir a imagen especial anterior
@@ -143,7 +143,7 @@ const ImageViewer = ({
           overflow="hidden"
         >
           <img
-            src={`${IMAGE_BASE_URL}${currentImage.file_url}`}
+            src={`${baseImageUrl}${currentImage.file_url}`}
             alt={currentImage.image_name || `Imagen ${currentIndex + 1}`}
             style={{
               maxWidth: "100%",

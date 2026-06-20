@@ -31,14 +31,27 @@ const UploadSection = ({ uploadHook }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log('🔍 UploadSection - submit clicked', {
+      selectedTechnique: uploadHook.formData.selectedTechnique,
+      selectedCategory: uploadHook.formData.selectedCategory,
+      handleSubmitType: typeof uploadHook.handleSubmit,
+    });
+
     if (uploadHook.handleSubmit) {
       uploadHook.handleSubmit();
+    } else {
+      console.error('🔍 UploadSection - handleSubmit missing');
     }
   };
 
   return (
     <section className="form-section-upload">
       <h2 className="form-title">Cargar nueva imagen</h2>
+      {uploadHook.uploadKeyError && (
+        <div style={{ color: '#FF416C', fontSize: '0.95em', marginBottom: '16px' }}>
+          {uploadHook.uploadKeyError}
+        </div>
+      )}
       <form className="image-upload-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Técnica:</label>
@@ -175,6 +188,28 @@ const UploadSection = ({ uploadHook }) => {
                 </div>
               )}
             </div>
+            <div className="form-group">
+              <label>Seleccionar imagen:</label>
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  uploadHook.handleFileChange(file);
+                  if (file) {
+                    const ext = file.name.split('.').pop().toLowerCase();
+                    if (!VALIDATION_CONSTANTS.ALLOWED_FILE_TYPES.includes(ext)) {
+                      e.target.value = null;
+                    }
+                  }
+                }}
+              />
+              {uploadHook.validationErrors.imageFile && (
+                <div style={{ color: "#FF416C", fontSize: "0.95em", marginTop: "4px" }}>
+                  {uploadHook.validationErrors.imageFile}
+                </div>
+              )}
+            </div>
 
             <div className="form-group check-group">
               <label 
@@ -297,6 +332,28 @@ const UploadSection = ({ uploadHook }) => {
               {uploadHook.validationErrors.descriptionImage && (
                 <div style={{ color: "#FF416C", fontSize: "0.95em", marginTop: "4px" }}>
                   {uploadHook.validationErrors.descriptionImage}
+                </div>
+              )}
+            </div>
+            <div className="form-group">
+              <label>Seleccionar imagen:</label>
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  uploadHook.handleFileChange(file);
+                  if (file) {
+                    const ext = file.name.split('.').pop().toLowerCase();
+                    if (!VALIDATION_CONSTANTS.ALLOWED_FILE_TYPES.includes(ext)) {
+                      e.target.value = null;
+                    }
+                  }
+                }}
+              />
+              {uploadHook.validationErrors.imageFile && (
+                <div style={{ color: "#FF416C", fontSize: "0.95em", marginTop: "4px" }}>
+                  {uploadHook.validationErrors.imageFile}
                 </div>
               )}
             </div>

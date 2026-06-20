@@ -345,9 +345,11 @@ export const useUploadForm = () => {
 
   // Función para subir imagen
   const uploadImage = async () => {
+    console.log('🔍 uploadImage called with formData:', formData);
     // Validar formulario antes de enviar
     const validation = validateUploadForm(formData);
     if (!validation.isValid) {
+      console.log('🔍 uploadImage validation failed:', validation.errors);
       setValidationErrors(validation.errors);
       return false;
     }
