@@ -54,7 +54,7 @@ const UploadSection = ({ uploadHook }) => {
       )}
       <form className="image-upload-form" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label>Técnica:</label>
+          <label>Categoria:</label>
           <select
             value={uploadHook.formData.selectedTechnique}
             onChange={(e) => uploadHook.handleTechniqueChange(e.target.value)}
@@ -74,7 +74,7 @@ const UploadSection = ({ uploadHook }) => {
         </div>
 
         <div className="form-group">
-          <label>Categoría:</label>
+          <label>Técnica:</label>
           <select
             value={uploadHook.formData.selectedCategory}
             onChange={(e) => uploadHook.updateField("selectedCategory", e.target.value)}

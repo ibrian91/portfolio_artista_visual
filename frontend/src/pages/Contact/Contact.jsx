@@ -1,4 +1,5 @@
 import React from "react";
+import { FaWhatsapp } from "react-icons/fa";
 import "./Contact.css";
 
 const Contact = () => {
@@ -10,6 +11,13 @@ const Contact = () => {
         <p>📧 <strong>Email:</strong> <a href="mailto:matiasborsalino@hotmail.com">matiasborsalino@hotmail.com</a></p>
         <p>📷 <strong>Instagram:</strong> <a href="https://instagram.com/aveseca" target="_blank" rel="noopener noreferrer">@aveseca</a></p>
         <p>📍 <strong>Ubicación:</strong> Ciudad Autónoma de Buenos Aires, Argentina</p>
+        <p>
+          <FaWhatsapp style={{ color: "#25D366", marginRight: "8px", fontSize: "1.2rem", verticalAlign: "middle" }} />
+          <strong>WhatsApp:</strong>{" "}
+          <a href="https://wa.me/541154195432" target="_blank" rel="noopener noreferrer">
+            +54 11 5419-5432
+          </a>
+        </p>
       </div>
 
       <div className="map-container">
