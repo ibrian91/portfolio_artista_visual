@@ -59,7 +59,7 @@ const UploadSection = ({ uploadHook }) => {
             value={uploadHook.formData.selectedTechnique}
             onChange={(e) => uploadHook.handleTechniqueChange(e.target.value)}
           >
-            <option value="">Seleccionar técnica</option>
+            <option value="">Seleccionar categoria</option>
             {techniques.map((t, idx) => (
               <option key={idx} value={t.title}>
                 {t.title}
@@ -80,7 +80,7 @@ const UploadSection = ({ uploadHook }) => {
             onChange={(e) => uploadHook.updateField("selectedCategory", e.target.value)}
             disabled={!uploadHook.formData.selectedTechnique}
           >
-            <option value="">Seleccionar categoría</option>
+            <option value="">Seleccionar tecnica</option>
             {categories.map((c, idx) => (
               <option key={idx} value={c.name}>
                 {c.name}
